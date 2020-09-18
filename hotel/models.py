@@ -1,10 +1,5 @@
 from django.db import models
-from core.models import Localidad, Categoria, Servicio, TipoHabitacion
-
-# Habitación
-class Habitacion(models.Model):
-    #Piso, Numero
-    pass
+from core.models import Localidad, Categoria, Servicio, TipoHabitacion, Vendedor
 
 # Hotel (Asignar Vendedor)
 class Hotel(models.Model):
@@ -16,19 +11,32 @@ class Hotel(models.Model):
     localidad = models.ForeignKey(Localidad, on_delete=models.CASCADE)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     servicios = models.ManyToManyField(Servicio)
-    habitaciones = models.ManyToManyField(Habitacion, through='HabitacionHotel', through_fields=('hotel', 'habitacion'))
+    tipos = models.ManyToManyField(TipoHabitacion, through='PrecioPorTipo', through_fields=('hotel', 'tipo'))
+    vendedores = models.ManyToManyField(Vendedor)
 
-class HabitacionHotel(models.Model):
+    def es_hospedaje(self):
+        return self.categoria.estrellas in [Categoria.ESTRELLA_A, Categoria.ESTRELLA_B, Categoria.ESTRELLA_C]
+
+    def __str__(self):
+        return f"Hospedaje {self.nombre}" if self.es_hospedaje() else f"Hotel {self.nombre}"
+
+class PrecioPorTipo(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
-    habitacion = models.ForeignKey(Habitacion, on_delete=models.CASCADE)
     tipo = models.ForeignKey(TipoHabitacion, on_delete=models.CASCADE)
-    alta = models.DecimalField(max_digits=20, decimal_places=2)
+    # Precio por noche
     baja = models.DecimalField(max_digits=20, decimal_places=2)
+    alta = models.DecimalField(max_digits=20, decimal_places=2)
+
+# Habitación
+class Habitacion(models.Model):
+    hotel = models.ForeignKey(Hotel, related_name="habitaciones", on_delete=models.CASCADE)
+    numero = models.PositiveSmallIntegerField() # 403 <Piso><Cuarto>
+    # TODO: Validar que el tipo seleccionado sea un tipo del hotel
+    tipo = models.ForeignKey(TipoHabitacion, on_delete=models.CASCADE)
 
 # Temporada Alta
 class TemporadaAlta(models.Model):
     nombre = models.CharField(max_length=200)
-    descripcion = models.CharField(max_length=800)
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
     inicio = models.DateField()
     fin = models.DateField()
@@ -36,7 +44,12 @@ class TemporadaAlta(models.Model):
 # Descuentos
 class Descuento(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
-    cantidad = models.PositiveSmallIntegerField()
+    # 1 = coeficiente1 = 0 opcionalmente
+    # 2 = coeficiente1
+    # 3 = coeficiente2
+    # 4 = coeficiente3
+    # 5 = coeficiente4
+    cantidad_habitaciones = models.PositiveSmallIntegerField()
     coeficiente = models.DecimalField(max_digits=3, decimal_places=2)
 
 # Paquete Turistico

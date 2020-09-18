@@ -44,7 +44,12 @@ class Categoria(models.Model):
 class TipoHabitacion(models.Model):
     nombre = models.CharField(max_length=200)
     descripcion = models.CharField(max_length=800)
-    tipo_documento = models.PositiveSmallIntegerField()
+    pasajeros = models.PositiveSmallIntegerField()
+    # Cuartos para cuando el tipo es Departamento
+    cuartos = models.PositiveSmallIntegerField(default = 0)
+
+    def es_departamento(self):
+        return self.cuartos == 0
 
 # Encargados, Clientes, Vendedores
 class Persona(models.Model):
@@ -92,15 +97,21 @@ class Rol(models.Model):
 
 class Encargado(Rol):
     TIPO = 1
-    # Clave 
+
+    # Clave Autogenerada? un token?
+    clave = models.CharField(max_length=10)
 
 class Vendedor(Rol):
     TIPO = 2
+
     # Coeficiente de Ganancia
+    coeficiente = models.DecimalField(max_digits=3, decimal_places=2)
 
 class Cliente(Rol):
     TIPO = 3
+
     # Puntos
+    puntos = models.PositiveIntegerField()
 
 for Klass in [Encargado, Vendedor, Cliente]:
     Rol.register(Klass)

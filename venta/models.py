@@ -2,32 +2,35 @@ from django.db import models
 from core.models import Vendedor, Cliente
 from hotel.models import Habitacion, PaqueteTuristico
 
-class Factura(models.Model):
+# Liquidar Comision
+class Liquidacion(models.Model):
+    fecha = models.DateField(auto_now_add=True)
+    abonado = models.DateField(null=True)
     vendedor = models.ForeignKey(Vendedor, on_delete=models.CASCADE)
+    total = models.DecimalField(max_digits=20, decimal_places=2)
+
+    def abonada(self):
+        return self.abonado != None
+
+class Factura(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
+    vendedor = models.ForeignKey(Vendedor, on_delete=models.CASCADE)
+    liquidacion = models.ForeignKey(Liquidacion, null=True, blank=True, on_delete=models.SET_NULL)
+    # medio_de_pago
     # Tipo, Monto
     fecha = models.DateField()
     #total = models.DecimalField(max_digits=20, decimal_places=2)
 
-    def total(self):
-        return "EL TOTAL" # Para cada alquiler el total del alquiler
+    #def alquilar_paquete(self, paquete):
+    #    return Alquiler(habitaciones=paquete.habitaciones, inicio=paquete.inicio, fin=paquete.fin)
 
 # Alquiler
 class Alquiler(models.Model):
+    factura = models.ForeignKey(Factura, related_name="alquileres", on_delete=models.CASCADE)
+    # De un mismo hotel
     habitaciones = models.ManyToManyField(Habitacion)
-    paquete = models.ForeignKey(PaqueteTuristico, null=True, on_delete=models.NULL)
-    factura = models.ForeignKey(Factura, related_name="alquileres", null=True, on_delete=models.NULL)
-    #cantidad_huespedes
+    paquete = models.ForeignKey(PaqueteTuristico, null=True, blank=True, on_delete=models.SET_NULL)
+    cantidad_huespedes = models.PositiveSmallIntegerField()
     inicio = models.DateField()
     fin = models.DateField()
-
-    @classmethod
-    def alquilar_paquete(cls, paquete):
-        return cls(habitaciones=paquete.habitaciones, inicio=paquete.inicio, fin=paquete.fin)
-
-    def total(self):
-        return "EL TOTAL" # Calcular cada habitacion por temporada y aplicar descuentos del hotel y si tiene paquete decuento 
-
-
-# Venta Paquete Turistico
-# Liquidar Comision
+    total = models.DecimalField(max_digits=20, decimal_places=2)
