@@ -34,6 +34,12 @@ class Habitacion(models.Model):
     # TODO: Validar que el tipo seleccionado sea un tipo del hotel
     tipo = models.ForeignKey(TipoHabitacion, on_delete=models.CASCADE)
 
+    class Meta:
+        unique_together = (('hotel', 'numero'), )
+
+    def __str__(self):
+        return f"{self.hotel}, Habitacion: {self.numero}"
+
 # Temporada Alta
 class TemporadaAlta(models.Model):
     nombre = models.CharField(max_length=200)

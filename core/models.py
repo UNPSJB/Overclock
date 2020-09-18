@@ -4,18 +4,33 @@ from django.db import models
 class Pais(models.Model):
     nombre = models.CharField(max_length=200)
 
+    class Meta:
+        verbose_name_plural = "Paises"
+
+    def __str__(self):
+        return self.nombre
+
 class Provincia(models.Model):
     nombre = models.CharField(max_length=200)
     pais = models.ForeignKey(Pais, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.nombre
 
 class Localidad(models.Model):
     nombre = models.CharField(max_length=200)
     provincia = models.ForeignKey(Provincia, on_delete=models.CASCADE)
 
+    def __str__(self):
+        return self.nombre
+
 # Servicios, Categorias
 class Servicio(models.Model):
     nombre = models.CharField(max_length=200)
     descripcion = models.CharField(max_length=800)
+
+    def __str__(self):
+        return self.nombre
 
 class Categoria(models.Model):
     ESTRELLA_A = 0
@@ -40,6 +55,9 @@ class Categoria(models.Model):
     nombre = models.CharField(max_length=200)
     servicios = models.ManyToManyField(Servicio)
 
+    def __str__(self):
+        return self.nombre
+
 # Tipo De Habitacion
 class TipoHabitacion(models.Model):
     nombre = models.CharField(max_length=200)
@@ -51,15 +69,26 @@ class TipoHabitacion(models.Model):
     def es_departamento(self):
         return self.cuartos == 0
 
+    def __str__(self):
+        return self.nombre
+
 # Encargados, Clientes, Vendedores
 class Persona(models.Model):
-    tipo_documento = models.PositiveSmallIntegerField() # 0 - 32767
+    DNI = 0
+    PASAPORTE = 1
+    LIBRETA = 2
+    TIPOS_DOCUMENTO = (
+        (DNI, "DNI"), 
+        (PASAPORTE, "PASAPORTE"), 
+        (LIBRETA, "LIBRETA")
+    )
+    tipo_documento = models.PositiveSmallIntegerField(choices=TIPOS_DOCUMENTO)
     documento = models.CharField(max_length=13)
     nombre = models.CharField(max_length=200)
     apellido = models.CharField(max_length=200)
 
     def __str__(self):
-        return "{0}, {1}".format(self.apellido, self.nombre)
+        return f"{self.apellido}, {self.nombre}"
 
     def como(self, Klass):
         return self.roles.get(tipo=Klass.TIPO).related()
@@ -94,6 +123,9 @@ class Rol(models.Model):
     @classmethod
     def register(cls, klass):
         cls.TIPOS.append((klass.TIPO, klass.__name__.lower()))
+
+    def __str__(self):
+        return f"{self.get_tipo_display()} {self.persona}"
 
 class Encargado(Rol):
     TIPO = 1
