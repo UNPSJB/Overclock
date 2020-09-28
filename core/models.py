@@ -72,7 +72,7 @@ class TipoHabitacion(models.Model):
     def __str__(self):
         return self.nombre
 
-# Encargados, Clientes, Vendedores
+# Las Personas
 class Persona(models.Model):
     DNI = 0
     PASAPORTE = 1
@@ -104,6 +104,8 @@ class Persona(models.Model):
     def sos(self, Klass):
         return any([isinstance(rol, Klass) for rol in self.roles_related()])
 
+# Usamos patron roles para
+# Encargados, Clientes, Vendedores
 class Rol(models.Model):
     TIPO = 0
     TIPOS = [
