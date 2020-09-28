@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import User
 
 # Pais, Provincia, Localidad
 class Pais(models.Model):
@@ -86,6 +87,7 @@ class Persona(models.Model):
     documento = models.CharField(max_length=13)
     nombre = models.CharField(max_length=200)
     apellido = models.CharField(max_length=200)
+    usuario = models.OneToOneField(User, null=True, blank=True, on_delete=models.SET_NULL)
 
     def __str__(self):
         return f"{self.apellido}, {self.nombre}"
