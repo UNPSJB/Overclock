@@ -1,11 +1,14 @@
 from django.test import TestCase
 from .models import Hotel, Habitacion 
 
+FIXTURES = [
+    './core/fixtures/auth.json',
+    './core/fixtures/base.json',
+    './hotel/fixtures/base.json'
+    ]
+
 class HotelesTestCase(TestCase):
-    fixtures = [
-      './core/fixtures/base.json',
-      './hotel/fixtures/base.json'
-      ]
+    fixtures = FIXTURES
     def setUp(self):
         pass
 

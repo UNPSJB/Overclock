@@ -1,8 +1,13 @@
 from django.test import TestCase
 from .models import Pais, Provincia, Localidad
 
+FIXTURES = [
+    './core/fixtures/auth.json',
+    './core/fixtures/base.json'
+    ]
+
 class ZonaTestCase(TestCase):
-    fixtures = ['./core/fixtures/base.json']
+    fixtures = FIXTURES
     def setUp(self):
         pass
 
@@ -10,7 +15,7 @@ class ZonaTestCase(TestCase):
         pass
 
 class EncargadoTestCase(TestCase):
-    fixtures = ['./core/fixtures/base.json']
+    fixtures = FIXTURES
     def setUp(self):
         pass
 
@@ -18,7 +23,7 @@ class EncargadoTestCase(TestCase):
         pass
 
 class VendedorTestCase(TestCase):
-    fixtures = ['./core/fixtures/base.json']
+    fixtures = FIXTURES
     def setUp(self):
         pass
 
@@ -26,7 +31,7 @@ class VendedorTestCase(TestCase):
         pass
 
 class ClienteTestCase(TestCase):
-    fixtures = ['./core/fixtures/base.json']
+    fixtures = FIXTURES
     def setUp(self):
         pass
 
