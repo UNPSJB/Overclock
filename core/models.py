@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from decimal import Decimal
 
 # Pais, Provincia, Localidad
 class Pais(models.Model):
@@ -141,13 +142,13 @@ class Vendedor(Rol):
     TIPO = 2
 
     # Coeficiente de Ganancia
-    coeficiente = models.DecimalField(max_digits=3, decimal_places=2)
+    coeficiente = models.DecimalField(max_digits=3, decimal_places=2, default=Decimal(0))
 
 class Cliente(Rol):
     TIPO = 3
 
     # Puntos
-    puntos = models.PositiveIntegerField()
+    puntos = models.PositiveIntegerField(default=0)
 
 for Klass in [Encargado, Vendedor, Cliente]:
     Rol.register(Klass)
