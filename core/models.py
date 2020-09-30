@@ -19,7 +19,16 @@ class Provincia(models.Model):
     def __str__(self):
         return self.nombre
 
+class LocalidadManager(models.Manager):
+    def crear_zona(self, nombre):
+        return self.model.objects.all()
+
+class LocalidadQuerySet(models.QuerySet):
+    pass
+
 class Localidad(models.Model):
+    objects = LocalidadManager.from_queryset(LocalidadQuerySet)()
+
     nombre = models.CharField(max_length=200)
     provincia = models.ForeignKey(Provincia, on_delete=models.CASCADE)
 

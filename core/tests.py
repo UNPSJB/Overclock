@@ -19,10 +19,15 @@ class ZonaTestCase(TestCase):
 class ServicioTestCase(TestCase):
     fixtures = FIXTURES
     def setUp(self):
-        pass
+        self.trelew = Localidad.objects.filter(nombre="Trelew").first()
 
     def test_crear_zona(self):
-        pass
+        zona = Localidad.objects.crear_zona("Trelew")
+        self.assertTrue(self.trelew in zona)
+        zona = Localidad.objects.crear_zona("Chubut")
+        self.assertTrue(self.trelew in zona)
+        zona = Localidad.objects.crear_zona("Argentina")
+        self.assertTrue(self.trelew in zona)
 
 class CategoriaTestCase(TestCase):
     fixtures = FIXTURES
