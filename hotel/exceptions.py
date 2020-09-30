@@ -1,0 +1,3 @@
+
+class DescuentoException(Exception):
+    pass
