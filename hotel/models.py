@@ -48,9 +48,13 @@ class Hotel(models.Model):
         # Condicion loca?
         if self.descuentos.filter(cantidad_habitaciones__lt=habitaciones, coeficiente__gt=coeficiente).exists():
             raise DescuentoException("No se puede crear un descuento menor a un descuento ya otorgado por menos habitaciones")
+        return self.descuentos.create(cantidad_habitaciones=habitaciones, coeficiente=coeficiente)
 
-    def obtener_descuentos(self, habitaciones):
-        return self.descuentos.all()
+    def obtener_descuento(self, habitaciones):
+        return self.obtener_descuento_por_cantidad(len(habitaciones))
+
+    def obtener_descuento_por_cantidad(self, cantidad):
+        return self.descuentos.filter(cantidad_habitaciones__gte=cantidad).first()
 
 class PrecioPorTipo(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='tarifario')
@@ -108,6 +112,9 @@ class Descuento(models.Model):
     # 5 = coeficiente4
     cantidad_habitaciones = models.PositiveSmallIntegerField()
     coeficiente = models.DecimalField(max_digits=3, decimal_places=2)
+
+    class Meta:
+        ordering = ["cantidad_habitaciones"]
 
 # Paquete Turistico
 class PaqueteTuristico(models.Model):

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from decimal import Decimal
+from .utils import str_alfanumerico
 
 # Pais, Provincia, Localidad
 class Pais(models.Model):
@@ -21,7 +22,10 @@ class Provincia(models.Model):
 
 class LocalidadManager(models.Manager):
     def crear_zona(self, nombre):
-        return self.model.objects.all()
+        query = models.Q(nombre__icontains=nombre) | \
+            models.Q(provincia__nombre__icontains=nombre) | \
+            models.Q(provincia__pais__nombre__icontains=nombre)
+        return self.model.objects.filter(query)
 
 class LocalidadQuerySet(models.QuerySet):
     pass
@@ -145,7 +149,7 @@ class Encargado(Rol):
     TIPO = 1
 
     # Clave Autogenerada? un token?
-    clave = models.CharField(max_length=10)
+    clave = models.CharField(max_length=10, default=lambda n = 10: str_alfanumerico(n))
 
 class Vendedor(Rol):
     TIPO = 2
