@@ -2,7 +2,7 @@ from django.test import TestCase
 from decimal import Decimal
 from core.models import Localidad, TipoHabitacion
 from .models import Hotel, Habitacion 
-from .exceptions import DescuentoException
+from .exceptions import DescuentoException, TipoHotelException
 from datetime import datetime
 
 FIXTURES = [
@@ -16,6 +16,7 @@ class HotelesTestCase(TestCase):
     def setUp(self):
         self.hotel = Hotel.objects.first()
         self.tipo_habitacion = TipoHabitacion.objects.first()
+        self.nuevo_tipo_habitacion = TipoHabitacion.objects.create(nombre="Nuevo Tipo", pasajeros=12)
 
     def test_buscar_en_zona(self):
         zona_trelew = Localidad.objects.crear_zona("Trelew")
@@ -35,6 +36,10 @@ class HotelesTestCase(TestCase):
 
     def test_tarifa_por_tipo(self):
         self.hotel.agregar_tarifa(self.tipo_habitacion, 1300, 2000)
+
+    def test_agregar_habitacion_sin_tipo(self):
+        with self.assertRaises(TipoHotelException):
+            self.hotel.agregar_habitacion(self.nuevo_tipo_habitacion, 202)
 
 class HabitacionTestCase(TestCase):
     fixtures = FIXTURES

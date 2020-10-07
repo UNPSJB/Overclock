@@ -2,7 +2,7 @@ from django.db import models
 from decimal import Decimal
 from datetime import date, timedelta
 from core.models import Localidad, Categoria, Servicio, TipoHabitacion, Vendedor
-from .exceptions import DescuentoException
+from .exceptions import DescuentoException, TipoHotelException
 
 class HotelManager(models.Manager):
     def en_zona(self, zona):
@@ -25,15 +25,20 @@ class Hotel(models.Model):
     tipos = models.ManyToManyField(TipoHabitacion, through='PrecioPorTipo', through_fields=('hotel', 'tipo'))
     vendedores = models.ManyToManyField(Vendedor)
 
+    def es_comercializable(self):
+        return self.vendedores.count() > 0
+
     def es_hospedaje(self):
         return self.categoria.estrellas in [Categoria.ESTRELLA_A, Categoria.ESTRELLA_B, Categoria.ESTRELLA_C]
 
     def __str__(self):
         return f"Hospedaje {self.nombre}" if self.es_hospedaje() else f"Hotel {self.nombre}"
 
-    def agregar_habitacion(self):
-        #TODO: hacer
-        pass 
+    def agregar_habitacion(self, tipo, numero):
+        # TODO: Validar que el tipo seleccionado sea un tipo del hotel
+        if not self.tipos.filter(pk=tipo.pk).exists():
+            raise TipoHotelException(f"El hotel no trabaja con el tipo de habitación {tipo}")
+        return Habitacion.objects.create(tipo=tipo, numero=numero, hotel=self)
 
     def agregar_tarifa(self, tipo, baja, alta):
         # Que pasa si ya tengo el tipo cargado en el hotel?
@@ -67,7 +72,6 @@ class PrecioPorTipo(models.Model):
 class Habitacion(models.Model):
     hotel = models.ForeignKey(Hotel, related_name="habitaciones", on_delete=models.CASCADE)
     numero = models.PositiveSmallIntegerField() # 403 <Piso><Cuarto>
-    # TODO: Validar que el tipo seleccionado sea un tipo del hotel
     tipo = models.ForeignKey(TipoHabitacion, on_delete=models.CASCADE)
 
     class Meta:
