@@ -1,5 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from decimal import Decimal
 from .utils import str_alfanumerico
 
@@ -87,6 +87,19 @@ class TipoHabitacion(models.Model):
     def __str__(self):
         return self.nombre
 
+class PersonaManager(models.Manager):
+    pass
+
+class PersonaQuerySet(models.QuerySet):
+    def vendedores(self):
+        return self.filter(roles__tipo__exact=Vendedor.TIPO)
+
+    def encargados(self):
+        return self.filter(roles__tipo__exact=Encargado.TIPO)
+
+    def clientes(self):
+        return self.filter(roles__tipo__exact=Cliente.TIPO)
+
 # Las Personas
 class Persona(models.Model):
     DNI = 0
@@ -97,6 +110,7 @@ class Persona(models.Model):
         (PASAPORTE, "PASAPORTE"), 
         (LIBRETA, "LIBRETA")
     )
+    objects = PersonaManager.from_queryset(PersonaQuerySet)()
     tipo_documento = models.PositiveSmallIntegerField(choices=TIPOS_DOCUMENTO)
     documento = models.CharField(max_length=13)
     nombre = models.CharField(max_length=200)
@@ -119,6 +133,14 @@ class Persona(models.Model):
 
     def sos(self, Klass):
         return any([isinstance(rol, Klass) for rol in self.roles_related()])
+    
+    def hacer_vendedor(self, user_name, email, password):
+        vendedor = Vendedor()
+        self.agregar_rol(vendedor)
+        self.usuario = User.objects.create_user(user_name, email, password)
+        self.usuario.groups.add(Group.objects.get(name="Vendedor"))
+        self.save()
+        return vendedor
 
 # Usamos patron roles para
 # Encargados, Clientes, Vendedores

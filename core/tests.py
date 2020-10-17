@@ -43,6 +43,16 @@ class PersonaTestCase(TestCase):
             tipo_documento=Persona.DNI,
             documento="23423435")
 
+    def test_listar_vendedores(self):
+        self.persona.hacer_vendedor("pepe", "pepe@gmail.com", "pepe")
+        vendedores = Persona.objects.vendedores().filter(nombre="Pepe")
+        self.assertEqual(len(vendedores), 1)
+
+    def test_listar_encargados_con_dni(self):
+        self.persona.hacer_vendedor("pepe", "pepe@gmail.com", "pepe")
+        encargados = Persona.objects.encargados().filter(documento=23423435)
+        self.assertEqual(len(encargados), 0)
+
 class EncargadoTestCase(PersonaTestCase):
     def test_promover_encargado(self):
         self.persona.agregar_rol(Encargado())
@@ -52,12 +62,29 @@ class EncargadoTestCase(PersonaTestCase):
 
 class VendedorTestCase(PersonaTestCase):
     def test_promover_vendedor(self):
-        self.persona.agregar_rol(Vendedor())
+        vendedor = self.persona.hacer_vendedor("pepe", "pepe@gmail.com", "pepe")
+        vendedor.coeficiente = Decimal(5)
+        vendedor.save()
+
         self.assertTrue(self.persona.sos(Vendedor))
-        #self.assertTrue(self.persona.como(Vendedor).coeficiente == Decimal(0))
-        #self.assertNotNone(self.persona.usuario)
-        #self.assertTrue(self.persona.usuario.has_perm('core.add_cliente'))
-        #self.assertFalse(self.persona.usuario.has_perm('core.add_servicio'))
+        self.assertTrue(self.persona.como(Vendedor).coeficiente == Decimal(5))
+        self.assertIsNotNone(self.persona.usuario)
+        self.assertTrue(self.persona.usuario.has_perm('core.add_cliente'))
+        self.assertFalse(self.persona.usuario.has_perm('core.add_servicio'))
+
+#   Alta Vendedor
+#   =============
+#   Nombre:
+#   Apellido:
+#   Tipo:
+#   Documento:
+#   Ganancia:
+#   -------------------
+#   Email: 
+#   Usuario:
+#   Password:
+
+#                  |Aceptar|
 
 class ClienteTestCase(PersonaTestCase):
     def test_promover_cliente(self):
