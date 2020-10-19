@@ -79,7 +79,10 @@ WSGI_APPLICATION = 'BuenaVista.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': str(BASE_DIR / 'db.sqlite3'),
+        'TEST': {
+            'NAME': str(BASE_DIR / 'testdb.sqlite3'),
+        },
     }
 }
 
@@ -122,6 +125,9 @@ USE_TZ = True
 
 
 STATIC_URL = '/static/'
+
+#Cuanto es la tolerancia permitida de pasajeros al alquilar
+TOLERANCIA_PASAJEROS = 0
 
 STATICFILES_DIRS = (
     Path.joinpath(BASE_DIR, "static"),
