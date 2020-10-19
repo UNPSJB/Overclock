@@ -1,2 +1,0 @@
-# Overclock
-# Prueba readme

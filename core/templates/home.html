@@ -1,0 +1,63 @@
+<html>
+
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Buena Vista</title>
+    <!--BOOTSTRAP CSS-->
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css'%}">
+    <!-- FONTAWESOME -->
+    <script src="https://kit.fontawesome.com/d91d4c71ff.js" crossorigin="anonymous"></script>
+    <!--CUSTOM CSS-->
+    <link rel="stylesheet" href="{% static 'css/stylelog.css' %}">
+</head>
+
+<body>
+    <!-- JAVASCRIPT
+    <script src="codigo.js"></script> -->
+    <!--HEADER-->
+    <header class="main-header">
+        <div class="background-overlay text-white py-5">
+            <div class="container mt-5">
+                <div class="row">
+                    <div class="col-md-6 text-center justify-content-center align-self-center">
+                        <h1>
+                            Centro hotelero Buena Vista
+                        </h1>
+
+                        <form method="POST">
+                        
+                           {% csrf_token %}
+                           {{ form.as_p }}
+
+                            <input type="submit" class="btm btn-primary btn-lg btn-block" value="Ingresar">
+                        </form>
+                    </div>
+                    <div class="col-md-6">
+                        <img src="{% static 'media/log/Hotel.jpg' %}" alt="Hotel" class="img-fluid d-none d-sm-block">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <footer>
+        futer
+    </footer>
+    <!--BOOTSTRAP JS-->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"></script>
+</body>
+
+
+
+
+
+</html>

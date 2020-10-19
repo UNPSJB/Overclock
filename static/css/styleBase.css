@@ -1,0 +1,42 @@
+.mainHeader {
+    background-color: #18121E;
+    width: 100%;
+    height: 10%;
+}
+
+.card {
+    background-color: #0d7377;
+}
+.card-sub{
+    background-color: #41aea9;
+}
+
+.bodyComplete {
+    background-color: #eeeeee;
+    width: 100%;
+    height: 100%;
+}
+
+.gestion {
+    background-color: #38ffef;
+}
+
+.footer {
+    position: relative;
+    left: 0px;
+    bottom: 0px;
+    background-color: #18121E;
+    width: 100%;
+    height: 20%;
+}
+#sidebar-container{
+    min-height: 100vh;
+    background-color: #0d7377;
+}
+
+#content{
+    overflow-y: auto;
+    padding-bottom: 5rem;
+    height: 100vh;
+
+}
