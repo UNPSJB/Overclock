@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_extensions',
     'core',
     'hotel',
     'venta'
@@ -79,7 +80,10 @@ WSGI_APPLICATION = 'BuenaVista.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': str(BASE_DIR / 'db.sqlite3'),
+        'TEST': {
+            'NAME': str(BASE_DIR / 'testdb.sqlite3'),
+        },
     }
 }
 
@@ -121,3 +125,6 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+#Cuanto es la tolerancia permitida de pasajeros al alquilar
+TOLERANCIA_PASAJEROS = 0

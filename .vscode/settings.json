@@ -1,3 +1,4 @@
 {
-  "python.venvPath": "~/.virtualenvs"
+  "python.venvPath": "~/.virtualenvs",
+  "python.pythonPath": "/home/diego/.virtualenvs/BuenaVista/bin/python"
 }
