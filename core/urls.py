@@ -18,15 +18,16 @@ from django.contrib import admin
 from django.contrib.admin.sites import all_sites
 from django.urls import path, include
 from core import views
-
+app_name="core"
 
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('core/', include('core.urls', namespace="core")),
-    path('',views.home, name="home" ),
-    path('logout', views.logout),
-    
+  
+    path('paisAdd', views.paisAdd),
+    path('localidades', views.correctaAdmin, name="listadoLocalidades"),
+    path('altaPais', views.altaPais),
+    path('correctaVendedor', views.correctaVendedor),
+    path('altaProvincia',views.altaProvincia, name="crearProvincia"),
     
 ]
