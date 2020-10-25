@@ -9,6 +9,7 @@ from django.contrib.auth import authenticate
 from django.contrib.auth import login as do_login
 from django.contrib.auth import logout
 from django.contrib.auth.models import Group, User
+from django.utils import timezone
 
 
 # Create your views here.
@@ -118,23 +119,3 @@ def logout(request):
 
     # Redirect to a success page.
     return redirect(home)
-
-
-def paisAdd(request):
-    # Creamos un formulario vacío
-    paises = Pais.objects.all()
-    provincias = Provincia.objects.all()
-    form = PaisForm()
-
-    # Comprobamos si se ha enviado el formulario
-    if request.method == "POST":
-        # Añadimos los datos recibidos al formulario
-        form = PaisForm(request.POST)
-        if form.is_valid():  # Si el formulario es válido...
-            # Guardamos el formulario pero sin confirmarlo, así conseguiremos una instancia para manejarla
-            instancia = form.save(commit=False)
-            instancia.save()  # Podemos guardarla cuando queramos
-            # Después de guardar redireccionamos a la lista
-            return redirect('/correctaAdmin')
-    # Si llegamos al final renderizamos el formulario
-    return render(request, "base/agregaPais.html", {'form': form, "paises": paises, "provincias": provincias})

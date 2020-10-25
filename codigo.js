@@ -6,6 +6,6 @@ function validate() {
             return true;
         }
     }
-    alert("Los campos deben ser iguales y no deben estar vacios")
+    alert("Los campos cara de pija deben ser iguales y no deben estar vacios")
     return false;
 }
