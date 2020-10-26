@@ -19,7 +19,6 @@ class PaisForm(ModelForm):
             raise ValidationError("NO ME GUSTA EN BLANCO!!!!")
         return nombre.title()
 
-
     def __init__(self, *args, **kwargs):
         super(PaisForm, self).__init__(*args, **kwargs)
         self.fields['nombre'].widget.attrs.update({'class': 'form-control'})

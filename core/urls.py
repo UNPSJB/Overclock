@@ -30,4 +30,5 @@ urlpatterns = [
     path('altaPais', views.altaPais),
     path('correctaVendedor', views.correctaVendedor),
     path('altaProvincia',views.altaProvincia, name="crearProvincia"),
+    path('pais', views.PaisCreate.as_view(), name="crear_pais"),
 ]

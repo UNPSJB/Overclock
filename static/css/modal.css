@@ -21,6 +21,7 @@
 }
 @import url("https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css");
 
+/*
 .fade-scale {
     transform: scale(0);
     opacity: 0;
@@ -33,3 +34,4 @@
     opacity: 1;
     transform: scale(1);
   }
+  */

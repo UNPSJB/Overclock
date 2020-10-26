@@ -1,6 +1,6 @@
 import django
 from django.forms import forms
-from django.http import request
+from django.http import request, JsonResponse
 from django.shortcuts import render, HttpResponse, redirect
 from core.models import Pais, Provincia, Localidad
 from .forms import PaisForm, LocalidadForm, AutenticacionForm, ProvinciaForm
@@ -11,6 +11,15 @@ from django.contrib.auth import logout
 from django.contrib.auth.models import Group, User
 from django.utils import timezone
 
+from django.views.generic.edit import CreateView
+
+# Modal
+class PaisCreate(CreateView):
+    model = Pais
+    fields = '__all__'
+    template_name = 'core/modals/pais_form.html'
+    form = PaisForm
+    success_url = "ok"
 
 # Create your views here.
 def ingresoAdmin(request):
@@ -40,7 +49,7 @@ def home(request):
                 do_login(request, user)
                 usr = User.objects.get(username=user)
 
-                if usr.groups.filter(name='administrador').exists():
+                if usr.groups.filter(name='Administrador').exists():
                     return redirect("core:listadoLocalidades")
                 else:
                     # Y le redireccionamos a la portada
@@ -68,8 +77,6 @@ def correctaAdmin(request):
     formProvincia = ProvinciaForm(request.POST)
     formLocalidad = LocalidadForm(request.POST)
     
-
-
     if request.method == "POST":
         #TODO garantizar que si los forms tienen errores las modales se vuelvan a abrir indicando el error
         #print(request.POST)
