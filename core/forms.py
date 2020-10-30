@@ -10,14 +10,14 @@ class PaisForm(ModelForm):
    
     #ver en la doc de django
     
-    def clean_nombre(self):
+    """def clean_nombre(self):
         #print("aca estoy en la func")       
         nombre=self.cleaned_data["nombre"]
         #print(nombre)
         if str(nombre).strip() == "pepe":
             print("ACANO ENTRA....")
             raise ValidationError("NO ME GUSTA EN BLANCO!!!!")
-        return nombre.title()
+        return nombre.title()"""
 
     def __init__(self, *args, **kwargs):
         super(PaisForm, self).__init__(*args, **kwargs)

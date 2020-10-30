@@ -14,6 +14,8 @@ from django.utils import timezone
 from django.views.generic.edit import CreateView
 
 # Modal
+
+
 class PaisCreate(CreateView):
     model = Pais
     fields = '__all__'
@@ -22,6 +24,8 @@ class PaisCreate(CreateView):
     success_url = "ok"
 
 # Create your views here.
+
+
 def ingresoAdmin(request):
     # Si estamos identificados devolvemos la portada
     if request.user.is_authenticated:
@@ -53,7 +57,7 @@ def home(request):
                     return redirect("core:listadoLocalidades")
                 else:
                     # Y le redireccionamos a la portada
-                    return redirect(correctaVendedor)
+                    return redirect("core:vendedor")
             else:
                 return render(request, "home.html", {'form': form})
 
@@ -61,32 +65,50 @@ def home(request):
     return render(request, "home.html", {'form': form})
 
 
-# def home(request):
-#     paises=Pais.objects.all()
-#     provincias=Provincia.objects.all()
-#     form = UsuarioLoginForm()
-#     return render(request, "home.html", {"form": form, "provincias": provincias})
-
-
 def correctaAdmin(request):
     paises = Pais.objects.all()
     provincias = Provincia.objects.all()
     localidades = Localidad.objects.all()
-    #FIXME cuando no vienen datos en el POST  por ser un GET, la instanciacion tendria que ser 
+    # FIXME cuando no vienen datos en el POST  por ser un GET, la instanciacion tendria que ser
     formPais = PaisForm(request.POST)
     formProvincia = ProvinciaForm(request.POST)
     formLocalidad = LocalidadForm(request.POST)
-    
+
     if request.method == "POST":
-        #TODO garantizar que si los forms tienen errores las modales se vuelvan a abrir indicando el error
-        #print(request.POST)
-        if request.POST["accion"]=="provincia":
-            if formProvincia.is_valid():
-                formProvincia.save()
-        elif request.POST["accion"]=="pais":
+        # TODO garantizar que si los forms tienen errores las modales se vuelvan a abrir indicando el error
+        # print(request.POST)
+
+       # si la accion viene por el lado de un boton del modal nombre accion y valor pais....
+        if request.POST["accion"] == "provincia":
+            # tomamos el formulario recepcionado para trabajarlo
+            form = ProvinciaForm(request.POST)
+            if form.is_valid():  # si es valido
+                # tomamos el formulario recibido
+                provinciaIngresado = Provincia(
+                    nombre=form.cleaned_data['nombre'])
+                # declaramos una variable para poder seguir cuando realmente estamos frente a una ocurrencia o no
+                ocurrencia = False
+                for provincia in provincias:  # se recorren las provincias existentes
+                    if (provincia.nombre == provinciaIngresado.nombre):  # si los nombres son iguales
+                        ocurrencia = True  # con al menos una declaramos esa variable en verdadero
+                    # debug de los valores
+                    print(f"La ocurrencia dio ...{ocurrencia}")
+                if ocurrencia == True:  # si es verdadero que hay ocurrencias iguales
+                    print("LA PROVINCIA EXISTE INMUNDO ANIMAL")  # debug
+                    print("====>    NO SE GRABA   :)")
+                    # se vuelve a refrescar la pagina
+                    return redirect('core:listadoLocalidades')
+                else:  # si no se encontro que la provincia ya existe
+                    print("====>    SE GRABA   :)")
+                    formProvincia.save()  # se graba la provincia
+            return redirect('core:listadoLocalidades')  # se recarga la pagina
+
+        elif request.POST["accion"] == "pais":
             if formPais.is_valid():
-                formPais.save()
-        elif request.POST["accion"]=="localidad":
+                formPais.save(commit=True)
+            else:
+                formPais.save(commit=False)
+        elif request.POST["accion"] == "localidad":
             if formLocalidad.is_valid():
                 formLocalidad.save()
     return render(request, "base/administrador.html", {"paises": paises, "localidades": localidades, "provincias": provincias, "formPais": formPais, "formProvincia": formProvincia, "formLocalidad": formLocalidad})
@@ -99,7 +121,12 @@ def altaPais(request):
         if form.is_valid():  # Si el formulario es válido...
             # Guardamos el formulario pero sin confirmarlo, así conseguiremos una instancia para manejarla
             instancia = form.save(commit=True)
-            return redirect('core:listadoLocalidades')
+    return redirect('core:listadoLocalidades')
+
+
+def regionAdmin(request):
+    # ACA VA EL LISTADO DE LOCALIDADES ETC
+    return render(request, "core/regionAdmin.html")
 
 
 def altaProvincia(request):
@@ -116,7 +143,6 @@ def altaProvincia(request):
 
 
 def correctaVendedor(request):
-
     return render(request, "base/vendedor.html")
 
 

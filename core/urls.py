@@ -25,10 +25,10 @@ app_name="core"
 urlpatterns = [
   
     path('logout', views.logout),
-    #path('paisAdd', views.paisAdd),
     path('localidades', views.correctaAdmin, name="listadoLocalidades"),
     path('altaPais', views.altaPais),
-    path('correctaVendedor', views.correctaVendedor),
+    path('correctaVendedor', views.correctaVendedor,name="vendedor"),
     path('altaProvincia',views.altaProvincia, name="crearProvincia"),
     path('pais', views.PaisCreate.as_view(), name="crear_pais"),
+    path('region',views.regionAdmin, name="opcionRegion"),
 ]

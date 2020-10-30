@@ -5,7 +5,8 @@
 }
 
 .card {
-    background-color: #0d7377;
+    background-color: #085153;
+    height: 11%;
 }
 .card-sub{
     background-color: #41aea9;
@@ -22,14 +23,14 @@
 }
 
 .footer {
-    position: relative;
+    position: absolute;
     left: 0px;
     bottom: 0px;
     background-color: #18121E;
     width: 100%;
-    height: 20%;
+    height: 10%;
 }
-#sidebar-container{
+#sticky-sidebar{
     min-height: 100vh;
     background-color: #0d7377;
 }

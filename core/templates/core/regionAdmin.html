@@ -1,0 +1,34 @@
+{% extends 'base/base.html'%}
+{% load static %}
+
+{% block header %}
+<button onclick="location.href='/core/localidades'" style="text-decoration:none"
+            class="rounded-1 btn btn-lg btn-outline-light text-white ml-4 mt-3"> Hola Administrador </button>
+{% endblock header %}
+
+{% block tarjeta1 %}
+<div class="card rounded-0">
+    <div class="card-header" id="headingOne">
+        <button class="btn btn-link btn-block text-white">
+            <center>
+                <h5> Opcion X </h5>
+            </center>
+        </button>
+    </div>
+</div>
+{% endblock tarjeta1 %}
+
+ 
+
+{% block content %}
+<p>
+<h1>ESTAS PARADO EN REGION DE ADMINISTRADOR</h1>
+</p>
+<p>
+<h1>PONER ACA LISTA DE LOCALIDADES</h1>
+</p>
+<p>
+<h1>LOS MODALES DEPENDEN TAMBIEN DE ESTA VISTA</h1>
+</p>
+
+{% endblock content %}
