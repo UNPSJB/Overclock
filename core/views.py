@@ -14,12 +14,12 @@ from django.utils import timezone
 from django.views.generic.edit import CreateView
 
 
-def ingresoAdmin(request):
+"""def ingresoAdmin(request):
     # Si estamos identificados devolvemos la portada
     if request.user.is_authenticated:
         return render(request, "administrador.html")
     # En otro caso redireccionamos al login
-    return redirect('/home.html')
+    return redirect('/home.html')"""
 
 
 def home(request):
@@ -40,13 +40,13 @@ def home(request):
                 # Hacemos el login manualmente
                 do_login(request, user)
                 usr = User.objects.get(username=user)
-
                 if usr.groups.filter(name='Administrador').exists():
                     return redirect("core:administrador")
                 else:
                     # Y le redireccionamos a la portada
                     return redirect("core:vendedor")
             else:
+                print("ESTAMOS ACA <=========")
                 return render(request, "home.html", {'form': form})
 
     # Si llegamos al final renderizamos el formulario
