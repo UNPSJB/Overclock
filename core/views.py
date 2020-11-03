@@ -13,18 +13,6 @@ from django.utils import timezone
 
 from django.views.generic.edit import CreateView
 
-# Modal
-
-
-class PaisCreate(CreateView):
-    model = Pais
-    fields = '__all__'
-    template_name = 'core/modals/pais_form.html'
-    form = PaisForm
-    success_url = "ok"
-
-# Create your views here.
-
 
 def ingresoAdmin(request):
     # Si estamos identificados devolvemos la portada
@@ -54,7 +42,7 @@ def home(request):
                 usr = User.objects.get(username=user)
 
                 if usr.groups.filter(name='Administrador').exists():
-                    return redirect("core:listadoLocalidades")
+                    return redirect("core:administrador")
                 else:
                     # Y le redireccionamos a la portada
                     return redirect("core:vendedor")
@@ -66,6 +54,15 @@ def home(request):
 
 
 def correctaAdmin(request):
+   #aca van los listados de hoteles
+   return render(request, "base/administrador.html")
+
+def correctaVendedor(request):
+    #aca van tambien listados de hoteles
+    return render(request, "base/vendedor.html")
+
+
+def regionAdmin(request):
     paises = Pais.objects.all()
     provincias = Provincia.objects.all()
     localidades = Localidad.objects.all()
@@ -97,11 +94,11 @@ def correctaAdmin(request):
                     print("LA PROVINCIA EXISTE INMUNDO ANIMAL")  # debug
                     print("====>    NO SE GRABA   :)")
                     # se vuelve a refrescar la pagina
-                    return redirect('core:listadoLocalidades')
+                    return redirect('core:opcionRegion')
                 else:  # si no se encontro que la provincia ya existe
                     print("====>    SE GRABA   :)")
                     formProvincia.save()  # se graba la provincia
-            return redirect('core:listadoLocalidades')  # se recarga la pagina
+            return redirect('core:opcionRegion')  # se recarga la pagina
 
         elif request.POST["accion"] == "pais":
             if formPais.is_valid():
@@ -111,40 +108,8 @@ def correctaAdmin(request):
         elif request.POST["accion"] == "localidad":
             if formLocalidad.is_valid():
                 formLocalidad.save()
-    return render(request, "base/administrador.html", {"paises": paises, "localidades": localidades, "provincias": provincias, "formPais": formPais, "formProvincia": formProvincia, "formLocalidad": formLocalidad})
-
-
-def altaPais(request):
-    if request.method == "POST":
-        # Añadimos los datos recibidos al formulario
-        form = PaisForm(request.POST)
-        if form.is_valid():  # Si el formulario es válido...
-            # Guardamos el formulario pero sin confirmarlo, así conseguiremos una instancia para manejarla
-            instancia = form.save(commit=True)
-    return redirect('core:listadoLocalidades')
-
-
-def regionAdmin(request):
-    # ACA VA EL LISTADO DE LOCALIDADES ETC
-    return render(request, "core/regionAdmin.html")
-
-
-def altaProvincia(request):
-    if request.method == "POST":
-        # Añadimos los datos recibidos al formulario
-        form = ProvinciaForm(request.POST)
-        if form.is_valid():  # Si el formulario es válido...
-            # Guardamos el formulario pero sin confirmarlo, así conseguiremos una instancia para manejarla
-            instancia = form.save(commit=True)
-        else:
-            pass
-           # mensajes.error("NOMBRE NO PUEDE SER CADENA VACIA...") ---> spike
-    return redirect('core:listadoLocalidades')
-
-
-def correctaVendedor(request):
-    return render(request, "base/vendedor.html")
-
+    return render(request, "core/regionAdmin.html", {"paises": paises, "localidades": localidades, "provincias": provincias, "formPais": formPais, "formProvincia": formProvincia, "formLocalidad": formLocalidad})
+    
 
 def logout(request):
     if not request.user.is_authenticated:
