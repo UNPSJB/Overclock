@@ -102,9 +102,9 @@ def regionAdmin(request):
 
         elif request.POST["accion"] == "pais":
             if formPais.is_valid():
-                formPais.save(commit=True)
+                formPais.save()
             else:
-                formPais.save(commit=False)
+                formPais.save()
         elif request.POST["accion"] == "localidad":
             if formLocalidad.is_valid():
                 formLocalidad.save()

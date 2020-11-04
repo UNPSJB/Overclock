@@ -110,7 +110,7 @@
     </div>
 </div>
 
-<!-- Modal AÑADIR PAIS-->
+<!-- Modal AÑADIR PROVINCIA-->
 <div class="modal fade-scale" id="crearPais" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-xl modal-dialog modal-dialog-scrollable">
         <div class="modal-content">
@@ -125,16 +125,17 @@
             <div class="modal-body">
                 <form method="POST">
                     {% csrf_token %}
-                    {{ formPais.as_p }}
+                    {{formPais.as_p}}
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                <button type="submit" name="accion" class="btm btn-success" value="provincia">Guardar</button>
+                <button type="submit" name="accion" class="btm btn-success" value="pais">Guardar</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
 <!-- Modal AÑADIR PROVINCIA-->
 <div class="modal fade-scale" id="crearProvincia" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-xl modal-dialog modal-dialog-scrollable">
@@ -179,7 +180,7 @@
                     {{ formLocalidad.as_p }}
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
+                <button type="dismiss" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
                 <button type="submit" name="accion" class="btm btn-success" value="localidad">Guardar</button>
                 </form>
             </div>
@@ -224,4 +225,19 @@
     $(document).ready(function () {
         $('#example').DataTable();
     });</script>
+
+<script>
+
+//ESTO ES PARA CAPTURAR LOS PAQUETES
+    $(function () {
+    var token =jQuery("[name=csrfmiddlewaretoken]").val();
+    $("form").submit(function (e){
+        e.preventDefault();
+        var datosFormulario=$('form').serializeArray();
+        console.log(datosFormulario);
+         
+    });
+});
+
+</script>
 {% endblock %}

@@ -5,7 +5,7 @@ from .utils import str_alfanumerico
 
 # Pais, Provincia, Localidad
 class Pais(models.Model):
-    nombre = models.CharField(max_length=200)
+    nombre = models.CharField(max_length=200, unique=True)
 
     class Meta:
       verbose_name_plural = "Paises"
