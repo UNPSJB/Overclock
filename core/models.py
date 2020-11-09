@@ -172,7 +172,8 @@ class Encargado(Rol):
     TIPO = 1
 
     # Clave Autogenerada? un token?
-    clave = models.CharField(max_length=10, default=lambda n = 10: str_alfanumerico(n))
+    # clave = models.CharField(max_length=10, default=lambda n = 10: str_alfanumerico(n))
+    clave = models.CharField(max_length=10, default="")
 
 class Vendedor(Rol):
     TIPO = 2
