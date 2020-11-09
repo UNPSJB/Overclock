@@ -75,9 +75,7 @@
                 <button type="button" class="btn btn-success ml-4 float-right btn-sm" data-toggle="modal"
                     data-target="#crearLocalidad"
                     onclick="abrir_modal('{% url 'core:modalCrearLocalidad' %}','#crearLocalidad');">
-                    <img src="/static/icons/plus-circle.svg"
-                        class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}"
-                        alt="">
+                    <i class="fas fa-plus-circle"></i>
                     AÑADIR</button>
                 <th>Pais</th>
                 <th>Provincia</th>
@@ -104,9 +102,7 @@
                         <button type="button" class="btn btn-warning" data-toggle="modal"
                             data-target="#modificarLocalidad"
                             onclick="abrir_modal('{% url 'core:modalModificarLocalidad' ciudad %}','#modificarLocalidad');">
-                            <img src="/static/icons/pencil-square.svg"
-                                class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}"
-                                alt="">
+                            <i class="fas fa-edit"></i>
                         </button>
                     </center>
 
@@ -146,9 +142,7 @@
                 <button type="button" class="btn btn-success ml-4 float-right btn-sm" data-toggle="modal"
                     data-target="#crearProvincia"
                     onclick="abrir_modal('{% url 'core:modalCrearProvincia' %}','#crearProvincia');">
-                    <img src="/static/icons/plus-circle.svg"
-                        class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}"
-                        alt="">
+                    <i class="fas fa-plus-circle"></i>
                     AÑADIR</button>
                 <th>Pais</th>
                 <th>Provincia</th>
@@ -169,9 +163,7 @@
                         <button type="button" class="btn btn-warning" data-toggle="modal"
                             data-target="#modificarProvincia"
                             onclick="abrir_modal('{% url 'core:modalModificarProvincia' provincia %}','#modificarProvincia');">
-                            <img src="/static/icons/pencil-square.svg"
-                                class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}"
-                                alt="">
+                            <i class="fas fa-edit"></i>
                         </button>
                     </center>
 
@@ -210,9 +202,7 @@
             <tr>
                 <button type="button" class="btn btn-success ml-4 float-right btn-sm" data-toggle="modal"
                     data-target="#crearPais" onclick="abrir_modal('{% url 'core:modalCrearPais' %}','#crearPais');">
-                    <img src="/static/icons/plus-circle.svg"
-                        class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}"
-                        alt="">
+                    <i class="fas fa-plus-circle"></i>
                     AÑADIR</button>
                 <th>Pais</th>
 
@@ -236,9 +226,7 @@
                     <center>
                         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modificarPais"
                             onclick="abrir_modal('{% url 'core:modalModificarPais' pais %}','#modificarPais');">
-                            <img src="/static/icons/pencil-square.svg"
-                                class="img-fluid ${3|rounded-top,rounded-right,rounded-bottom,rounded-left,rounded-circle,|}"
-                                alt="">
+                            <i class="fas fa-edit"></i>
                         </button>
                     </center>
 
@@ -327,13 +315,7 @@
         });
     });
 </script>
-<script type="text/javascript">
-    function abrir_modal(url, id) { /// al llamar a la funcion para apertura de modales le damos url del modal y id del mismo
-        $(id).load(url, function () {
-            $(this).modal('show');
-        });
-    }
-</script>
+
 
 
 

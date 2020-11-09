@@ -12,11 +12,11 @@
     
     <!-- Bootstrap CSS para datatable-->
     <link rel="stylesheet" href="{% static '/css/bootstrap.css' %}">
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.22/css/dataTables.bootstrap4.min.css">
+    <link rel="stylesheet" href="{% static '/css/dataTables.bootstrap4.min.css' %}">
     <!-- Bootstrap CSS para datatable-->
 
     <!-- FONTAWESOME -->
-    <script src="https://kit.fontawesome.com/d91d4c71ff.js" crossorigin="anonymous"></script>
+    <script src="{% static '/js/d91d4c71ff.js' %}"></script>
 
     <!--CUSTOM CSS-->
     <link rel="stylesheet" href="{% static '/css/styleBase.css' %}">
@@ -98,6 +98,9 @@
     <!--dataTable jquery + bootstrap + popper include-->
     <script src="{% static 'js/jquery.dataTables.min.js'%}"></script>
     <script src="{% static '/js/dataTables.bootstrap4.min.js'%}"></script>
+    
+    <!--scripts personalizados-->
+    <script src="{% static '/js/main.js' %}"></script>
 
     {% block extrajs %}
     {% endblock %}
