@@ -1,7 +1,9 @@
+from typing import Reversible
 import django
 from django.forms import forms
 from django.http import request, JsonResponse
-from django.shortcuts import render, HttpResponse, redirect
+from django.http.response import HttpResponseRedirect
+from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from core.models import Pais, Provincia, Localidad
 from .forms import PaisForm, LocalidadForm, AutenticacionForm, ProvinciaForm
 from django.contrib.auth.forms import AuthenticationForm
@@ -54,11 +56,12 @@ def home(request):
 
 
 def correctaAdmin(request):
-   #aca van los listados de hoteles
-   return render(request, "base/administrador.html")
+    # aca van los listados de hoteles
+    return render(request, "base/administrador.html")
+
 
 def correctaVendedor(request):
-    #aca van tambien listados de hoteles
+    # aca van tambien listados de hoteles
     return render(request, "base/vendedor.html")
 
 
@@ -109,11 +112,83 @@ def regionAdmin(request):
             if formLocalidad.is_valid():
                 formLocalidad.save()
     return render(request, "core/regionAdmin.html", {"paises": paises, "localidades": localidades, "provincias": provincias, "formPais": formPais, "formProvincia": formProvincia, "formLocalidad": formLocalidad})
-    
+
 
 def logout(request):
     if not request.user.is_authenticated:
         logout(request)
-
-    # Redirect to a success page.
     return redirect(home)
+
+
+def localidadCrear(request):
+    localidades = Localidad.objects.all() #tomo todas las localidades (la idea aca es usarlas para controlar entradas)
+    formLocalidad = LocalidadForm(request.POST) #variable que toma el formulario con datos que se envia
+    if request.method == "POST": # si se usa el envio ....
+            if formLocalidad.is_valid(): # si es valido el formulario ...
+                formLocalidad.save() # se graba!
+                return redirect('core:opcionRegion') # se redirige hacia region
+    return render(request, "core/modals/modal_localidad_crear.html", {"localidades": localidades, "formulario": formLocalidad}) #si el metodo es GET se renderiza el modal con un formulario vacio
+
+def provinciaCrear(request):
+    provincias = Provincia.objects.all()
+    formProvincia = ProvinciaForm(request.POST)
+    if request.method == "POST":
+            if formProvincia.is_valid():
+                formProvincia.save()
+                return redirect('core:opcionRegion')
+    return render(request, "core/modals/modal_provincia_crear.html", {"provincias": provincias, "formulario": formProvincia})
+
+def paisCrear(request):
+    paises = Pais.objects.all()
+    formPais = PaisForm(request.POST)
+    if request.method == "POST":
+            if formPais.is_valid():
+                formPais.save()
+                return redirect('core:opcionRegion')
+    return render(request, "core/modals/modal_pais_crear.html", {"paises": paises, "formulario": formPais})
+
+def localidadModificar(request, ciudad): #se recibe la el objeto ciudad que corresponde a la linea donde se encontraba el boton modificar
+    ciudadInstancia = get_object_or_404(Localidad, nombre=ciudad) #ciudadInstancia es el objeto Localidad que corresponde a la ciudad, esto es para modificar lo que ya existe
+    localidades = Localidad.objects.all() #localidades se pretende usar para controlar los ingresos
+    if request.method == 'POST': #si el metodo es post, esto es el envio de la modificacion
+        form=LocalidadForm(request.POST,instance=ciudadInstancia) # el fomulario toma los datos del objeto correspondiente a la ciudad a modificar
+        if form.is_valid(): #si el formulario es valido
+            ciudadInstancia.nombre=request.POST['nombre'] #tomamos el campo nombre de la instancia que teniamos y la cambiamos por la que nos devuelve el formulario
+            ciudadInstancia.save() # se graba la modificacion
+            return redirect('core:opcionRegion') # se redirige a region
+        else: #si el formulario no fue valido se devuelve para mostrar errores
+            form=LocalidadForm(request.POST,instance=ciudadInstancia)
+    else: #si el metodo es GET ...
+        form=LocalidadForm(instance=ciudadInstancia)        
+    return render(request, "core/modals/modal_localidad_modificar.html", {"localidades": localidades, "formulario": form, "ciudad": ciudadInstancia})
+
+
+def provinciaModificar(request, provincia):
+    provinciaInstancia = get_object_or_404(Provincia, nombre=provincia)
+    provincias = Provincia.objects.all()
+    if request.method == 'POST':
+        form=ProvinciaForm(request.POST,instance=provinciaInstancia)
+        if form.is_valid():
+            provinciaInstancia.nombre=request.POST['nombre']
+            provinciaInstancia.save()
+            return redirect('core:opcionRegion')
+        else:
+            form=ProvinciaForm(request.POST,instance=provinciaInstancia)
+    else:
+        form=ProvinciaForm(instance=provinciaInstancia)
+    return render(request, "core/modals/modal_provincia_modificar.html", {"provincias": provincias, "formulario": form, "provincia": provinciaInstancia})
+
+def paisModificar(request, pais):
+    paisInstancia = get_object_or_404(Pais, nombre=pais)
+    paises = Pais.objects.all()
+    if request.method == 'POST':
+        form=PaisForm(request.POST,instance=paisInstancia)
+        if form.is_valid():
+            paisInstancia.nombre=request.POST['nombre']
+            paisInstancia.save()
+            return redirect('core:opcionRegion')
+        else:
+            form=PaisForm(request.POST,instance=paisInstancia)
+    else:
+        form=PaisForm(instance=paisInstancia)
+    return render(request, "core/modals/modal_pais_modificar.html", {"paises": paises, "formulario": form, "pais": paisInstancia})

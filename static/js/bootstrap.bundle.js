@@ -4680,7 +4680,7 @@
   var EVENT_CLICK_DATA_API$5 = "click" + EVENT_KEY$5 + DATA_API_KEY$5;
   var CLASS_NAME_SCROLLABLE = 'modal-dialog-scrollable';
   var CLASS_NAME_SCROLLBAR_MEASURER = 'modal-scrollbar-measure';
-  var CLASS_NAME_BACKDROP = 'modal-backdrop';
+  var CLASS_NAME_BACKDROP = '';/*modal-backdrop*/
   var CLASS_NAME_OPEN = 'modal-open';
   var CLASS_NAME_FADE$1 = 'fade';
   var CLASS_NAME_SHOW$3 = 'show';
