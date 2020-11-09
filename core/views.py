@@ -4,8 +4,8 @@ from django.forms import forms
 from django.http import request, JsonResponse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
-from core.models import Pais, Provincia, Localidad
-from .forms import PaisForm, LocalidadForm, AutenticacionForm, ProvinciaForm
+from core.models import Pais, Provincia, Localidad, TipoHabitacion
+from .forms import PaisForm, LocalidadForm, AutenticacionForm, ProvinciaForm, TipoHabitacionForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as do_login
@@ -192,3 +192,39 @@ def paisModificar(request, pais):
     else:
         form=PaisForm(instance=paisInstancia)
     return render(request, "core/modals/modal_pais_modificar.html", {"paises": paises, "formulario": form, "pais": paisInstancia})
+
+
+# GESTION TIPO HABITACION
+
+
+def tipoHabitacion(request):
+    tiposHabitaciones=TipoHabitacion.objects.all()
+    return render(request, "core/tipoHabitacionAdmin.html",{"tipos":tiposHabitaciones,})
+
+
+
+def tipoHabitacionCrear(request):
+    coltiposHabitaciones = TipoHabitacion.objects.all()
+    form = TipoHabitacionForm(request.POST)
+    if request.method == "POST":
+            if form.is_valid():
+                form.save()
+                return redirect('core:tipoDeHabitacion')
+    return render(request, "core/modals/modal_tipoHabitacion_crear.html", {"coltiposHabitaciones": coltiposHabitaciones, "formulario": form})
+
+
+
+def tipoHabitacionModificar(request, unTipoHabitacion):
+    tipoHabitacionInstancia = get_object_or_404(Pais, nombre = unTipoHabitacion.nombre)
+    coltiposHabitaciones = TipoHabitacion.objects.all()
+    if request.method == 'POST':
+        form=TipoHabitacionForm(request.POST,instance=tipoHabitacionInstancia)
+        if form.is_valid():
+            tipoHabitacionInstancia.nombre=request.POST['nombre']
+            tipoHabitacionInstancia.save()
+            return redirect('core:tipoDeHabitacion')
+        else:
+            form=TipoHabitacionForm(request.POST,instance=tipoHabitacionInstancia)
+    else:
+        form=TipoHabitacionForm(instance=tipoHabitacionInstancia)
+    return render(request, "core/modals/modal_tipoHabitacion_modificar.html", {"coltiposHabitaciones": coltiposHabitaciones, "formulario": form, "tipoHabitacion": tipoHabitacionInstancia})
