@@ -9,7 +9,9 @@
 {% block content %}
 <div class="formularioRegion" id="vistaLocalidades">
 
-<center><h1 class="my-4">LISTADO DE TIPOS DE HABITACION</h1></center>
+    <center>
+        <h1 class="my-4">LISTADO DE TIPOS DE HABITACION</h1>
+    </center>
 
 
     <table id="example1" class="table table-striped table-bordered" style="width:100%">
@@ -19,7 +21,7 @@
             <tr>
 
                 <button type="button" class="btn btn-success ml-4 float-right btn-sm" data-toggle="modal"
-                    data-target="#crearLocalidad"
+                    data-target="#crearTipoHabitacion"
                     onclick="abrir_modal('{% url 'core:modalCrearTipoHabitacion' %}','#crearTipoHabitacion');">
                     <i class="fas fa-plus-circle"></i>
                     AÑADIR</button>
@@ -37,7 +39,7 @@
         <tbody>
 
 
-            {% for tipoHabitacion in coltiposHabitaciones %}
+            {% for tipoHabitacion in tiposHabitaciones %}
 
 
             <tr>
@@ -48,8 +50,8 @@
                 <td>
                     <center>
                         <button type="button" class="btn btn-warning" data-toggle="modal"
-                            data-target="#modificarLocalidad"
-                            onclick="abrir_modal('{% url 'core:modalModificarTipoHabitacion' unTipoHabitacion %}','#modificarTipoHabitacion');">
+                            data-target="#modificarTipoHabitacion"
+                            onclick="abrir_modal('{% url 'core:modalModificarTipoHabitacion' tipoHabitacion %}','#modificarTipoHabitacion');">
                             <i class="fas fa-edit"></i>
                         </button>
                     </center>
@@ -87,7 +89,7 @@
 
 
 
- 
+
 {% endblock content %}
 
 {% block extrajs %}

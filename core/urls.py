@@ -28,7 +28,7 @@ urlpatterns = [
     path('homeAdministrador', views.correctaAdmin, name="administrador"),
     path('hometaVendedor', views.correctaVendedor,name="vendedor"),
     path('region',views.regionAdmin, name="opcionRegion"),
-    path('tipoHabitacion',views.tipoHabitacion, name="tipoDeHabitacion"),
+    path('tipoHabitacion',views.tipoHabitacion, name="opcionTipoHabitacion"),
     path('crearLocalidad',views.localidadCrear, name="modalCrearLocalidad"),
     path('modificarLocalidad/<ciudad>',views.localidadModificar, name="modalModificarLocalidad"),
     path('crearProvincia',views.provinciaCrear, name="modalCrearProvincia"),
@@ -36,5 +36,5 @@ urlpatterns = [
     path('crearPais',views.paisCrear, name="modalCrearPais"),
     path('modificarPais/<pais>',views.paisModificar, name="modalModificarPais"),
     path('crearTipoHabitacion',views.tipoHabitacionCrear, name="modalCrearTipoHabitacion"),
-    path('modificarTipoHabitacion/<unTipoHabitacion>',views.tipoHabitacionModificar, name="modalModificarTipoHabitacion"),
+    path('modificarTipoHabitacion/<tipoHabitacion>',views.tipoHabitacionModificar, name="modalModificarTipoHabitacion"),
 ]

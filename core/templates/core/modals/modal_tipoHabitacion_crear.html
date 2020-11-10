@@ -8,11 +8,11 @@
                 <span>&times;</span>
             </button>
         </div>
-        <form method="POST">
+        <form action="{% url 'core:modalCrearTipoHabitacion' %}" method="POST">
             <div class="modal-body">
 
                 {% csrf_token %}
-                {{ formulario }}
+                {{ formulario.as_p }}
             </div>
             <div class="modal-footer">
                 <button type="dismiss" class="btn btn-danger" data-dismiss="modal">Cerrar</button>

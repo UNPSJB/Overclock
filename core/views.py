@@ -132,11 +132,22 @@ def localidadCrear(request):
 def provinciaCrear(request):
     provincias = Provincia.objects.all()
     formProvincia = ProvinciaForm(request.POST)
-    if request.method == "POST":
+    if request.method == 'POST':
             if formProvincia.is_valid():
                 formProvincia.save()
                 return redirect('core:opcionRegion')
     return render(request, "core/modals/modal_provincia_crear.html", {"provincias": provincias, "formulario": formProvincia})
+
+def tipoHabitacionCrear(request):
+    coltiposHabitaciones = TipoHabitacion.objects.all()
+    formTipoHabitacion = TipoHabitacionForm(request.POST)
+    if request.method == 'POST':
+           if formTipoHabitacion.is_valid():
+                formTipoHabitacion.save()
+                return redirect('core:opcionTipoHabitacion')
+    return render(request, "core/modals/modal_tipoHabitacion_crear.html", {"coltiposHabitaciones": coltiposHabitaciones, "formulario": formTipoHabitacion})
+
+
 
 def paisCrear(request):
     paises = Pais.objects.all()
@@ -146,6 +157,8 @@ def paisCrear(request):
                 formPais.save()
                 return redirect('core:opcionRegion')
     return render(request, "core/modals/modal_pais_crear.html", {"paises": paises, "formulario": formPais})
+
+
 
 def localidadModificar(request, ciudad): #se recibe la el objeto ciudad que corresponde a la linea donde se encontraba el boton modificar
     ciudadInstancia = get_object_or_404(Localidad, nombre=ciudad) #ciudadInstancia es el objeto Localidad que corresponde a la ciudad, esto es para modificar lo que ya existe
@@ -199,30 +212,24 @@ def paisModificar(request, pais):
 
 def tipoHabitacion(request):
     tiposHabitaciones=TipoHabitacion.objects.all()
-    return render(request, "core/tipoHabitacionAdmin.html",{"tipos":tiposHabitaciones,})
+    return render(request, "core/tipoHabitacionAdmin.html",{"tiposHabitaciones":tiposHabitaciones})
 
 
 
-def tipoHabitacionCrear(request):
-    coltiposHabitaciones = TipoHabitacion.objects.all()
-    form = TipoHabitacionForm(request.POST)
-    if request.method == "POST":
-            if form.is_valid():
-                form.save()
-                return redirect('core:tipoDeHabitacion')
-    return render(request, "core/modals/modal_tipoHabitacion_crear.html", {"coltiposHabitaciones": coltiposHabitaciones, "formulario": form})
+#dasdasd
 
-
-
-def tipoHabitacionModificar(request, unTipoHabitacion):
-    tipoHabitacionInstancia = get_object_or_404(Pais, nombre = unTipoHabitacion.nombre)
+def tipoHabitacionModificar(request, tipoHabitacion):
+    tipoHabitacionInstancia = get_object_or_404(TipoHabitacion,nombre=tipoHabitacion)
     coltiposHabitaciones = TipoHabitacion.objects.all()
     if request.method == 'POST':
         form=TipoHabitacionForm(request.POST,instance=tipoHabitacionInstancia)
         if form.is_valid():
             tipoHabitacionInstancia.nombre=request.POST['nombre']
+            tipoHabitacionInstancia.descripcion=request.POST['descripcion']
+            tipoHabitacionInstancia.pasajeros=request.POST['pasajeros']
+            tipoHabitacionInstancia.cuartos=request.POST['cuartos']
             tipoHabitacionInstancia.save()
-            return redirect('core:tipoDeHabitacion')
+            return redirect('core:opcionTipoHabitacion')
         else:
             form=TipoHabitacionForm(request.POST,instance=tipoHabitacionInstancia)
     else:

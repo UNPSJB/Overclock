@@ -8,17 +8,7 @@ class PaisForm(ModelForm):
         model = Pais
         fields = '__all__'
    
-    #ver en la doc de django
     
-    """def clean_nombre(self):
-        #print("aca estoy en la func")       
-        nombre=self.cleaned_data["nombre"]
-        #print(nombre)
-        if str(nombre).strip() == "pepe":
-            print("ACANO ENTRA....")
-            raise ValidationError("NO ME GUSTA EN BLANCO!!!!")
-        return nombre.title()"""
-
     def __init__(self, *args, **kwargs):
         super(PaisForm, self).__init__(*args, **kwargs)
         self.fields['nombre'].widget.attrs.update({'class': 'form-control'})
@@ -60,10 +50,3 @@ class TipoHabitacionForm(ModelForm):
     class Meta:
         model=TipoHabitacion
         fields = '__all__'
-    
-    def __init__(self, *args, **kwargs):
-        super(TipoHabitacionForm, self).__init__(*args, **kwargs)
-        self.fields['nombre'].widget.attrs.update({'class': 'form-control'})   
-        self.fields['descripcion'].widget.attrs.update({'class': 'form-control'})
-        self.fields['pasajeros'].widget.attrs.update({'class': 'form-control'})
-        self.fields['cuartos'].widget.attrs.update({'class': 'form-control'})
