@@ -4,8 +4,8 @@ from django.forms import forms
 from django.http import request, JsonResponse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
-from core.models import Pais, Provincia, Localidad, TipoHabitacion
-from .forms import PaisForm, LocalidadForm, AutenticacionForm, ProvinciaForm, TipoHabitacionForm
+from core.models import Pais, Provincia, Localidad, TipoHabitacion, Servicio
+from .forms import PaisForm, LocalidadForm, AutenticacionForm, ProvinciaForm, TipoHabitacionForm, ServicioForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as do_login
@@ -228,3 +228,46 @@ def tipoHabitacionModificar(request, unTipoHabitacion):
     else:
         form=TipoHabitacionForm(instance=tipoHabitacionInstancia)
     return render(request, "core/modals/modal_tipoHabitacion_modificar.html", {"coltiposHabitaciones": coltiposHabitaciones, "formulario": form, "tipoHabitacion": tipoHabitacionInstancia})
+
+
+# GESTION SERVICIOS
+
+
+def servicio(request):
+    colServicios=Servicio.objects.all()
+    print(colServicios)
+    return render(request, "core/servicioAdmin.html",{"colServicios": colServicios})
+
+
+
+def servicioCrear(request):
+    colServicios = Servicio.objects.all()
+    form = ServicioForm(request.POST)
+    
+    if request.method == "POST":
+            if form.is_valid():
+                print(form)
+                form.save()
+                return redirect('core:servicio')
+    return render(request, "core/modals/modal_servicio_crear.html", {"colServicios": colServicios, "formulario": form})
+
+
+
+def serviciosModificar(request, servicio):
+    servicioInstancia = get_object_or_404(Servicio, nombre=servicio)
+    colServicios = Servicio.objects.all()
+    if request.method == 'POST':
+        form=ServicioForm(request.POST,instance=servicioInstancia)
+        if form.is_valid():
+            servicioInstancia.nombre=request.POST['nombre']
+            servicioInstancia.descripcion=request.POST['descripcion']
+            servicioInstancia.save()
+            return redirect('core:servicio')
+        else:
+            form=ServicioForm(request.POST,instance=servicioInstancia)
+    else:
+        form=ServicioForm(instance=servicioInstancia)
+    return render(request, "core/modals/modal_servicio_modificar.html", {"colServicios": colServicios, "formulario": form, "servicio": servicioInstancia})
+
+    
+

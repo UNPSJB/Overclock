@@ -29,6 +29,7 @@ urlpatterns = [
     path('hometaVendedor', views.correctaVendedor,name="vendedor"),
     path('region',views.regionAdmin, name="opcionRegion"),
     path('tipoHabitacion',views.tipoHabitacion, name="tipoDeHabitacion"),
+    path('servicio',views.servicio, name="servicio"),
     path('crearLocalidad',views.localidadCrear, name="modalCrearLocalidad"),
     path('modificarLocalidad/<ciudad>',views.localidadModificar, name="modalModificarLocalidad"),
     path('crearProvincia',views.provinciaCrear, name="modalCrearProvincia"),
@@ -37,4 +38,6 @@ urlpatterns = [
     path('modificarPais/<pais>',views.paisModificar, name="modalModificarPais"),
     path('crearTipoHabitacion',views.tipoHabitacionCrear, name="modalCrearTipoHabitacion"),
     path('modificarTipoHabitacion/<unTipoHabitacion>',views.tipoHabitacionModificar, name="modalModificarTipoHabitacion"),
+    path('crearServicio',views.servicioCrear, name="modalCrearServicio"),
+    path('modificarServicio/<servicio>',views.serviciosModificar, name="modalModificarServicio"),
 ]

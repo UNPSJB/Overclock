@@ -1,5 +1,5 @@
 from django.forms import ModelForm, ValidationError
-from core.models import Localidad, Pais, Provincia, Persona, TipoHabitacion
+from core.models import Localidad, Pais, Provincia, Persona, TipoHabitacion, Servicio
 from django.contrib.auth.forms import AuthenticationForm
 
 # 
@@ -67,3 +67,13 @@ class TipoHabitacionForm(ModelForm):
         self.fields['descripcion'].widget.attrs.update({'class': 'form-control'})
         self.fields['pasajeros'].widget.attrs.update({'class': 'form-control'})
         self.fields['cuartos'].widget.attrs.update({'class': 'form-control'})
+
+class ServicioForm(ModelForm):
+    class Meta:
+        model=Servicio
+        fields = '__all__'
+    
+    def __init__(self, *args, **kwargs):
+        super(ServicioForm, self).__init__(*args, **kwargs)
+        self.fields['nombre'].widget.attrs.update({'class': 'form-control'})   
+        self.fields['descripcion'].widget.attrs.update({'class': 'form-control'})
