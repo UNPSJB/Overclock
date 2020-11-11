@@ -11,8 +11,8 @@
         </div>
         <form action="{% url 'core:modalModificarCategoria' categoria.nombre %}" method="POST">
         <div class="modal-body">
-
-            ESTRELLAS: {{categoria.estrellasStr}}
+            Estrellas: 
+            <textarea class="mt-2 form-control" style="resize:none" rows="1" readonly="readonly">{{categoria.estrellasStr}}</textarea>
             {% csrf_token %}
             {{ formulario.as_p }}
            
