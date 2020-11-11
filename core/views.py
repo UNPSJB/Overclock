@@ -4,8 +4,8 @@ from django.forms import forms
 from django.http import request, JsonResponse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
-from core.models import Pais, Provincia, Localidad, TipoHabitacion, Servicio
-from .forms import PaisForm, LocalidadForm, AutenticacionForm, ProvinciaForm, TipoHabitacionForm, ServicioForm
+from core.models import Pais, Provincia, Localidad, TipoHabitacion, Servicio, Categoria
+from .forms import PaisForm, LocalidadForm, AutenticacionForm, ProvinciaForm, TipoHabitacionForm, ServicioForm, CategoriaForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as do_login
@@ -242,7 +242,6 @@ def tipoHabitacionModificar(request, tipoHabitacion):
 
 def servicio(request):
     colServicios=Servicio.objects.all()
-    print(colServicios)
     return render(request, "core/servicioAdmin.html",{"colServicios": colServicios})
 
 
@@ -253,7 +252,6 @@ def servicioCrear(request):
     
     if request.method == "POST":
             if form.is_valid():
-                print(form)
                 form.save()
                 return redirect('core:servicio')
     return render(request, "core/modals/modal_servicio_crear.html", {"colServicios": colServicios, "formulario": form})
@@ -276,5 +274,48 @@ def serviciosModificar(request, servicio):
         form=ServicioForm(instance=servicioInstancia)
     return render(request, "core/modals/modal_servicio_modificar.html", {"colServicios": colServicios, "formulario": form, "servicio": servicioInstancia})
 
-    
+# GESTION CATEGORIAS 
 
+def categoria(request):
+    colCategorias=Categoria.objects.all()
+    return render(request, "core/categoriaAdmin.html",{"colCategorias": colCategorias})
+
+
+
+def categoriaCrear(request):
+    colCategorias = Categoria.objects.all()
+    form = CategoriaForm(request.POST)
+    
+    if request.method == "POST":
+            if form.is_valid():
+                form.save()
+                return redirect('core:categoria')
+    return render(request, "core/modals/modal_categoria_crear.html", {"colCategorias": colCategorias, "formulario": form})
+
+
+
+def categoriaModificar(request, categoria):
+    categoriaInstancia = get_object_or_404(Categoria, nombre=categoria)
+    colCategorias = Categoria.objects.all()
+    if request.method == 'POST':
+#        POST = request.POST.copy()
+#        POST['estrellas'] = categoriaInstancia.estrellas
+#        print(categoriaInstancia.estrellas)
+        form=CategoriaForm(request.POST,instance=categoriaInstancia)
+
+        if form.is_valid():
+            categoriaInstancia = form.save(commit=False)
+            categoriaInstancia.nombre=request.POST['nombre']
+            categoriaInstancia.estrellas=request.POST['estrellas']
+            categoriaInstancia.save()
+            form.save_m2m()
+            return redirect('core:categoria')
+        else:
+            form=CategoriaForm(request.POST,instance=categoriaInstancia)
+    else:
+        form=CategoriaForm(instance=categoriaInstancia)
+        form.fields['nombre'].widget.attrs['readonly'] = True
+        #form.fields['estrellas'].widget.attrs['disabled'] = True
+        form.fields['estrellas'].widget.attrs['style'] = 'display:none;'
+        form.fields['estrellas'].label = ''
+    return render(request, "core/modals/modal_categoria_modificar.html", {"colCategorias": colCategorias, "formulario": form, "categoria": categoriaInstancia})

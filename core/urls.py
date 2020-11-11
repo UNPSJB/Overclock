@@ -31,6 +31,7 @@ urlpatterns = [
 
     path('tipoHabitacion',views.tipoHabitacion, name="opcionTipoHabitacion"),
     path('servicio',views.servicio, name="servicio"),
+    path('categoria',views.categoria, name="categoria"),
 
     path('crearLocalidad',views.localidadCrear, name="modalCrearLocalidad"),
     path('modificarLocalidad/<ciudad>',views.localidadModificar, name="modalModificarLocalidad"),
@@ -43,4 +44,9 @@ urlpatterns = [
     path('modificarTipoHabitacion/<tipoHabitacion>',views.tipoHabitacionModificar, name="modalModificarTipoHabitacion"),
     path('crearServicio',views.servicioCrear, name="modalCrearServicio"),
     path('modificarServicio/<servicio>',views.serviciosModificar, name="modalModificarServicio"),
+
+    path('crearCategoria',views.categoriaCrear, name="modalCrearCategoria"),
+    path('modificarCategoria/<categoria>',views.categoriaModificar, name="modalModificarCategoria"),
+
+    
 ]

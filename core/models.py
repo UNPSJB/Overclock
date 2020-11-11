@@ -71,8 +71,13 @@ class Categoria(models.Model):
     nombre = models.CharField(max_length=200)
     servicios = models.ManyToManyField(Servicio)
 
+    def estrellasStr(self):
+        return self.get_estrellas_display()
+        
     def __str__(self):
         return self.nombre
+    
+    
 
 # Tipo De Habitacion
 class TipoHabitacion(models.Model):
