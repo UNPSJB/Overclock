@@ -1,7 +1,7 @@
 from django.db import models
 from decimal import Decimal
 from datetime import date, timedelta
-from core.models import Localidad, Categoria, Servicio, TipoHabitacion, Vendedor
+from core.models import Localidad, Categoria, Servicio, TipoHabitacion, Vendedor, Encargado
 from .exceptions import DescuentoException, TipoHotelException
 
 class HotelManager(models.Manager):
@@ -24,6 +24,9 @@ class Hotel(models.Model):
     servicios = models.ManyToManyField(Servicio)
     tipos = models.ManyToManyField(TipoHabitacion, through='PrecioPorTipo', through_fields=('hotel', 'tipo'))
     vendedores = models.ManyToManyField(Vendedor)
+    encargado= models.ForeignKey(Encargado, on_delete=models.CASCADE, null=True)
+
+
 
     def es_comercializable(self):
         return self.vendedores.count() > 0

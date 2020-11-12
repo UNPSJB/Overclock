@@ -15,7 +15,7 @@
         <thead>
             <tr>
                 <button type="button" class="btn btn-success ml-4 float-right btn-sm" data-toggle="modal"
-                    data-target="#crearHotel" onclick="abrir_modal('{% url 'hotel:modalCrearHotel' %}','#crearHotel');">
+                    data-target="#crearHotel" onclick="abrir_modal('{% url 'hotel:modalCrearHotel' %}','#crearHotel');">AÑADIR
                     <i class="fas fa-plus-circle"></i>
                     <th>Nombre</th>
                     <th>Localidad</th>
@@ -30,12 +30,13 @@
         </thead>
         <tbody>
             {% for hotel in colHoteles %}
+            
             <tr>
                 <td>{{hotel.nombre}}</td>
                 <td>{{hotel.localidad}}</td>
                 <td>{{hotel.direccion}}</td>
                 <td>{{hotel.email}}</td>
-                <td>{{hotel.encargado.nombre +", "+hotel.encargado.apellido}}</td>
+                <td>{{hotel.encargado.persona.nombre}} {{hotel.encargado.persona.apellido}}</td>
                 <td>{{hotel.categoria.nombre}}</td>
                 <td>
                     <center>

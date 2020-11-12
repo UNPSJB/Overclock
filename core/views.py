@@ -13,6 +13,7 @@ from django.contrib.auth import login as do_login
 from django.contrib.auth import logout
 from django.contrib.auth.models import Group, User
 from django.utils import timezone
+from hotel import views as hviews
 
 from django.views.generic.edit import CreateView
 
@@ -58,7 +59,7 @@ def home(request):
 
 def correctaAdmin(request):
     # aca van los listados de hoteles
-    return render(request, "base/administrador.html")
+     return redirect("hotel:hotel")
 
 
 def correctaVendedor(request):

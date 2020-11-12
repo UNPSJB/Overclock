@@ -17,7 +17,7 @@ from django.contrib import admin
 from django.contrib.admin.sites import all_sites
 from django.urls import path, include
 from core import views
-# from hotel import views
+from hotel import views as hviews
 
 
 
@@ -25,5 +25,6 @@ from core import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('core/', include('core.urls', namespace="core")),
+    path('hotel/', include('hotel.urls', namespace="hotel")),
     path('', views.home, name="home" ),
 ]

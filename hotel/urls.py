@@ -16,16 +16,17 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.admin.sites import all_sites
 from django.urls import path, include
-from hotel import views
+from hotel import views as hviews
+from core import views as cviews
 app_name="hotel"
 
 
 
 urlpatterns = [
-    path('logout', views.logout),
+    path('logout', cviews.logout),
 
-    path('hotel',views.hotel, name="hotel"),
-    path('crearHotel',views.hotelCrear, name="modalCrearHotel"),
+    path('hotel',hviews.hotel, name="hotel"),
+    path('crearHotel',hviews.hotelCrear, name="modalCrearHotel"),
 
-    # path('modificarHotel/<hotel>',views.hotelModificar, name="modalModificarHotel"),
+    path('modificarHotel/<hotel>', hviews.hotelModificar, name="modalModificarHotel"),
 ]
