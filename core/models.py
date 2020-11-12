@@ -67,6 +67,7 @@ class Categoria(models.Model):
         (ESTRELLA_4, "First Class"), 
         (ESTRELLA_5, "Luxury"), 
     )
+   
     estrellas = models.PositiveSmallIntegerField(choices=ESTRELLAS)
     nombre = models.CharField(max_length=200)
     servicios = models.ManyToManyField(Servicio)

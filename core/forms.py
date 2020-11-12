@@ -1,4 +1,5 @@
-from django.forms import ModelForm, ValidationError
+from django.forms import ModelForm, ValidationError, MultipleChoiceField, CheckboxSelectMultiple, forms
+from django.forms import widgets, MultipleChoiceField, CheckboxSelectMultiple
 from core.models import Localidad, Pais, Provincia, Persona, TipoHabitacion, Servicio, Categoria
 from django.contrib.auth.forms import AuthenticationForm
 
@@ -72,11 +73,16 @@ class CategoriaForm(ModelForm):
     class Meta:
         model=Categoria
         fields = '__all__'
-    
+
+       
     def __init__(self, *args, **kwargs):
         super(CategoriaForm, self).__init__(*args, **kwargs)
         self.fields['nombre'].widget.attrs.update({'class': 'form-control'})   
         self.fields['estrellas'].widget.attrs.update({'class': 'form-control'})
-        self.fields['servicios'].widget.attrs.update({'class': 'form-control'})
+        self.fields['servicios'].widget.attrs.update({'class': 'form-check-input form-check-label laSeleccionBox'})
+        self.fields['servicios'].choices=[(c.pk,c.nombre) for c in Servicio.objects.all()]
 
+    servicios = MultipleChoiceField(
+         widget=CheckboxSelectMultiple,        
+     )
 

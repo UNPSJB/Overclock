@@ -8,12 +8,27 @@
                 <span>&times;</span>
             </button>
         </div>
-         <form action="{% url 'core:modalCrearCategoria' %}" method="POST">
+        <form action="{% url 'core:modalCrearCategoria' %}" method="POST">
             <div class="modal-body">
 
                 {% csrf_token %}
-                {{ formulario }}
+                {{formulario.as_p}}
+
+            <style>
+                .laSeleccionBox{
+                    display:grid;
+                    grid-template-columns: 1fr 1fr 1fr 1fr;
                 
+                }
+                .laSeleccionBox li{
+                    list-style-type: none;
+                    margin:0px 3vh 0px 3vh;
+                }
+                .errorList li{
+                    display: none;
+                }
+            </style>
+
             </div>
             <div class="modal-footer">
                 <button type="dismiss" class="btn btn-danger" data-dismiss="modal">Cerrar</button>

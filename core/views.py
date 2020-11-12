@@ -1,5 +1,6 @@
 from typing import Reversible
 import django
+from django.db.models.enums import Choices
 from django.forms import forms
 from django.http import request, JsonResponse
 from django.http.response import HttpResponseRedirect
@@ -285,11 +286,12 @@ def categoria(request):
 def categoriaCrear(request):
     colCategorias = Categoria.objects.all()
     form = CategoriaForm(request.POST)
-    
     if request.method == "POST":
             if form.is_valid():
+                print("ACABA DE ENTRAR")
                 form.save()
                 return redirect('core:categoria')
+    print("SIGO DE LARGO")
     return render(request, "core/modals/modal_categoria_crear.html", {"colCategorias": colCategorias, "formulario": form})
 
 
@@ -298,11 +300,7 @@ def categoriaModificar(request, categoria):
     categoriaInstancia = get_object_or_404(Categoria, nombre=categoria)
     colCategorias = Categoria.objects.all()
     if request.method == 'POST':
-#        POST = request.POST.copy()
-#        POST['estrellas'] = categoriaInstancia.estrellas
-#        print(categoriaInstancia.estrellas)
         form=CategoriaForm(request.POST,instance=categoriaInstancia)
-
         if form.is_valid():
             categoriaInstancia = form.save(commit=False)
             categoriaInstancia.nombre=request.POST['nombre']
@@ -315,7 +313,21 @@ def categoriaModificar(request, categoria):
     else:
         form=CategoriaForm(instance=categoriaInstancia)
         form.fields['nombre'].widget.attrs['readonly'] = True
-        #form.fields['estrellas'].widget.attrs['disabled'] = True
         form.fields['estrellas'].widget.attrs['style'] = 'display:none;'
         form.fields['estrellas'].label = ''
+        arregloServicios = form.fields['servicios'].choices=[(c.pk,c.nombre) for c in Servicio.objects.all()]
+        arregloTildados = categoriaInstancia.servicios.all()
+        #print(arregloServicios)
+        #print(arregloTildados)
+        for tilde in arregloServicios:
+            for servicio in arregloTildados:
+                #print(servicio)
+                #print(tilde[1])    
+                if (servicio.nombre == tilde[1]):
+                    print("---- ENTRO AL IF")
+                    form.fields['servicios'] # falta q aparezcan tildados los checkbox seleccionados
+                    break
+
+                 
+
     return render(request, "core/modals/modal_categoria_modificar.html", {"colCategorias": colCategorias, "formulario": form, "categoria": categoriaInstancia})
