@@ -16,14 +16,16 @@ Including another URLconf
 from django.contrib import admin
 from django.contrib.admin.sites import all_sites
 from django.urls import path, include
-from core import views
-# from hotel import views
-
+from hotel import views
+app_name="hotel"
 
 
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('core/', include('core.urls', namespace="core")),
-    path('', views.home, name="home" ),
+    path('logout', views.logout),
+
+    path('hotel',views.hotel, name="hotel"),
+    path('crearHotel',views.hotelCrear, name="modalCrearHotel"),
+
+    # path('modificarHotel/<hotel>',views.hotelModificar, name="modalModificarHotel"),
 ]
