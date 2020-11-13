@@ -20,11 +20,12 @@ class Hotel(models.Model):
     email = models.CharField(max_length=200)
     telefono = models.CharField(max_length=200)
     localidad = models.ForeignKey(Localidad, on_delete=models.CASCADE)
+    encargado= models.ForeignKey(Encargado, on_delete=models.CASCADE, null=True)
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     servicios = models.ManyToManyField(Servicio)
     tipos = models.ManyToManyField(TipoHabitacion, through='PrecioPorTipo', through_fields=('hotel', 'tipo'))
     vendedores = models.ManyToManyField(Vendedor)
-    encargado= models.ForeignKey(Encargado, on_delete=models.CASCADE, null=True)
+   
 
 
 

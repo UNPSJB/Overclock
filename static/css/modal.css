@@ -37,3 +37,26 @@
     transform: scale(1);
   }
 */
+.laSeleccionBox {
+    display: grid;
+    grid-template-columns: 0.8fr 0.8fr 0.8fr 0.8fr;
+    grid-auto-rows: auto;
+    
+}
+
+.laSeleccionBox li {
+    list-style-type: none;
+    margin: 0px 3vh 0px 3vh;
+}
+
+.errorList li {
+    display: none;
+}
+
+.modal-dialog-scrollable .modal-body {
+    overflow-y: auto;
+}
+.modal{
+    height: 80%;
+    
+}
