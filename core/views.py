@@ -316,19 +316,12 @@ def categoriaModificar(request, categoria):
         form.fields['nombre'].widget.attrs['readonly'] = True
         form.fields['estrellas'].widget.attrs['style'] = 'display:none;'
         form.fields['estrellas'].label = ''
-        arregloServicios = form.fields['servicios'].choices=[(c.pk,c.nombre) for c in Servicio.objects.all()]
+        form.fields['servicios'].choices=[(c.pk,c.nombre) for c in Servicio.objects.all()]
         arregloTildados = categoriaInstancia.servicios.all()
-        #print(arregloServicios)
-        #print(arregloTildados)
-        for tilde in arregloServicios:
-            for servicio in arregloTildados:
-                #print(servicio)
-                #print(tilde[1])    
-                if (servicio.nombre == tilde[1]):
-                    print("---- ENTRO AL IF")
-                    form.fields['servicios'] # falta q aparezcan tildados los checkbox seleccionados
-                    break
-
+        preseleccion=[]
+        for servicio in arregloTildados:
+            preseleccion.append(servicio.pk)
+        form.initial['servicios'] = preseleccion
                  
 
     return render(request, "core/modals/modal_categoria_modificar.html", {"colCategorias": colCategorias, "formulario": form, "categoria": categoriaInstancia})

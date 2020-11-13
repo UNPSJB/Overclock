@@ -9,7 +9,7 @@ class HotelForm(ModelForm):
     class Meta:
         model=Hotel
         fields = '__all__'
-        exclude = ['servicios','tipos'] 
+        exclude = ['servicios','tipos', 'vendedores'] 
         # Debemos quitar vendedores de aca ya que nosotros tenemos un crear vendedor
         # y asignar vendedor a hotel
     
@@ -22,16 +22,5 @@ class HotelForm(ModelForm):
         self.fields['telefono'].widget.attrs.update({'class': 'form-control'})
         self.fields['encargado'].widget.attrs.update({'class': 'form-control'})
         self.fields['categoria'].widget.attrs.update({'class': 'form-control'})
-        self.fields['vendedores'].widget.attrs.update({'class': 'form-control'})
-       
-        '''self.fields['servicios'].widget.attrs.update({'class': 'form-check-input form-check-label laSeleccionBox'})
-        self.fields['servicios'].choices=[(c.pk,c.nombre) for c in Servicio.objects.all()]
-        self.fields['tipos'].widget.attrs.update({'class': 'form-check-input form-check-label laSeleccionBox'})
-        self.fields['tipos'].choices=[(c.pk,c.nombre) for c in TipoHabitacion.objects.all()]
+        
 
-    servicios = MultipleChoiceField(
-        widget=CheckboxSelectMultiple,        
-    )
-    tipos = MultipleChoiceField(
-        widget=CheckboxSelectMultiple,        
-    )'''

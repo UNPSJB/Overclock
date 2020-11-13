@@ -30,7 +30,10 @@ def hotelCrear(request):
     
     if request.method == "POST":
             if form.is_valid():
-                form.save()
+                hotelInstancia=form.save()
+                for servicio in hotelInstancia.categoria.servicios.all():
+                    hotelInstancia.servicios.add(servicio)
+                hotelInstancia.save()
                 return redirect('hotel:hotel')
     return render(request, "hotel/modals/modal_hotel_crear.html", {"colHoteles": colHoteles, "formulario": form})
 
