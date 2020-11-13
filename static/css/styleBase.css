@@ -53,3 +53,8 @@
     height: 100vh;
 
 }
+a:link, a:visited, a:active a{
+    text-decoration:none;
+    color: #212121;
+}
+

@@ -17,7 +17,7 @@ class Hotel(models.Model):
     nombre = models.CharField(max_length=200)
     direccion = models.CharField(max_length=800)
     #TODO: Email
-    email = models.CharField(max_length=200)
+    email = models.EmailField(max_length=200)
     telefono = models.CharField(max_length=200)
     localidad = models.ForeignKey(Localidad, on_delete=models.CASCADE)
     encargado= models.ForeignKey(Encargado, on_delete=models.CASCADE, null=True)

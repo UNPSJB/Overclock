@@ -32,14 +32,14 @@
         <tbody>
             {% for hotel in colHoteles %}
 
-            <tr>
-                <td>{{hotel.nombre}}</td>
-                <td>{{hotel.localidad}}</td>
-                <td>{{hotel.direccion}}</td>
-                <td>{{hotel.email}}</td>
-                <td>{{hotel.telefono}}</td>
-                <td>{{hotel.encargado.persona.nombre}} {{hotel.encargado.persona.apellido}}</td>
-                <td>{{hotel.categoria.nombre}}</td>
+            <tr class="pepito">
+                <td><a href="#">{{hotel.nombre}}</a></td>
+                <td><a href="#">{{hotel.localidad}}</a></td>
+                <td><a href="#">{{hotel.direccion}}</a></td>
+                <td><a href="#">{{hotel.email}}</a></td>
+                <td><a href="#">{{hotel.telefono}}</a></td>
+                <td><a href="#">{{hotel.encargado.persona.nombre}} {{hotel.encargado.persona.apellido}}</a></td>
+                <td><a href="#">{{hotel.categoria.nombre}}</a></td>
                 <td>
                     <center>
                         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modificarHotel"
@@ -48,7 +48,24 @@
                         </button>
                     </center>
                 </td>
+
             </tr>
+            {% if not hotel.es_comercializable %}
+            <style>
+                .pepito tr.even,
+                .table-striped tbody tr:nth-of-type(2n+1) {
+                    background-color: red;
+                }
+            </style>
+            {% else %}
+            <style>
+                .pepito tr.even,
+                .table-striped tbody tr:nth-of-type(2n+1) {
+                    background-color: green;
+                }
+            </style>
+            {% endif %}
+
             {% endfor %}
         </tbody>
         <tfoot>
@@ -66,6 +83,7 @@
             </tr>
         </tfoot>
     </table>
+
     <!--Modal crear Hotel en otro html-->
 
     <div class="modal fade-scale" id="crearHotel" tabindex="-1" aria-labelledby="exampleModalLabel">
@@ -86,4 +104,6 @@
     $(document).ready(function () {
         $('#example1').DataTable();
     });</script>
+
+
 {% endblock extrajs%}

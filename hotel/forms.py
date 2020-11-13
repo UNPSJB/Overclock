@@ -1,14 +1,15 @@
 from django.forms import widgets, MultipleChoiceField, CheckboxSelectMultiple
 from django.forms import ModelForm, ValidationError, forms
 from django.contrib.auth.forms import AuthenticationForm
+from django.forms.fields import EmailField
 from hotel.models import Hotel
-from core.models import Servicio, TipoHabitacion
+from core.models import Servicio, TipoHabitacion, Vendedor
 
 class HotelForm(ModelForm):
     class Meta:
         model=Hotel
         fields = '__all__'
-        exclude = ['vendedores','servicios','tipos'] 
+        exclude = ['servicios','tipos'] 
         # Debemos quitar vendedores de aca ya que nosotros tenemos un crear vendedor
         # y asignar vendedor a hotel
     
@@ -21,6 +22,8 @@ class HotelForm(ModelForm):
         self.fields['telefono'].widget.attrs.update({'class': 'form-control'})
         self.fields['encargado'].widget.attrs.update({'class': 'form-control'})
         self.fields['categoria'].widget.attrs.update({'class': 'form-control'})
+        self.fields['vendedores'].widget.attrs.update({'class': 'form-control'})
+       
         '''self.fields['servicios'].widget.attrs.update({'class': 'form-check-input form-check-label laSeleccionBox'})
         self.fields['servicios'].choices=[(c.pk,c.nombre) for c in Servicio.objects.all()]
         self.fields['tipos'].widget.attrs.update({'class': 'form-check-input form-check-label laSeleccionBox'})

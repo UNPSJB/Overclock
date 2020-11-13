@@ -14,10 +14,13 @@ from django.contrib.auth import logout
 from django.contrib.auth.models import Group, User
 from django.utils import timezone
 from django.views.generic.edit import CreateView
+from core.models import Vendedor
 
 # Create your views here.
 def hotel(request):
     colHoteles=Hotel.objects.all()
+    for hotel in colHoteles:
+        print(hotel.es_comercializable())
     return render(request, "hotel/hotelAdmin.html",{"colHoteles": colHoteles})
 
 def hotelCrear(request):
