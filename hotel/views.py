@@ -21,14 +21,15 @@ def hotel(request):
     return render(request, "hotel/hotelAdmin.html",{"colHoteles": colHoteles})
 
 def hotelCrear(request):
-    colHotel = Hotel.objects.all()
+    print("Entre a la vista")
+    colHoteles = Hotel.objects.all()
     form = HotelForm(request.POST)
     
     if request.method == "POST":
             if form.is_valid():
                 form.save()
                 return redirect('hotel:hotel')
-    return render(request, "hotel/modals/modal_hotel_crear.html", {"colHotel": colHotel, "formulario": form})
+    return render(request, "hotel/modals/modal_hotel_crear.html", {"colHoteles": colHoteles, "formulario": form})
 
 def hotelModificar(request):
     colHotel = Hotel.objects.all()
