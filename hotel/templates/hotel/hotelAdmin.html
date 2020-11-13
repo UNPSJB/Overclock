@@ -32,40 +32,31 @@
         <tbody>
             {% for hotel in colHoteles %}
 
-            <tr class="pepito">
-                <td><a href="#">{{hotel.nombre}}</a></td>
-                <td><a href="#">{{hotel.localidad}}</a></td>
-                <td><a href="#">{{hotel.direccion}}</a></td>
-                <td><a href="#">{{hotel.email}}</a></td>
-                <td><a href="#">{{hotel.telefono}}</a></td>
-                <td><a href="#">{{hotel.encargado.persona.nombre}} {{hotel.encargado.persona.apellido}}</a></td>
-                <td><a href="#">{{hotel.categoria.nombre}}</a></td>
-                <td>
-                    <center>
-                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modificarHotel"
-                            onclick="abrir_modal('{% url 'hotel:modalModificarHotel' hotel %}','#modificarHotel');">
-                            <i class="fas fa-edit"></i>
-                        </button>
-                    </center>
-                </td>
-
-            </tr>
-            {% if not hotel.es_comercializable %}
-            <style>
-                .pepito tr.even,
-                .table-striped tbody tr:nth-of-type(2n+1) {
-                    background-color: red;
-                }
-            </style>
+            <tr class="{% if hotel.es_comercializable%}
+            comercializable manito
             {% else %}
-            <style>
-                .pepito tr.even,
-                .table-striped tbody tr:nth-of-type(2n+1) {
-                    background-color: green;
-                }
-            </style>
-            {% endif %}
-
+            noComercializable manito
+            {% endif%}
+            " data-navigate = "http://www.google.com">
+                <div class="pepito">
+                    <td>{{hotel.nombre}}</td>
+                    <td>{{hotel.localidad}}</td>
+                    <td>{{hotel.direccion}}</td>
+                    <td>{{hotel.email}}</td>
+                    <td>{{hotel.telefono}}</td>
+                    <td>{{hotel.encargado.persona.nombre}} {{hotel.encargado.persona.apellido}}</td>
+                    <td>{{hotel.categoria.nombre}}</td>
+                    <td>
+                        <center>
+                            <button type="button" class="btn btn-warning" data-toggle="modal"
+                                data-target="#modificarHotel"
+                                onclick="abrir_modal('{% url 'hotel:modalModificarHotel' hotel %}','#modificarHotel');">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        </center>
+                    </td>
+                </div>
+            </tr>
             {% endfor %}
         </tbody>
         <tfoot>
@@ -103,7 +94,17 @@
     const $ = jQuery.noConflict();
     $(document).ready(function () {
         $('#example1').DataTable();
-    });</script>
+        $('tr:even').removeClass('even');
+        $('tr:odd').removeClass('odd');
+    });
+    
+    $('[data-navigate]').on('click', (event)=>{
+        event.stopPropagation();
+        let data = $(event.currentTarget).data();
+        console.log(data);
+        location.assign(data.navigate);
+    });
+    </script>
 
 
 {% endblock extrajs%}
