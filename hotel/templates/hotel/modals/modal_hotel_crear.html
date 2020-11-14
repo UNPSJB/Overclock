@@ -12,8 +12,15 @@
             <div class="modal-body">
 
                 {% csrf_token %}
-                {{formulario}}
-               
+
+                {% for field in formulario %}
+                <div>
+                    {{ field.errors }}
+                    {{ field.label_tag }} {{ field }}
+                </div>
+                {% endfor %}
+               <!--{{formulario}} --> 
+
                 <style>
                     .laSeleccionBox {
                         display: grid;
@@ -33,8 +40,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="dismiss" class="btn btn-danger" data-dismiss="modal">Cerrar</button>
-                <button type="submit" name="accion" class="btm btn-success" value="hotel">Guardar</button>
+                <button type="dismiss" class="cerrar" data-dismiss="modal">Cerrar</button>
+                <button type="submit" name="accion" class="guardar" value="hotel">Guardar</button>
 
             </div>
         </form>
