@@ -1,3 +1,5 @@
+
+
 <div class="modal-xl modal-dialog modal-dialog-scrollable">
     <div class="modal-content">
         <div class="modal-header">
@@ -8,12 +10,13 @@
                 <span>&times;</span>
             </button>
         </div>
-        <form method="POST">
+        <form action="{% url 'core:modalCrearPais'%}" method="POST">
             <div class="modal-body">
 
                 {% csrf_token %}
                 {{ formulario.as_p }}
             </div>
+            <div id="mal" value="{{errores}}"></div>
             <div class="modal-footer">
                 <button type="dismiss" class="Cerrar" data-dismiss="modal">Cerrar</button>
                 <button type="submit" name="accion" class="Guardar" value="pais">Guardar</button>
@@ -22,3 +25,15 @@
         </form>
     </div>
 </div>
+
+<script>
+    $(function () {
+        var token = jQuery("[name=csrfmiddlewaretoken]").val();
+        $("form").submit(function (e) {
+            e.preventDefault();
+            var datosFormulario = $('form').serializeArray();
+            if(datosFormulario[1].value=='Juan')
+                alert('');
+        });
+    });
+</script>

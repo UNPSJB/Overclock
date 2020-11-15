@@ -1,4 +1,4 @@
-from django.forms import ModelForm, ValidationError, MultipleChoiceField, CheckboxSelectMultiple, forms
+from django.forms import ModelForm,MultipleChoiceField, CheckboxSelectMultiple, forms, ValidationError
 from django.forms import widgets, MultipleChoiceField, CheckboxSelectMultiple
 from core.models import Localidad, Pais, Provincia, Persona, TipoHabitacion, Servicio, Categoria
 from django.contrib.auth.forms import AuthenticationForm
@@ -7,13 +7,22 @@ from django.contrib.auth.forms import AuthenticationForm
 class PaisForm(ModelForm):
     class Meta:
         model = Pais
-        fields = '__all__'
+        fields = ['nombre']
    
     
     def __init__(self, *args, **kwargs):
         super(PaisForm, self).__init__(*args, **kwargs)
         self.fields['nombre'].widget.attrs.update({'class': 'form-control'})
 
+    def clean_nombre(self):
+         nombreRecibido = self.cleaned_data.get("nombre")
+         if nombreRecibido == 'Juan':
+           raise ValidationError('Este nombre no esta permitido')
+         if nombreRecibido.split(' ') == ' ':
+           raise ValidationError('El nombre no puede estar vacio')
+         return nombreRecibido
+   
+        
 
 class ProvinciaForm(ModelForm):
     class Meta:

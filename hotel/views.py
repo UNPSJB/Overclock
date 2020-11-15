@@ -19,8 +19,8 @@ from core.models import Vendedor
 # Create your views here.
 def hotel(request):
     colHoteles=Hotel.objects.all()
-    for hotel in colHoteles:
-        print(hotel.es_comercializable())
+    #for hotel in colHoteles:
+        #print(hotel.es_comercializable())
     return render(request, "hotel/hotelAdmin.html",{"colHoteles": colHoteles})
 
 def hotelCrear(request):
@@ -37,12 +37,8 @@ def hotelCrear(request):
                 return redirect('hotel:hotel')
     return render(request, "hotel/modals/modal_hotel_crear.html", {"colHoteles": colHoteles, "formulario": form})
 
-def hotelModificar(request):
-    colHotel = Hotel.objects.all()
-    form = HotelForm(request.POST)
+def detalleHotel(request,hotel):
+    hotelInstancia =get_object_or_404(Hotel, pk=hotel)
     
-    if request.method == "POST":
-            if form.is_valid():
-                form.save()
-                return redirect('hotel:hotel')
-    return render(request, "hotel/modals/modal_hotel_crear.html", {"colHotel": colHotel, "formulario": form})
+    print(hotel)
+    return render(request, "hotel/vistaHotelAdmin.html",{"hotel":hotelInstancia})

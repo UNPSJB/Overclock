@@ -1,0 +1,195 @@
+{% extends 'base/base.html'%}
+{% load static %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static '/css/vistaHotel.css' %}">
+{% endblock extra_css %}
+
+{% block header %}
+<button onclick="location.href='/core/homeAdministrador'" style="text-decoration:none"
+    class="rounded-1 btn btn-lg btn-outline-light text-white "> Hola Administrador</button>
+{% endblock header %}
+
+
+<!--  ####################### TARJETAS DEL SIDE BAR #######################-->
+
+{% block tarjeta1 %}
+<div class="card rounded-0">
+    <div class="card-header" id="headingOne">
+        <button class="btn btn-link btn-block text-white">
+            <center>
+                <h5> Temporada</h5>
+            </center>
+        </button>
+    </div>
+</div>
+{% endblock tarjeta1 %}
+
+{% block tarjeta2 %}
+<div class="card rounded-0">
+    <div class="card-header" id="headingOne">
+        <button class="btn btn-link btn-block text-white">
+            <center>
+                <h5> Vendedor </h5>
+            </center>
+        </button>
+    </div>
+</div>
+{% endblock tarjeta2 %}
+
+{% block tarjeta3 %}
+<div class="card rounded-0">
+    <div class="card-header" id="headingOne">
+        <button class="btn btn-link btn-block text-white">
+            <center>
+                <h5> Encargado </h5>
+            </center>
+        </button>
+    </div>
+</div>
+{% endblock tarjeta3 %}
+
+{% block tarjeta4 %}
+<div class="card rounded-0">
+    <div class="card-header" id="headingOne">
+        <button class="btn btn-link btn-block text-white">
+            <center>
+                <h5> Tipo de Habitacion</h5>
+            </center>
+        </button>
+    </div>
+</div>
+{% endblock tarjeta4 %}
+
+{% block tarjeta5 %}
+<div class="card rounded-0">
+    <div class="card-header" id="headingOne">
+        <button class="btn btn-link btn-block text-white">
+            <center>
+                <h5> Servicios </h5>
+            </center>
+        </button>
+    </div>
+</div>
+{% endblock tarjeta5 %}
+
+<!--  ####################### FIN TARJETAS DEL SIDE BAR #######################-->
+
+
+{% block content %}
+
+<!--  #######################  DATOS DEL HOTEL  #######################-->
+
+<div class="titulo">
+    <h1>
+        <center> <u> {%if hotel.es_hospedaje%} HOSPEDAJE {%else%} HOTEL {% endif %} {{hotel.nombre.upper}}</u> </center>
+    </h1>
+</div>
+<div class="datosHotel">
+    <div class="container">
+        <div class="row">
+            <div class="col-sm-3 lugarImagen">
+                <img class="imagen" src="{% static '/media/hoteles/1.jpg' %}">
+            </div>
+            <div class="col-sm-7">
+                <center>
+                    <table class="table table-responsive tablaDatos">
+                        <tr>
+                            <th>Direccion:</th>
+                            <td>{{hotel.direccion}}</td>
+                        </tr>
+                        <tr>
+                            <th>E-mail:</th>
+                            <td>{{hotel.email}}</td>
+                        </tr>
+                        <tr>
+                            <th>Telefono:</th>
+                            <td>{{hotel.telefono}}</td>
+                        </tr>
+                        <tr>
+                            <th>Localidad:</th>
+                            <td>{{hotel.localidad}}</td>
+                        </tr>
+                        <tr>
+                            <th>Categoria:</th>
+                            <td>{{hotel.categoria}}</td>
+                        </tr>
+                    </table>
+                </center>
+
+            </div>
+            <div class="col-sm-2">
+                <center>
+                    <button type="button" class="btn btn-warning" data-toggle="modal" data-target="" onclick="">
+                        <i class="fas fa-edit"></i>
+                        MODIFICAR</button>
+                </center>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--  ####################### FIN DATOS DEL HOTEL  #######################-->
+
+
+<!--  #######################  INICIO DATA TABLE  DEL HOTEL  #######################-->
+<div class="abajo">
+
+    <div id="container">
+        <input type="radio" id="user" name="material">
+        <label for="user" id="label-1">
+            <span class="glyphicon glyphicon-user"><i class="fas fa-bed"></i></span></label>
+        <input type="radio" id="bell" name="material">
+        <label for="bell" id="label-2">
+            <span class="glyphicon glyphicon-bell"><i class=" fas fa-box"></i></span></label>
+        <div id="effect"></div>
+
+
+
+    </div>
+</div>
+{% endblock content %}
+
+
+{% block extrajs %}
+
+<script type="text/javascript">
+    //SCRIPT DE DATATABLE
+    const $ = jQuery.noConflict();
+    $(document).ready(function () {
+        $('#example1').DataTable();
+        $('#example2').DataTable();
+    });</script>
+
+<script>
+    $("#vistaPais").show();
+    $("#vistaLocalidades").hide();
+    $("#vistaProvincia").hide();
+    $(function () {
+        $('input').click(function () {
+            var state = $(this).val();
+            console.log(state)
+            switch (state) {
+                case "provincia":
+                    $("#vistaPais").hide();
+                    $("#vistaLocalidades").hide();
+                    $("#vistaProvincia").show();
+                    break;
+                case "pais":
+                    $("#vistaPais").show();
+                    $("#vistaLocalidades").hide();
+                    $("#vistaProvincia").hide();
+                    break;
+                case "ciudad":
+                    $("#vistaPais").hide();
+                    $("#vistaLocalidades").show();
+                    $("#vistaProvincia").hide();
+                    break;
+            }
+        });
+    });
+
+</script>
+<script src="{% static 'js/dd8c49730d.js' %}"></script>
+
+{% endblock extrajs%}

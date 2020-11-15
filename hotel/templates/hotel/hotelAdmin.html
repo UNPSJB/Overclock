@@ -24,9 +24,7 @@
                     <th>Telefono</th>
                     <th>Encargado</th>
                     <th>Categoria</th>
-                    <th>
-                        <Center>Modificar</Center>
-                    </th>
+
             </tr>
         </thead>
         <tbody>
@@ -37,7 +35,7 @@
             {% else %}
             noComercializable manito
             {% endif%}
-            " data-navigate = "http://www.google.com">
+            " data-navigate="{% url 'hotel:vistaHotel' hotel.pk %}">
                 <div class="pepito">
                     <td>{{hotel.nombre}}</td>
                     <td>{{hotel.localidad}}</td>
@@ -46,15 +44,7 @@
                     <td>{{hotel.telefono}}</td>
                     <td>{{hotel.encargado.persona.nombre}} {{hotel.encargado.persona.apellido}}</td>
                     <td>{{hotel.categoria.nombre}}</td>
-                    <td>
-                        <center>
-                            <button type="button" class="btn btn-warning" data-toggle="modal"
-                                data-target="#modificarHotel"
-                                onclick="abrir_modal('{% url 'hotel:modalModificarHotel' hotel %}','#modificarHotel');">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                        </center>
-                    </td>
+
                 </div>
             </tr>
             {% endfor %}
@@ -68,9 +58,7 @@
                 <th>Telefono</th>
                 <th>Encargado</th>
                 <th>Categoria</th>
-                <th>
-                    <Center>Modificar</Center>
-                </th>
+
             </tr>
         </tfoot>
     </table>
@@ -80,9 +68,6 @@
     <div class="modal fade-scale" id="crearHotel" tabindex="-1" aria-labelledby="exampleModalLabel">
     </div>
 
-    <!-- Modal modificar Hotel en otro html-->
-    <div class="modal fade-scale" id="modificarHotel" tabindex="-1" aria-labelledby="exampleModalLabel">
-    </div>
 </div>
 
 {% endblock content %}
@@ -97,14 +82,14 @@
         $('tr:even').removeClass('even');
         $('tr:odd').removeClass('odd');
     });
-    
-    $('[data-navigate]').on('click', (event)=>{
+
+    $('[data-navigate]').on('click', (event) => {
         event.stopPropagation();
         let data = $(event.currentTarget).data();
         console.log(data);
         location.assign(data.navigate);
     });
-    </script>
+</script>
 
 
 {% endblock extrajs%}

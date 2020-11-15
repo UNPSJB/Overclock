@@ -1,0 +1,177 @@
+.titulo{
+    margin-top: 3vh;
+}
+.lugarImagen{
+    padding: 3vh 0 0 0;
+    /*outline: 1px solid red;*/
+    margin-left: 0 ;
+}
+.imagen{
+     box-shadow: 1vh 1vh 0.5vh grey;
+     width: 100%;
+     height: auto;
+}
+
+.tablaDatos{
+    margin-left: 2vh;
+}
+
+
+/* ######################### COSAS BOTON TOOGLE #################################*/
+
+    
+   input {
+    display: none;
+    }
+    
+    div#container {
+    height: 5vh;
+    width: 15vh;
+    box-shadow: 0px 1px 5px black;
+    background-color: white;
+    border-radius: 5px;
+    position: relative;
+    top: 25%;
+    left: 89.5%;
+    transform: translate(-50%, -50%);
+    }
+    
+    label {
+    position: absolute;
+    top: 1vh;
+    color: gray;
+    width: 1%;
+    height: 1%;
+    text-align: center;
+    font-size: 150%;
+    color: black;
+    cursor: pointer;
+    }
+    
+    label#label-1 {
+    left: 5%;
+    }
+    
+    label#label-2 {
+    right: 26.5%;
+    }
+    
+    
+    div#effect {
+    position: absolute;
+    top: 5%;
+    width: 50%;
+    right: 4%;
+    height: 90%;
+    box-shadow: 0px 2px 2px grey;
+    z-index: -1;
+    border-radius: 5px;
+    background-color: orange;
+    }
+    
+    #user:checked~div#effect {
+    animation: goLeft 0.5s;
+    visibility: visible;
+    animation-fill-mode: forwards;
+    }
+    
+    @keyframes goLeft {
+    0% {
+    width: 50%;
+    right: 1vh;
+    }
+    
+    40% {
+    width: 70%;
+    right: 2vh;
+    }
+    
+    50% {
+    width: 50%;
+    right: 3vh;
+    transform: translateX(0px)
+    }
+    
+    65% {
+    width: 50%;
+    right: 4vh;
+    transform: translateX(2px);
+    }
+    
+    70% {
+    transform: translateX(0px);
+    width: 50%;
+    right: 5vh;
+    }
+    
+    85% {
+    transform: translateX(2px);
+    right: 6vh;
+    width: 50%;
+    }
+    
+    100% {
+    width: 50%;
+    right: 7.6vh;
+    transform: translateX(0px)
+    }
+    
+    }
+    
+    #bell:checked~div#effect {
+    visibility: visible;
+    animation: goRight 0.5s;
+    animation-fill-mode: forwards;
+    }
+    
+    @keyframes goRight {
+    0% {
+    width: 50%;
+    left: 1vh;
+    }
+    
+    40% {
+    width: 70%;
+    left: 2vh;
+    }
+    
+    50% {
+    width: 50%;
+    left: 3vh;
+    transform: translateX(0px)
+    }
+    
+    65% {
+    width: 50%;
+    left: 4vh;
+    transform: translateX(-2px);
+    }
+    
+    70% {
+    transform: translateX(0px);
+    width: 50%;
+    left: 5vh;
+    }
+    
+    85% {
+    transform: translateX(-2px);
+    left: 6vh;
+    width: 50%;
+    }
+    
+    100% {
+    width: 50%;
+    left: 7.6vh;
+    transform: translateX(0px)
+    }
+    
+    }
+    
+    span {
+    color: #111111;
+    transition: color 2s;
+    }
+    
+    input:checked+label span {
+    color: #111;
+    }

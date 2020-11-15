@@ -14,6 +14,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.models import Group, User
 from django.utils import timezone
 from hotel import views as hviews
+import json
 
 from django.views.generic.edit import CreateView
 
@@ -71,49 +72,7 @@ def regionAdmin(request):
     paises = Pais.objects.all()
     provincias = Provincia.objects.all()
     localidades = Localidad.objects.all()
-    # FIXME cuando no vienen datos en el POST  por ser un GET, la instanciacion tendria que ser
-    formPais = PaisForm(request.POST)
-    formProvincia = ProvinciaForm(request.POST)
-    formLocalidad = LocalidadForm(request.POST)
-
-    if request.method == "POST":
-        # TODO garantizar que si los forms tienen errores las modales se vuelvan a abrir indicando el error
-        # print(request.POST)
-
-       # si la accion viene por el lado de un boton del modal nombre accion y valor pais....
-        if request.POST["accion"] == "provincia":
-            # tomamos el formulario recepcionado para trabajarlo
-            form = ProvinciaForm(request.POST)
-            if form.is_valid():  # si es valido
-                # tomamos el formulario recibido
-                provinciaIngresado = Provincia(
-                    nombre=form.cleaned_data['nombre'])
-                # declaramos una variable para poder seguir cuando realmente estamos frente a una ocurrencia o no
-                ocurrencia = False
-                for provincia in provincias:  # se recorren las provincias existentes
-                    if (provincia.nombre == provinciaIngresado.nombre):  # si los nombres son iguales
-                        ocurrencia = True  # con al menos una declaramos esa variable en verdadero
-                    # debug de los valores
-                    print(f"La ocurrencia dio ...{ocurrencia}")
-                if ocurrencia == True:  # si es verdadero que hay ocurrencias iguales
-                    print("LA PROVINCIA EXISTE INMUNDO ANIMAL")  # debug
-                    print("====>    NO SE GRABA   :)")
-                    # se vuelve a refrescar la pagina
-                    return redirect('core:opcionRegion')
-                else:  # si no se encontro que la provincia ya existe
-                    print("====>    SE GRABA   :)")
-                    formProvincia.save()  # se graba la provincia
-            return redirect('core:opcionRegion')  # se recarga la pagina
-
-        elif request.POST["accion"] == "pais":
-            if formPais.is_valid():
-                formPais.save()
-            else:
-                formPais.save()
-        elif request.POST["accion"] == "localidad":
-            if formLocalidad.is_valid():
-                formLocalidad.save()
-    return render(request, "core/regionAdmin.html", {"paises": paises, "localidades": localidades, "provincias": provincias, "formPais": formPais, "formProvincia": formProvincia, "formLocalidad": formLocalidad})
+    return render(request, "core/regionAdmin.html", {"paises": paises, "localidades": localidades, "provincias": provincias})
 
 
 def logout(request):
@@ -153,11 +112,15 @@ def tipoHabitacionCrear(request):
 
 def paisCrear(request):
     paises = Pais.objects.all()
-    formPais = PaisForm(request.POST)
+    formPais = PaisForm(data=request.POST)
     if request.method == "POST":
             if formPais.is_valid():
                 formPais.save()
-                return redirect('core:opcionRegion')
+                return redirect('core:opcionRegion') # se redirige a region
+            else:
+                formPais = PaisForm(data=request.POST)
+                erroresDelFormulario=formPais.errors
+                return render(request, "core/modals/modal_pais_crear.html", {"paises": paises, "formulario": formPais,"errores":erroresDelFormulario})
     return render(request, "core/modals/modal_pais_crear.html", {"paises": paises, "formulario": formPais})
 
 
@@ -289,10 +252,8 @@ def categoriaCrear(request):
     form = CategoriaForm(request.POST)
     if request.method == "POST":
             if form.is_valid():
-                print("ACABA DE ENTRAR")
                 form.save()
                 return redirect('core:categoria')
-    print("SIGO DE LARGO")
     return render(request, "core/modals/modal_categoria_crear.html", {"colCategorias": colCategorias, "formulario": form})
 
 

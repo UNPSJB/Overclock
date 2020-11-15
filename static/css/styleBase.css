@@ -58,10 +58,28 @@ a:link, a:visited, a:active a{
     color: #212121;
 }
 .comercializable{
-    background-color: #bef3ab !important;
+    border-left-style: solid  !important;
+    border-left-width: 3px !important;
+    border-left-color: green !important;
+    border-right-style: solid  !important;
+    border-right-width: 3px !important;
+    border-right-color: green !important;
+    background-color: lightgrey !important;
+    border-collapse: collapse !important;
+ 
+    
 }
 .noComercializable{
-    background-color: #F6CECE  !important;
+    border-left-style: solid  !important;
+    border-left-width: 3px !important;
+    border-left-color: red !important;
+    border-right-style: solid  !important;
+    border-right-width: 3px !important;
+    border-right-color: red !important;
+    background-color: lightgrey !important;
+    border-collapse: collapse !important;
+ 
+   
     
 }
 .manito{
