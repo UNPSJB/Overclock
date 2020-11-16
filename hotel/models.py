@@ -141,6 +141,15 @@ class PaqueteTuristico(models.Model):
     fin = models.DateField()
     habitaciones = models.ManyToManyField(Habitacion)
     vendido = models.BooleanField(default=False)
+    precio = models.DecimalField()
+
+    def __init__(self):
+        self.precio = 0
+        for habitacion in self.habitaciones:
+            self.precio += habitacion.precio_por_noche(habitacion, self.inicio)
+    
+    def get_costo(self):
+        return (1-self.coeficiente * self.precio)
 
     def tengo_habitacion(self,habitacion): 
         for item in self.habitaciones:
