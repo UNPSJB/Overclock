@@ -1,6 +1,6 @@
 from django.db import models
 from decimal import Decimal
-from datetime import date, timedelta
+from datetime import date, datetime, timedelta
 from core.models import Localidad, Categoria, Servicio, TipoHabitacion, Vendedor, Encargado
 from .exceptions import DescuentoException, TipoHotelException
 
@@ -28,7 +28,6 @@ class Hotel(models.Model):
    
 
 
-
     def es_comercializable(self):
         return self.vendedores.count() > 0
 
@@ -48,6 +47,9 @@ class Hotel(models.Model):
         # Que pasa si ya tengo el tipo cargado en el hotel?
         # que pasa si baja es mas grande que alta?
         pass 
+
+    def get_habitaciones(self):
+        return Habitacion.objects.filter(hotel=self)
 
     def agregar_descuento(self, habitaciones, coeficiente):
         if habitaciones <= 0:
@@ -77,6 +79,7 @@ class Habitacion(models.Model):
     hotel = models.ForeignKey(Hotel, related_name="habitaciones", on_delete=models.CASCADE)
     numero = models.PositiveSmallIntegerField() # 403 <Piso><Cuarto>
     tipo = models.ForeignKey(TipoHabitacion, on_delete=models.CASCADE)
+    baja = models.BooleanField(default=False) #Baja Logica 
 
     class Meta:
         unique_together = (('hotel', 'numero'), )
@@ -102,6 +105,11 @@ class Habitacion(models.Model):
             total += self.precio_por_noche(desde)
             desde += timedelta(days=1)
         return total
+    
+    def dar_baja(self):
+        self.baja=True
+        
+
 
 # Temporada Alta
 class TemporadaAlta(models.Model):
@@ -132,3 +140,19 @@ class PaqueteTuristico(models.Model):
     inicio = models.DateField()
     fin = models.DateField()
     habitaciones = models.ManyToManyField(Habitacion)
+    vendido = models.BooleanField(default=False)
+
+    def tengo_habitacion(self,habitacion): 
+        for item in self.habitaciones:
+            if item.pk == habitacion.pk:
+                return True
+        return False
+
+    def estoy_vigente(self):
+        return (not self.vendido) and (self.fin < date.today())
+            
+    def marcar_venta(self):
+        self.vendido=True
+        
+
+        
