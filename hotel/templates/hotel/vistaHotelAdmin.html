@@ -177,7 +177,10 @@
             </thead>
             <tbody>
 
-
+                {% if not hotel.get_habitaciones %}
+                <td valign="top" colspan="7" class="dataTables_empty"> NO HAY HABITACIONES CREADAS EN ESTE HOTEL !!!!
+                </td>
+                {% endif %}
                 {% for habitacion in hotel.get_habitaciones %}
 
 
