@@ -51,7 +51,7 @@
     transform: translate(-50%, -50%);
     }
     
-    label {
+    .etiqueta-boton {
     position: absolute;
     top: 1vh;
     color: gray;
@@ -63,11 +63,11 @@
     cursor: pointer;
     }
     
-    label#label-1 {
+    .etiqueta-boton#label-1 {
     left: 5%;
     }
     
-    label#label-2 {
+    .etiqueta-boton#label-2 {
     right: 26.5%;
     }
     

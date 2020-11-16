@@ -72,8 +72,9 @@ class Alquiler(models.Model):
     factura = models.ForeignKey(Factura, related_name="alquileres", on_delete=models.CASCADE)
     # De un mismo hotel
     habitaciones = models.ManyToManyField(Habitacion)
-    paquete = models.ForeignKey(PaqueteTuristico, null=True, blank=True, on_delete=models.SET_NULL)
+    paquete = models.OneToOneField(PaqueteTuristico, null=True, blank=True, on_delete=models.SET_NULL, related_name="alquiler")
     cantidad_huespedes = models.PositiveSmallIntegerField()
     inicio = models.DateField()
     fin = models.DateField()
     total = models.DecimalField(max_digits=20, decimal_places=2, default=Decimal(0))
+    #PaqueteTuristico.objects.filter(alquiler__isnull=True) para obtener paquetes no vendidos!

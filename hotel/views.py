@@ -14,7 +14,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.models import Group, User
 from django.utils import timezone
 from django.views.generic.edit import CreateView
-from core.models import Vendedor
+from core.models import Vendedor, Categoria
 
 # Create your views here.
 def hotel(request):
@@ -36,6 +36,40 @@ def hotelCrear(request):
                 hotelInstancia.save()
                 return redirect('hotel:hotel')
     return render(request, "hotel/modals/modal_hotel_crear.html", {"colHoteles": colHoteles, "formulario": form})
+
+def hotelModificar(request, hotel):
+    print("---entro a modificar---")
+    hotelInstancia = get_object_or_404(Hotel, pk= hotel )
+    #colCategorias = Categoria.objects.all()
+    colHoteles = Hotel.objects.all()
+
+    if request.method == 'POST':
+        form=HotelForm(request.POST,instance=hotelInstancia)
+        if form.is_valid():
+            hotelInstancia = form.save()
+            hotelInstancia.nombre=request.POST['nombre']
+            hotelInstancia.direccion=request.POST['direccion']
+            hotelInstancia.email=request.POST['email']
+            categoria = get_object_or_404( Categoria , pk=request.POST['categoria'])
+            
+            hotelInstancia.categoria=categoria
+            for servicio in hotelInstancia.categoria.servicios.all():
+                    hotelInstancia.servicios.add(servicio)
+            #hotelInstancia.localidad=request.POST['localidad']
+            hotelInstancia.save()
+            #form.save_m2m()
+            return redirect('hotel:hotel')
+        else:
+            form=HotelForm(request.POST,instance=hotelInstancia)
+    else:
+        form=HotelForm(instance=hotelInstancia)
+        form.fields['nombre'].widget.attrs['readonly'] = True
+        form.fields['localidad'].widget.attrs['readonly'] = True
+        form.fields['direccion'].widget.attrs['readonly'] = True
+        form.fields['encargado'].widget.attrs['readonly'] = True
+        
+    return render(request, "hotel/modals/modal_hotel_modificar.html", {"colHoteles": colHoteles, "formulario": form, "hotel": hotelInstancia})
+
 
 def detalleHotel(request,hotel):
     hotelInstancia =get_object_or_404(Hotel, pk=hotel)
