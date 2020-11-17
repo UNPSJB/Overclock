@@ -51,6 +51,9 @@ class Hotel(models.Model):
     def get_habitaciones(self):
         return Habitacion.objects.filter(hotel=self)
 
+    def get_paquetes(self):
+        return PaqueteTuristico.objects.filter(hotel=self)
+
     def agregar_descuento(self, habitaciones, coeficiente):
         if habitaciones <= 0:
             raise DescuentoException("El mínimo de habitaciones para aplicar descuento es de 1")
@@ -95,6 +98,20 @@ class Habitacion(models.Model):
         if self.hotel.temporadas.filter(inicio__lte=fecha, fin__gte=fecha).exists():
             return precio_por_tipo.alta
         return precio_por_tipo.baja
+
+    def precio_temp_baja(self):
+        precio_por_tipo = self.hotel.tarifario.filter(tipo=self.tipo).first()
+        if precio_por_tipo is None:
+            #TODO: Custom exception
+            raise Exception("No puedo calcular el precio")
+        return precio_por_tipo.baja
+
+    def precio_temp_alta(self):
+        precio_por_tipo = self.hotel.tarifario.filter(tipo=self.tipo).first()
+        if precio_por_tipo is None:
+            #TODO: Custom exception
+            raise Exception("No puedo calcular el precio")
+        return precio_por_tipo.alta
 
     def precio_alquiler(self, desde, hasta):
         if desde >= hasta:
@@ -141,15 +158,23 @@ class PaqueteTuristico(models.Model):
     fin = models.DateField()
     habitaciones = models.ManyToManyField(Habitacion)
     vendido = models.BooleanField(default=False)
-    precio = models.DecimalField()
+    precio = models.DecimalField(max_digits=10, decimal_places=2)
 
-    def __init__(self):
-        self.precio = 0
-        for habitacion in self.habitaciones:
-            self.precio += habitacion.precio_por_noche(habitacion, self.inicio)
-    
+
+    def actualizar_precio(self):
+        self.precio=0
+        
+        habitaciones = Habitacion.objects.filter(paqueteturistico = self)
+        
+        for habitacion in habitaciones:
+            self.precio += habitacion.precio_por_noche(self.inicio)
+
+    def cantidad_dias(self):
+        return abs(self.fin - self.inicio).days
+
     def get_costo(self):
-        return (1-self.coeficiente * self.precio)
+        self.actualizar_precio()
+        return "{0:.2f}".format((1-self.coeficiente) * (self.precio * self.cantidad_dias()))
 
     def tengo_habitacion(self,habitacion): 
         for item in self.habitaciones:
