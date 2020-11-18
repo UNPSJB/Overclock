@@ -64,10 +64,15 @@ def hotelModificar(request, hotel):
     else:
         form=HotelForm(instance=hotelInstancia)
         form.fields['nombre'].widget.attrs['readonly'] = True
-        form.fields['localidad'].widget.attrs['readonly'] = True
+        form.fields['localidad'].widget.attrs['style'] = 'display:none;'
+        form.fields['localidad'].label = ''
+        form.fields['direccion'].widget.attrs['readonly'] = True
+        form.fields['encargado'].widget.attrs['style'] = 'display:none;'
+        form.fields['encargado'].label = ''
+        """
         form.fields['direccion'].widget.attrs['readonly'] = True
         form.fields['encargado'].widget.attrs['readonly'] = True
-        
+        """
     return render(request, "hotel/modals/modal_hotel_modificar.html", {"colHoteles": colHoteles, "formulario": form, "hotel": hotelInstancia})
 
 

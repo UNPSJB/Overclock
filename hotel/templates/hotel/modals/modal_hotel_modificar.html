@@ -10,7 +10,10 @@
         </div>
         <form action="{% url 'hotel:modalModificarHotel' hotel.pk %}" method="POST">
         <div class="modal-body">
-
+            Locadidad: 
+            <textarea class="mt-2 form-control" style="resize:none" rows="1" readonly="readonly">{{hotel.localidad}}</textarea>
+            Encargado: 
+            <textarea class="mt-2 form-control" style="resize:none" rows="1" readonly="readonly">{{hotel.encargado}}</textarea>
             {% csrf_token %}
             {{ formulario.as_p }}
            
