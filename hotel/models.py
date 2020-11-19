@@ -56,6 +56,9 @@ class Hotel(models.Model):
     def get_paquetes(self):
         return PaqueteTuristico.objects.filter(hotel=self)
 
+    def get_temporadas(self):
+        return TemporadaAlta.objects.filter(hotel=self)
+
     def agregar_descuento(self, habitaciones, coeficiente):
         if habitaciones <= 0:
             raise DescuentoException("El mínimo de habitaciones para aplicar descuento es de 1")

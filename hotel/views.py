@@ -5,8 +5,8 @@ from django.forms import forms
 from django.http import request, JsonResponse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
-from hotel.models import Hotel
-from .forms import HotelForm
+from hotel.models import Hotel, TemporadaAlta
+from .forms import HotelForm, TemporadaHotelForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as do_login
@@ -84,3 +84,17 @@ def detalleHotel(request,hotel):
 def vistaTipoHabitacionHotel(request,hotel):
     hotelInstancia =get_object_or_404(Hotel, pk=hotel)    
     return render(request, "hotel/tipoHabitacion_Hotel_Admin.html",{"hotel":hotelInstancia })
+
+def temporadaHotel(request,hotel):
+    hotelInstancia =get_object_or_404(Hotel, pk=hotel)    
+    return render(request, "hotel/temporada_Hotel_Admin.html",{"hotel":hotelInstancia })
+
+
+def temporadaHotelCrear(request):
+    form = TemporadaHotelForm(request.POST)
+    
+    if request.method == "POST":
+            if form.is_valid():
+                hotelInstancia=form.save()
+                return redirect('hotel:hotel')
+    return render(request, "hotel/modals/modal_temporadaHotel_crear.html", { "formulario": form})
