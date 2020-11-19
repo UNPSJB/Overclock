@@ -77,7 +77,8 @@ def hotelModificar(request, hotel):
 
 
 def detalleHotel(request,hotel):
-    hotelInstancia =get_object_or_404(Hotel, pk=hotel)    
+    hotelInstancia =get_object_or_404(Hotel, pk=hotel)  
+    print(hotelInstancia.temporadas.first().fin)  
     return render(request, "hotel/vistaHotelAdmin.html",{"hotel":hotelInstancia })
 
 
@@ -103,11 +104,14 @@ def temporadaHotel(request,hotel):
     return render(request, "hotel/temporada_Hotel_Admin.html",{"hotel":hotelInstancia })
 
 
-def temporadaHotelCrear(request):
+def temporadaHotelCrear(request, hotel):
     form = TemporadaHotelForm(request.POST)
-    
+    hotelInstancia=get_object_or_404(Hotel, pk=hotel)
     if request.method == "POST":
             if form.is_valid():
-                hotelInstancia=form.save()
-                return redirect('hotel:hotel')
-    return render(request, "hotel/modals/modal_temporadaHotel_crear.html", { "formulario": form})
+                temporadaInstancia=form.save(commit=False)
+                
+                temporadaHotel.hotel= hotelInstancia
+                temporadaInstancia.save()
+                return redirect('hotel:temporadaHotel')
+    return render(request, "hotel/modals/modal_temporadaHotel_crear.html", { "hotel": hotelInstancia, "formulario": form})

@@ -23,6 +23,8 @@
     <link rel="stylesheet" href="{% static '/css/styleBase.css' %}">
     <link rel="stylesheet" href="{% static '/css/modal.css' %}">
     <link rel="stylesheet" href="{% static '/css/botones.css' %}">
+    <link rel="stylesheet" href="https://s3-us-west-2.amazonaws.com/s.cdpn.io/2708/bootstrap-datetimepicker.min.css">
+    
     {% block extra_css %}
       
     {% endblock extra_css %}
@@ -102,6 +104,8 @@
     <!-- Bootstrap 4.5-->
     <script src="{% static '/js/jquery-3.5.1.js' %}"></script>
     <script src="{% static '/js/bootstrap.bundle.js' %}"></script>
+    
+    <script src="{% static '/js/bootstrap-datetimepicker.min.js' %}"></script>
 
     <!--dataTable jquery + bootstrap + popper include-->
     <script src="{% static 'js/jquery.dataTables.min.js'%}"></script>
@@ -109,6 +113,9 @@
     
     <!--scripts personalizados-->
     <script src="{% static '/js/main.js' %}"></script>
+
+
+    
 
     {% block extrajs %}
     {% endblock %}

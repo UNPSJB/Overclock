@@ -35,6 +35,6 @@ urlpatterns = [
     path('crearTipoHabitacion/<hotel>', hviews.tipoHabitacionCrear, name="modalCrearTipoHabitacion"),
 
     path('temporadaHotel/<hotel>', hviews.temporadaHotel, name="temporadaHotel"),
-    path('crearTemporadaHotel',hviews.temporadaHotelCrear, name="modalCrearTemporadaHotel"),
+    path('crearTemporadaHotel/<hotel>',hviews.temporadaHotelCrear, name="modalCrearTemporadaHotel"),
 
 ]
