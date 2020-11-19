@@ -30,8 +30,10 @@ urlpatterns = [
     path('modificarHotel/<hotel>',hviews.hotelModificar, name="modalModificarHotel"),
 
     path('vistaHotel/<hotel>', hviews.detalleHotel, name="vistaHotel"),
-    path('tipoHabitacionHotel/<hotel>', hviews.vistaTipoHabitacionHotel, name="tipoHabitacionHotel"),
     
+    path('tipoHabitacionHotel/<hotel>', hviews.vistaTipoHabitacionHotel, name="tipoHabitacionHotel"),
+    path('crearTipoHabitacion/<hotel>', hviews.tipoHabitacionCrear, name="modalCrearTipoHabitacion"),
+
     path('temporadaHotel/<hotel>', hviews.temporadaHotel, name="temporadaHotel"),
     path('crearTemporadaHotel',hviews.temporadaHotelCrear, name="modalCrearTemporadaHotel"),
 

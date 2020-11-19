@@ -35,10 +35,10 @@
 /* ######################### COSAS BOTON TOOGLE #################################*/
 
  
-   input {
-    display: none;
-    }
-    
+.boton-Habitaciones-Paquetes {
+        display: none;
+}
+   
     div#container {
     height: 5vh;
     width: 15vh;
@@ -49,7 +49,7 @@
     top: 25%;
     left: 89.5%;
     transform: translate(-50%, -50%);
-    }
+}
     
     .etiqueta-boton {
     position: absolute;

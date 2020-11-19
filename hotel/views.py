@@ -6,7 +6,7 @@ from django.http import request, JsonResponse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from hotel.models import Hotel, TemporadaAlta
-from .forms import HotelForm, TemporadaHotelForm
+from .forms import HotelForm, TemporadaHotelForm, AgregarTipoAHotelForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as do_login
@@ -81,9 +81,22 @@ def detalleHotel(request,hotel):
     return render(request, "hotel/vistaHotelAdmin.html",{"hotel":hotelInstancia })
 
 
+#-------------------------- TIPO DE HABITACION ----------------------------------------
+
 def vistaTipoHabitacionHotel(request,hotel):
-    hotelInstancia =get_object_or_404(Hotel, pk=hotel)    
-    return render(request, "hotel/tipoHabitacion_Hotel_Admin.html",{"hotel":hotelInstancia })
+    hotelInstancia =get_object_or_404(Hotel, pk=hotel)
+    tarifas_hotel=hotelInstancia.tarifario.all()
+    return render(request, "hotel/tipoHabitacion_Hotel_Admin.html",{"hotel":hotelInstancia, "tarifas":tarifas_hotel })
+
+def tipoHabitacionCrear(request,hotel):
+    formulario=AgregarTipoAHotelForm(request.POST)
+    hotelInstancia =get_object_or_404(Hotel, pk=hotel)
+    return render(request, "hotel/modals/modal_tipoHabitacionHotel_crear.html",{"hotel": hotelInstancia,"formulario":formulario})
+
+
+#-------------------------- TIPO DE HABITACION ----------------------------------------
+
+
 
 def temporadaHotel(request,hotel):
     hotelInstancia =get_object_or_404(Hotel, pk=hotel)    

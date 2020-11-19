@@ -26,6 +26,8 @@ class Hotel(models.Model):
     tipos = models.ManyToManyField(TipoHabitacion, through='PrecioPorTipo', through_fields=('hotel', 'tipo'))
     vendedores = models.ManyToManyField(Vendedor)
    
+    def get_tipos(self):
+        return TipoHabitacion.objects.filter(hotel=self)
 
     def tengo_tipos(self):
         return self.tipos.count()>0
@@ -79,9 +81,10 @@ class PrecioPorTipo(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='tarifario')
     tipo = models.ForeignKey(TipoHabitacion, on_delete=models.CASCADE, related_name='hoteles')
     # Precio por noche
-    baja = models.DecimalField(max_digits=20, decimal_places=2)
-    alta = models.DecimalField(max_digits=20, decimal_places=2)
+    baja = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
+    alta = models.DecimalField(decimal_places=2, max_digits=10, blank=True, null=True)
 
+ 
 # Habitación
 class Habitacion(models.Model):
     hotel = models.ForeignKey(Hotel, related_name="habitaciones", on_delete=models.CASCADE)
