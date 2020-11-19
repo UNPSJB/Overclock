@@ -13,12 +13,13 @@
 
 <!--  ####################### TARJETAS DEL SIDE BAR #######################-->
 
+
 {% block tarjeta1 %}
 <div class="card rounded-0">
     <div class="card-header" id="headingOne">
-        <button class="btn btn-link btn-block text-white">
+        <button onclick="location.href='{% url 'hotel:vistaHotel' hotel.pk %}'" class="btn btn-link btn-block text-white">
             <center>
-                <h5> Temporada</h5>
+                <h5> Paquete / Habitacion</h5>
             </center>
         </button>
     </div>
@@ -30,7 +31,7 @@
     <div class="card-header" id="headingOne">
         <button class="btn btn-link btn-block text-white">
             <center>
-                <h5> Vendedor </h5>
+                <h5> Temporada </h5>
             </center>
         </button>
     </div>
@@ -42,7 +43,7 @@
     <div class="card-header" id="headingOne">
         <button class="btn btn-link btn-block text-white">
             <center>
-                <h5> Encargado </h5>
+                <h5>Vendedor  </h5>
             </center>
         </button>
     </div>
@@ -52,9 +53,9 @@
 {% block tarjeta4 %}
 <div class="card rounded-0">
     <div class="card-header" id="headingOne">
-        <button class="btn btn-link btn-block text-white">
+        <button  class="btn btn-link btn-block text-white">
             <center>
-                <h5> Tipo de Habitacion</h5>
+                <h5>Encargado </h5>
             </center>
         </button>
     </div>
@@ -64,14 +65,26 @@
 {% block tarjeta5 %}
 <div class="card rounded-0">
     <div class="card-header" id="headingOne">
-        <button class="btn btn-link btn-block text-white">
+        <button onclick="location.href='{% url 'hotel:tipoHabitacionHotel' hotel.pk %}'" class="btn btn-link btn-block text-white">
             <center>
-                <h5> Servicios </h5>
+                <h5>Tipo de Habitacion  </h5>
             </center>
         </button>
     </div>
 </div>
 {% endblock tarjeta5 %}
+
+{% block tarjeta6 %}
+<div class="card rounded-0">
+    <div class="card-header" id="headingOne">
+        <button class="btn btn-link btn-block text-white">
+            <center>
+                <h5> Servicios</h5>
+            </center>
+        </button>
+    </div>
+</div>
+{% endblock tarjeta6 %}
 
 <!--  ####################### FIN TARJETAS DEL SIDE BAR #######################-->
 
@@ -138,7 +151,7 @@
 <!--  #######################  TABLA LISTADO HABITACIONES/PAQUETES  #######################-->
 
 <!--  #######################  BOTON DE CAMBIO LISTADO HABITACIONES/PAQUETES  #######################-->
-
+{% block datosVista %}
 <div class="abajo">
 
     <div id="container">
@@ -279,7 +292,7 @@
     </div>
 
 </div>
-
+{% endblock datosVista %}
 {% endblock content %}
 
 
