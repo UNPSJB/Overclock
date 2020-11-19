@@ -27,6 +27,8 @@ class Hotel(models.Model):
     vendedores = models.ManyToManyField(Vendedor)
    
 
+    def tengo_tipos(self):
+        return self.tipos.count()>0
 
     def es_comercializable(self):
         return self.vendedores.count() > 0

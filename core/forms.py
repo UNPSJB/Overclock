@@ -12,7 +12,7 @@ class PaisForm(ModelForm):
     
     def __init__(self, *args, **kwargs):
         super(PaisForm, self).__init__(*args, **kwargs)
-        self.fields['nombre'].widget.attrs.update({'class': 'form-control'})
+        self.fields['nombre'].widget.attrs.update({'class': 'form-control', 'placeholder':'Ingrese Nombre Pais', 'title':'Ingrese mas de tres caracteres, no deje en blanco'})
 
     def clean_nombre(self):
          nombreRecibido = self.cleaned_data.get("nombre")

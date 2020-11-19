@@ -77,7 +77,5 @@ def hotelModificar(request, hotel):
 
 
 def detalleHotel(request,hotel):
-    hotelInstancia =get_object_or_404(Hotel, pk=hotel)
-    
-    print(hotel)
-    return render(request, "hotel/vistaHotelAdmin.html",{"hotel":hotelInstancia})
+    hotelInstancia =get_object_or_404(Hotel, pk=hotel)    
+    return render(request, "hotel/vistaHotelAdmin.html",{"hotel":hotelInstancia })

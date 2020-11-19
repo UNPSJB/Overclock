@@ -160,8 +160,22 @@
             <h3 class="mb-5">HABITACIONES</h3>
         </center>
         <table id="example1" class="table table-striped table-bordered tablaListaHabitacion">
-            <button type="button" class="btn btn-success mt-3 mr-4 float-right btn-sm" data-toggle="modal"
-                data-target="#crearLocalidad" onclick="">
+            <button type="button" class="btn btn-success mt-3 mr-4 float-right btn-sm" onclick="
+            {% if hotel.tengo_tipos %} 
+            Swal.fire({
+                    icon: 'success',
+                    title: 'Hay Tipos de Habitacion',
+                    text: 'Sos un groso segui adelante',
+                    footer: '<a href>Like?</a>'
+                  })
+                   {% else %}
+                   Swal.fire({
+                    icon: 'error',
+                    title: 'No hay tipos...',
+                    text: 'Primero tenes que cargar tipos',
+                    footer: '<a href>Sos huevon?</a>'
+                  })
+                   {% endif %}">
                 <i class="fas fa-plus-circle"></i>
                 AÑADIR</button>
             <thead>
@@ -191,8 +205,10 @@
                     <td>{{habitacion.tipo}}</td>
                     <td>{{habitacion.numero}}</td>
                     <td>{{habitacion.tipo.pasajeros}}</td>
-                    <td>${{habitacion.precio_temp_alta}}</td>
-                    <td>${{habitacion.precio_temp_baja}}</td>
+
+                    <td>${{habitacion.precio_temp_alta }}</td>
+
+                    <td>${{habitacion.precio_temp_baja }}</td>
                     <td>
                         <center>
                             <button type="button" class="btn btn-warning" data-toggle="modal" data-target="" onclick="">
@@ -232,7 +248,8 @@
             <tbody>
 
                 {% if not hotel.get_paquetes %}
-                <td valign="top" colspan="7" class="dataTables_empty"> NO HAY PAQUETES CREADOS EN ESTE HOTEL !!!!
+                <td valign="top" colspan="7" class="dataTables_empty text-center"> NO HAY PAQUETES CREADOS EN ESTE HOTEL
+                    !!!!
                 </td>
                 {% endif %}
                 {% for paquete in hotel.get_paquetes %}
