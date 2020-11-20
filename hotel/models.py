@@ -140,8 +140,8 @@ class Habitacion(models.Model):
 class TemporadaAlta(models.Model):
     nombre = models.CharField(max_length=200)
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name="temporadas")
-    inicio = models.DateField()
-    fin = models.DateField()
+    inicio = models.DateField('fecha inicio')
+    fin = models.DateField('fecha fin')
 
 # Descuentos
 class Descuento(models.Model):

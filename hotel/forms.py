@@ -1,11 +1,11 @@
 from django.forms import widgets, MultipleChoiceField, CheckboxSelectMultiple
-from django.forms import ModelForm, ValidationError, forms, DateInput
+from django.forms import ModelForm, ValidationError, forms, DateInput, DateField
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms.fields import EmailField
 from django.forms.widgets import NumberInput
+from tempus_dominus.widgets import DatePicker, TimePicker, DateTimePicker
 from hotel.models import Hotel, PrecioPorTipo, TemporadaAlta
 from core.models import Servicio, TipoHabitacion, Vendedor
-from bootstrap_datepicker_plus import DatePickerInput
 
 
 
@@ -33,19 +33,25 @@ class TemporadaHotelForm(ModelForm):
         model = TemporadaAlta
         fields = '__all__'
         exclude = ['hotel']
-        
+        """
         widgets = {
-            'inicio':DatePickerInput().start_of('event days'),
-            'fin':DatePickerInput().end_of('event days')
-            
+            'inicio': {'class': 'input-group date' , 'id': 'datetimepicker4' , 'data-target-input': 'nearest'},
+            'fin': {'class': 'input-group date' , 'id': 'datetimepicker4' , 'data-target-input': 'nearest'}   
         }
-
-        
+        """
+        inicio = DateField(required=True,
+                           widget=DatePicker(
+                               options={
+                                   'minDate': '2009-01-20',
+                                   'maxDate': '2017-01-20',
+                               },
+                           ),
+                           initial='2013-01-01',
+                           )
 
     def __init__(self, *args, **kwargs):
         super(TemporadaHotelForm, self).__init__(*args, **kwargs)
         self.fields['nombre'].widget.attrs.update({'class': 'form-control'})
-        
 
 
 class AgregarTipoAHotelForm(ModelForm):
@@ -53,11 +59,9 @@ class AgregarTipoAHotelForm(ModelForm):
         model = PrecioPorTipo
         fields = '__all__'
         exclude = ['hotel']
-       
+
     def __init__(self, *args, **kwargs):
         super(AgregarTipoAHotelForm, self).__init__(*args, **kwargs)
         self.fields['tipo'].widget.attrs.update({'class': 'form-control'})
         self.fields['baja'].widget.attrs.update({'class': 'form-control'})
         self.fields['alta'].widget.attrs.update({'class': 'form-control'})
-
-

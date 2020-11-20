@@ -115,8 +115,28 @@
     <script src="{% static '/js/main.js' %}"></script>
 
 
+    <script src="{% static '/js/sweetalert2@10.js' %}"></script>
     
+    <!--sweet alert2-->
+    <!-- Bootstrap 4.5-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+    <!--dataTable jquery + bootstrap + popper include-->
+    <script src="{% static '/js/jquery.dataTables.min.js'%}"></script>
+    <script src="{% static '/js/dataTables.bootstrap4.min.js'%}"></script>
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.22.2/moment.min.js"></script>
+
+    <!--scripts personalizados-->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.0.1/js/tempusdominus-bootstrap-4.min.js"></script>
+    <script src="{% static '/js/main.js' %}"></script>
+
+    <!--CUSTOM CSS-->
+    <link rel="stylesheet" href="{% static '/css/styleBase.css' %}">
+    <link rel="stylesheet" href="{% static '/css/modal.css' %}">
+    <link rel="stylesheet" href="{% static '/css/botones.css' %}">
+    <!-- <link rel="stylesheet" href="{% static '/css/bootstrap-datetimepicker.min.css' %}"> -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tempusdominus-bootstrap-4/5.1.2/css/tempusdominus-bootstrap-4.min.css" integrity="sha512-PMjWzHVtwxdq7m7GIxBot5vdxUY+5aKP9wpKtvnNBZrVv1srI8tU6xvFMzG8crLNcMj/8Xl/WWmo/oAP/40p1g==" crossorigin="anonymous" />
     {% block extrajs %}
     {% endblock %}
 
@@ -124,3 +144,4 @@
 
 
 </html>
+
