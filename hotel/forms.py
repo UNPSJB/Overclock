@@ -53,6 +53,9 @@ class TemporadaHotelForm(ModelForm):
         super(TemporadaHotelForm, self).__init__(*args, **kwargs)
         self.fields['nombre'].widget.attrs.update({'class': 'form-control'})
 
+        self.fields['inicio'].widget.attrs.update({'class': 'datepicker'})
+        self.fields['fin'].widget.attrs.update({'class': 'datepicker'})
+
 
 class AgregarTipoAHotelForm(ModelForm):
     class Meta:

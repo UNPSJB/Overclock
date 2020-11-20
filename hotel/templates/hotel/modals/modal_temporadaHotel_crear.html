@@ -8,7 +8,7 @@
     </div>
     <form action="{% url 'hotel:modalCrearTemporadaHotel' hotel.pk %}" method="POST">
       <div class="modal-body">
-        {% csrf_token %}
+       {% csrf_token %}
         {{formulario}}
         {{formulario.media}}
 
@@ -16,6 +16,7 @@
       </div>
   </div>
 </div>
+
 <div class="modal-footer">
   <button type="dismiss" class="cerrar" data-dismiss="modal">
     Cerrar
@@ -28,3 +29,9 @@
 </div>
 </div>
 
+
+<script type="text/javascript">
+  $(document).ready(function () {
+    $(".datepicker").datetimepicker({ sideBySide: true  format: 'DD/MM/YYYY'})
+  });
+ </script>
