@@ -33,29 +33,16 @@ class TemporadaHotelForm(ModelForm):
         model = TemporadaAlta
         fields = '__all__'
         exclude = ['hotel']
-        """
         widgets = {
-            'inicio': {'class': 'input-group date' , 'id': 'datetimepicker4' , 'data-target-input': 'nearest'},
-            'fin': {'class': 'input-group date' , 'id': 'datetimepicker4' , 'data-target-input': 'nearest'}   
+            'inicio': DateInput(attrs={'type': 'date'}),
+            'fin': DateInput(attrs={'type': 'date'})
         }
-        """
-        inicio = DateField(required=True,
-                           widget=DatePicker(
-                               options={
-                                   'minDate': '2009-01-20',
-                                   'maxDate': '2017-01-20',
-                               },
-                           ),
-                           initial='2013-01-01',
-                           )
 
     def __init__(self, *args, **kwargs):
         super(TemporadaHotelForm, self).__init__(*args, **kwargs)
         self.fields['nombre'].widget.attrs.update({'class': 'form-control'})
-
-        self.fields['inicio'].widget.attrs.update({'class': 'datepicker'})
-        self.fields['fin'].widget.attrs.update({'class': 'datepicker'})
-
+        self.fields['inicio'].widget.attrs.update({'class': 'form-control'})
+        self.fields['fin'].widget.attrs.update({'class': 'form-control'})
 
 class AgregarTipoAHotelForm(ModelForm):
     class Meta:
