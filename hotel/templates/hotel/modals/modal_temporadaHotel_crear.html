@@ -16,10 +16,10 @@
       method="POST"
     >
       <div class="modal-body">
-        {% csrf_token %} {% for field in formulario %}
-        <div>{{ field.errors }} {{ field.label_tag }} {{ field }}</div>
-        {% endfor %}
-        <!--{{formulario}} -->
+        <input class="datepicker" data-date-format="mm/dd/yyyy" />
+        {% csrf_token %} 
+        {{formulario.media}} 
+        {{formulario}} 
 
         <style>
           .laSeleccionBox {
@@ -49,4 +49,10 @@
   </div>
 </div>
 
+<script type="text/javascript">
+  $(document).ready(function () {
 
+    
+    $(".datepicker").datetimepicker({ sideBySide: true  format: 'DD/MM/YYYY'})
+  });
+ </script>
