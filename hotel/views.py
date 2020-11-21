@@ -108,10 +108,17 @@ def temporadaHotelCrear(request, hotel):
     form = TemporadaHotelForm(request.POST)
     hotelInstancia=get_object_or_404(Hotel, pk=hotel)
     if request.method == "POST":
+            form = TemporadaHotelForm(request.POST)
             if form.is_valid():
+                print(hotelInstancia)
+                form = TemporadaHotelForm(request.POST)
                 temporadaInstancia=form.save(commit=False)
                 
-                temporadaHotel.hotel= hotelInstancia
+                temporadaInstancia.hotel= hotelInstancia
+                print(temporadaInstancia.nombre)
+                print(temporadaInstancia.inicio)
+                print(temporadaInstancia.fin)
+                
                 temporadaInstancia.save()
-                return redirect('hotel:temporadaHotel')
+                return redirect('hotel:temporadaHotel', hotel)
     return render(request, "hotel/modals/modal_temporadaHotel_crear.html", { "hotel": hotelInstancia, "formulario": form})

@@ -43,6 +43,7 @@ class TemporadaHotelForm(ModelForm):
         self.fields['nombre'].widget.attrs.update({'class': 'form-control'})
         self.fields['inicio'].widget.attrs.update({'class': 'form-control'})
         self.fields['fin'].widget.attrs.update({'class': 'form-control'})
+   
 
 class AgregarTipoAHotelForm(ModelForm):
     class Meta:
