@@ -5,7 +5,7 @@ from django.forms import forms
 from django.http import request, JsonResponse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
-from hotel.models import Hotel, TemporadaAlta
+from hotel.models import Hotel, PrecioPorTipo, TemporadaAlta
 from .forms import HotelForm, TemporadaHotelForm, AgregarTipoAHotelForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
@@ -38,11 +38,8 @@ def hotelCrear(request):
     return render(request, "hotel/modals/modal_hotel_crear.html", {"colHoteles": colHoteles, "formulario": form})
 
 def hotelModificar(request, hotel):
-    print("---entro a modificar---")
     hotelInstancia = get_object_or_404(Hotel, pk= hotel )
-    #colCategorias = Categoria.objects.all()
     colHoteles = Hotel.objects.all()
-
     if request.method == 'POST':
         form=HotelForm(request.POST,instance=hotelInstancia)
         if form.is_valid():
@@ -92,7 +89,46 @@ def vistaTipoHabitacionHotel(request,hotel):
 def tipoHabitacionCrear(request,hotel):
     formulario=AgregarTipoAHotelForm(request.POST)
     hotelInstancia =get_object_or_404(Hotel, pk=hotel)
+    if request.method == "POST":
+            formulario=AgregarTipoAHotelForm(request.POST)
+            if formulario.is_valid():
+                formulario=AgregarTipoAHotelForm(request.POST)
+                tipoHabitacionRecibido=formulario.save(commit=False)
+                tipoHabitacionRecibido.hotel= hotelInstancia
+                tipoHabitacionRecibido.save()
+                return redirect('hotel:tipoHabitacionHotel', hotel)
     return render(request, "hotel/modals/modal_tipoHabitacionHotel_crear.html",{"hotel": hotelInstancia,"formulario":formulario})
+
+
+def tipoHabitacionModificar(request,hotel,tipo):
+    hotelInstancia =get_object_or_404(Hotel, pk=hotel)
+    tipoHabitacionInstancia=get_object_or_404(PrecioPorTipo,pk=tipo)
+    if request.method == 'POST':
+        formulario=AgregarTipoAHotelForm(request.POST,instance=tipoHabitacionInstancia)
+        if formulario.is_valid():
+            tipoHabitacionInstancia = formulario.save()
+            tipoHabitacionInstancia.alta=request.POST['alta']
+            tipoHabitacionInstancia.baja=request.POST['baja']
+            tipoHabitacionInstancia.save()
+            return redirect('hotel:tipoHabitacionHotel', hotel)
+        else:
+            formulario=AgregarTipoAHotelForm(request.POST,instance=tipoHabitacionInstancia)
+    else:
+        formulario=AgregarTipoAHotelForm(instance=tipoHabitacionInstancia)
+        formulario.fields['tipo'].widget.attrs['style'] = 'display:none;'
+        formulario.fields['tipo'].label = ''
+    return render(request, "hotel/modals/modal_tipoHabitacionHotel_modificar.html",{"formulario":formulario, "hotel":hotelInstancia ,"tipo":tipoHabitacionInstancia})
+
+
+def tipoHabitacionEliminar(request,hotel,tipo): 
+    hotelInstancia =get_object_or_404(Hotel, pk=hotel)
+    tipoHabitacionInstancia=get_object_or_404(PrecioPorTipo,pk=tipo)
+    if request.method == 'POST':
+        tipoHabitacionInstancia.delete()
+        return redirect('hotel:tipoHabitacionHotel', hotel)
+    return render(request, "hotel/modals/modal_tipoHabitacionHotel_eliminar.html",{"hotel":hotelInstancia ,"tipo":tipoHabitacionInstancia})
+    
+
 
 
 #-------------------------- TIPO DE HABITACION ----------------------------------------

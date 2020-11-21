@@ -42,10 +42,10 @@
                 <td>${{item.baja}}</td>
                 <td>
                     <center>
-                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="" onclick="">
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modificarTipoHabitacion" onclick="abrir_modal('{% url 'hotel:modalModificarTipoHabitacion' hotel.pk item.pk %}','#modificarTipoHabitacion');">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="" onclick="">
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#eliminarTipoHabitacion" onclick="abrir_modal('{% url 'hotel:modalEliminarTipoHabitacion' hotel.pk item.pk %}','#eliminarTipoHabitacion');">
                             <i class="fas fa-trash"></i>
                         </button>
                     </center>
