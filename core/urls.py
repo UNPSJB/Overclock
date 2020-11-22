@@ -24,7 +24,7 @@ app_name="core"
 
 urlpatterns = [
   
-    path('logout', views.logout),
+    path('logout', views.logout, name="logout"),
     path('homeAdministrador', views.correctaAdmin, name="administrador"),
     path('hometaVendedor', views.correctaVendedor,name="vendedor"),
     path('region',views.regionAdmin, name="opcionRegion"),

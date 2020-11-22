@@ -4,7 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.forms.fields import EmailField
 from django.forms.widgets import NumberInput
 
-from hotel.models import Hotel, PrecioPorTipo, TemporadaAlta
+from hotel.models import Hotel, PrecioPorTipo, TemporadaAlta, Habitacion
 from core.models import Servicio, TipoHabitacion, Vendedor
 
 
@@ -56,3 +56,15 @@ class AgregarTipoAHotelForm(ModelForm):
         self.fields['tipo'].widget.attrs.update({'class': 'form-control'})
         self.fields['baja'].widget.attrs.update({'class': 'form-control'})
         self.fields['alta'].widget.attrs.update({'class': 'form-control'})
+
+class HabitacionForm(ModelForm):
+    class Meta:
+        model = Habitacion
+        fields='__all__'
+        exclude=['hotel','baja']
+     
+    def __init__(self, *args, **kwargs):
+        super(HabitacionForm, self).__init__(*args, **kwargs)
+        self.fields['numero'].widget.attrs.update({'class': 'form-control'})
+        self.fields['tipo'].widget.attrs.update({'class': 'form-control'})
+        

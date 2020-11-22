@@ -5,8 +5,8 @@ from django.forms import forms
 from django.http import request, JsonResponse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
-from hotel.models import Hotel, PrecioPorTipo, TemporadaAlta
-from .forms import HotelForm, TemporadaHotelForm, AgregarTipoAHotelForm
+from hotel.models import Habitacion, Hotel, PrecioPorTipo, TemporadaAlta
+from .forms import HabitacionForm, HotelForm, TemporadaHotelForm, AgregarTipoAHotelForm, HabitacionForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as do_login
@@ -14,7 +14,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.models import Group, User
 from django.utils import timezone
 from django.views.generic.edit import CreateView
-from core.models import Vendedor, Categoria
+from core.models import Vendedor, Categoria, TipoHabitacion
 
 # Create your views here.
 def hotel(request):
@@ -75,11 +75,10 @@ def hotelModificar(request, hotel):
 
 def detalleHotel(request,hotel):
     hotelInstancia =get_object_or_404(Hotel, pk=hotel)  
-    print(hotelInstancia.temporadas.first().fin)  
     return render(request, "hotel/vistaHotelAdmin.html",{"hotel":hotelInstancia })
 
 
-#-------------------------- TIPO DE HABITACION ----------------------------------------
+#-------------------------- INICIO: TIPO DE HABITACION ----------------------------------------
 
 def vistaTipoHabitacionHotel(request,hotel):
     hotelInstancia =get_object_or_404(Hotel, pk=hotel)
@@ -131,9 +130,53 @@ def tipoHabitacionEliminar(request,hotel,tipo):
 
 
 
-#-------------------------- TIPO DE HABITACION ----------------------------------------
+#-------------------------- FIN TIPO DE HABITACION ----------------------------------------
 
 
+
+
+#-------------------------- GESTION HABITACIONES ----------------------------------------
+
+def habitacionCrear(request,hotel):
+    hotelInstancia =get_object_or_404(Hotel, pk=hotel)
+    formulario=HabitacionForm(request.POST)
+    if request.method == "POST":
+            if formulario.is_valid():
+                habitacionInstancia=formulario.save(commit=False)
+                habitacionInstancia.hotel= hotelInstancia
+                habitacionInstancia.save()
+                return redirect('hotel:vistaHotel',hotel)
+    else:
+        formulario=HabitacionForm(request.GET)
+        formulario.fields['tipo'].choices=[(t.pk,t.nombre) for t in hotelInstancia.get_tipos()]
+
+    return render(request, "hotel/modals/modal_habitacionHotel_crear.html",{"hotel":hotelInstancia,'formulario':formulario })
+
+
+def habitacionEliminar(request,hotel,habitacion):
+    hotelInstancia =get_object_or_404(Hotel, pk=hotel)
+    habitacionInstancia=get_object_or_404(Habitacion,pk=habitacion)
+    if request.method == "POST":
+        habitacionInstancia.dar_baja()
+        habitacionInstancia.save()
+        return redirect('hotel:vistaHotel',hotel)
+    return render(request, "hotel/modals/modal_habitacionHotel_eliminar.html",{"hotel":hotelInstancia,'habitacion':habitacionInstancia })
+
+def habitacionReciclar(request,hotel,habitacion):
+    hotelInstancia =get_object_or_404(Hotel, pk=hotel)
+    habitacionInstancia=get_object_or_404(Habitacion,pk=habitacion)
+    if request.method == "POST":
+        habitacionInstancia.dar_alta()
+        habitacionInstancia.save()
+        return redirect('hotel:vistaHotel',hotel)
+    return render(request, "hotel/modals/modal_habitacionHotel_reciclar.html",{"hotel":hotelInstancia,'habitacion':habitacionInstancia })
+
+#-------------------------- GESTION HABITACIONES ----------------------------------------
+
+
+
+
+#-------------------------- INICIO: GESTION TEMPORADAS ----------------------------------------
 
 def temporadaHotel(request,hotel):
     hotelInstancia =get_object_or_404(Hotel, pk=hotel)    
@@ -158,3 +201,6 @@ def temporadaHotelCrear(request, hotel):
                 temporadaInstancia.save()
                 return redirect('hotel:temporadaHotel', hotel)
     return render(request, "hotel/modals/modal_temporadaHotel_crear.html", { "hotel": hotelInstancia, "formulario": form})
+
+
+#-------------------------- FIN: GESTION TEMPORADAS ----------------------------------------

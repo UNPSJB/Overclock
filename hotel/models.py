@@ -133,6 +133,9 @@ class Habitacion(models.Model):
     
     def dar_baja(self):
         self.baja=True
+    
+    def dar_alta(self):
+        self.baja=False
         
 
 

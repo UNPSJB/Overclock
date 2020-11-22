@@ -17,7 +17,8 @@
 {% block tarjeta1 %}
 <div class="card rounded-0">
     <div class="card-header" id="headingOne">
-        <button onclick="location.href='{% url 'hotel:vistaHotel' hotel.pk %}'" class="btn btn-link btn-block text-white">
+        <button onclick="location.href='{% url 'hotel:vistaHotel' hotel.pk %}'"
+            class="btn btn-link btn-block text-white">
             <center>
                 <h5> Paquete / Habitacion</h5>
             </center>
@@ -29,7 +30,8 @@
 {% block tarjeta2 %}
 <div class="card rounded-0">
     <div class="card-header" id="headingOne">
-        <button onclick="location.href='{% url 'hotel:temporadaHotel' hotel.pk %}'" class="btn btn-link btn-block text-white">
+        <button onclick="location.href='{% url 'hotel:temporadaHotel' hotel.pk %}'"
+            class="btn btn-link btn-block text-white">
             <center>
                 <h5> Temporada </h5>
             </center>
@@ -43,7 +45,7 @@
     <div class="card-header" id="headingOne">
         <button class="btn btn-link btn-block text-white">
             <center>
-                <h5>Vendedor  </h5>
+                <h5>Vendedor </h5>
             </center>
         </button>
     </div>
@@ -53,7 +55,7 @@
 {% block tarjeta4 %}
 <div class="card rounded-0">
     <div class="card-header" id="headingOne">
-        <button  class="btn btn-link btn-block text-white">
+        <button class="btn btn-link btn-block text-white">
             <center>
                 <h5>Encargado </h5>
             </center>
@@ -65,9 +67,10 @@
 {% block tarjeta5 %}
 <div class="card rounded-0">
     <div class="card-header" id="headingOne">
-        <button onclick="location.href='{% url 'hotel:tipoHabitacionHotel' hotel.pk %}'" class="btn btn-link btn-block text-white">
+        <button onclick="location.href='{% url 'hotel:tipoHabitacionHotel' hotel.pk %}'"
+            class="btn btn-link btn-block text-white">
             <center>
-                <h5>Tipo de Habitacion  </h5>
+                <h5>Tipo de Habitacion </h5>
             </center>
         </button>
     </div>
@@ -173,22 +176,9 @@
             <h3 class="mb-5">HABITACIONES</h3>
         </center>
         <table id="example1" class="table table-striped table-bordered tablaListaHabitacion">
-            <button type="button" class="btn btn-success mt-3 mr-4 float-right btn-sm" onclick="
-            {% if hotel.tengo_tipos %} 
-            Swal.fire({
-                    icon: 'success',
-                    title: 'Hay Tipos de Habitacion',
-                    text: 'Sos un groso segui adelante',
-                    footer: '<a href>Like?</a>'
-                  })
-                   {% else %}
-                   Swal.fire({
-                    icon: 'error',
-                    title: 'No hay tipos...',
-                    text: 'Primero tenes que cargar tipos',
-                    footer: '<a href>Sos huevon?</a>'
-                  })
-                   {% endif %}">
+            <button type="button" class="btn btn-success mt-3 mr-4 float-right btn-sm" data-toggle="modal"
+                data-target="#crearHabitacion"
+                onclick="abrir_modal('{% url 'hotel:modalCrearHabitacion' hotel.pk %}','#crearHabitacion');">
                 <i class="fas fa-plus-circle"></i>
                 AÑADIR</button>
             <thead>
@@ -224,12 +214,18 @@
                     <td>${{habitacion.precio_temp_baja }}</td>
                     <td>
                         <center>
-                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="" onclick="">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="" onclick="">
+                            {% if habitacion.baja %}
+                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#reciclarHabitacion"
+                            onclick="abrir_modal('{% url 'hotel:modalReciclarHabitacion' hotel.pk habitacion.pk%}','#reciclarHabitacion');" title="Reciclar" >
+                                <i class="fas fa-recycle"></i>
+                            </button> 
+                            {% else %}
+                            <button type="button" class="btn btn-danger" data-toggle="modal"
+                            data-target="#eliminarHabitacion"
+                            onclick="abrir_modal('{% url 'hotel:modalEliminarHabitacion' hotel.pk habitacion.pk%}','#eliminarHabitacion');" title="Eliminar">
                                 <i class="fas fa-trash"></i>
                             </button>
+                            {% endif %}
                         </center>
                     </td>
                 </tr>
@@ -240,6 +236,26 @@
         </table>
 
     </div>
+
+
+    <!--Modal crear Habitacion en otro html-->
+
+    <div class="modal fade-scale" id="crearHabitacion" tabindex="-1" aria-labelledby="exampleModalLabel">
+    </div>
+
+     <!--Modal reciclar Habitacion en otro html-->
+
+     <div class="modal fade-scale" id="reciclarHabitacion" tabindex="-1" aria-labelledby="exampleModalLabel">
+    </div>
+
+     <!--Modal eliminar Habitacion en otro html-->
+
+     <div class="modal fade-scale" id="eliminarHabitacion" tabindex="-1" aria-labelledby="exampleModalLabel">
+    </div>
+
+
+
+
     <div class="formularioHotel" id="vistaPaquetes">
         <center>
             <h3 class="mb-5">PAQUETES</h3>
@@ -330,3 +346,22 @@
 <script src="{% static 'js/dd8c49730d.js' %}"></script>#
 
 {% endblock extrajs%}
+
+
+
+<!--onclick="
+            {% if hotel.tengo_tipos %} 
+            Swal.fire({
+                    icon: 'success',
+                    title: 'Hay Tipos de Habitacion',
+                    text: 'Sos un groso segui adelante',
+                    footer: '<a href>Like?</a>'
+                  })
+                   {% else %}
+                   Swal.fire({
+                    icon: 'error',
+                    title: 'No hay tipos...',
+                    text: 'Primero tenes que cargar tipos',
+                    footer: '<a href>Sos huevon?</a>'
+                  })
+                   {% endif %}">-->
