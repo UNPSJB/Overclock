@@ -197,7 +197,6 @@ def temporadaHotelCrear(request, hotel):
                 print(temporadaInstancia.nombre)
                 print(temporadaInstancia.inicio)
                 print(temporadaInstancia.fin)
-                
                 temporadaInstancia.save()
                 return redirect('hotel:temporadaHotel', hotel)
     return render(request, "hotel/modals/modal_temporadaHotel_crear.html", { "hotel": hotelInstancia, "formulario": form})

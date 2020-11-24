@@ -34,8 +34,8 @@ class TemporadaHotelForm(ModelForm):
         fields = '__all__'
         exclude = ['hotel']
         widgets = {
-            'inicio': DateInput(attrs={'type': 'date'}),
-            'fin': DateInput(attrs={'type': 'date'})
+            'inicio': DateInput(attrs={'id':'fecha1','type': 'date','min':'','value':'', 'onclick':'fecha_actual();'}),
+            'fin': DateInput(attrs={'id':'fecha2','type': 'date','min':'','value':'', 'onclick':'fecha_minima();'})
         }
 
     def __init__(self, *args, **kwargs):
