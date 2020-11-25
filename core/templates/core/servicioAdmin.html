@@ -19,8 +19,9 @@
             <tr>
 
                 <button type="button" class="btn btn-success ml-4 float-right btn-sm" data-toggle="modal"
-                    data-target="#crearLocalidad"
+                    data-target="#crearServicio"
                     onclick="abrir_modal('{% url 'core:modalCrearServicio' %}','#crearServicio');">
+                    
                     <i class="fas fa-plus-circle"></i>
                     AÑADIR</button>
                 <th>Nombre</th>
@@ -72,6 +73,8 @@
 
     <div class="modal fade-scale" id="crearServicio" tabindex="-1" aria-labelledby="exampleModalLabel">
     </div>
+
+    
 
     <!-- Modal modificar Servicio en otro html-->
     <div class="modal fade-scale" id="modificarServicio" tabindex="-1" aria-labelledby="exampleModalLabel">

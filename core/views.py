@@ -214,12 +214,14 @@ def servicio(request):
 def servicioCrear(request):
     colServicios = Servicio.objects.all()
     form = ServicioForm(request.POST)
-    
+
+    print("estoy entrando a crear servicios")
     if request.method == "POST":
             if form.is_valid():
                 form.save()
                 return redirect('core:servicio')
     return render(request, "core/modals/modal_servicio_crear.html", {"colServicios": colServicios, "formulario": form})
+    
 
 
 

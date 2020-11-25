@@ -12,7 +12,7 @@
             <div class="modal-body">
 
                 {% csrf_token %}
-                {{ formulario }}
+                {{ formulario.as_p }}
             </div>
             <div class="modal-footer">
                 <button type="dismiss" class="Cerrar" data-dismiss="modal">Cerrar</button>
