@@ -45,8 +45,10 @@
                         <button type="button" class="btn btn-warning" data-toggle="modal" data-target="" onclick="">
                             <i class="fas fa-edit"></i>
                         </button>
-                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="" onclick="">
-                            <i class="fas fa-trash"></i>
+                        <button type="button" class="btn btn-danger" data-toggle="modal"
+                            data-target="#eliminarTemporada"
+                            onclick="abrir_modal('{% url 'hotel:modalEliminarTemporada' hotel.pk temporada.pk%}','#eliminarTemporada');" title="Eliminar">
+                                <i class="fas fa-trash"></i>
                         </button>
                     </center>
                 </td>
@@ -61,6 +63,11 @@
     
 
     <div class="modal fade-scale" id="crearTemporadaHotel" tabindex="-1" aria-labelledby="exampleModalLabel">
+    </div>
+
+         <!--Modal eliminar Temporada en otro html-->
+
+     <div class="modal fade-scale" id="eliminarTemporada" tabindex="-1" aria-labelledby="exampleModalLabel">
     </div>
 
 </div>
