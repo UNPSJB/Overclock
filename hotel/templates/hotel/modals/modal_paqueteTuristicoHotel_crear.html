@@ -1,4 +1,3 @@
-{{formulario.media}}
 <div class="modal-xl modal-dialog">
   <div class="modal-content">
     <div class="modal-header">
@@ -11,8 +10,8 @@
     </div>
     <form action="{% url 'hotel:modalCrearPaqueteTuristicoHotel' hotel.pk %}" method="POST">
       <div class="modal-body">
-       {% csrf_token %}
-        {{formulario}}
+        {% csrf_token %}
+        {{formulario.as_p}}
       </div>
       <div class="modal-footer">
         <button type="dismiss" class="cerrar" data-dismiss="modal">
@@ -29,6 +28,6 @@
 <script type="text/javascript">
   $(document).ready(function () {
     $('.datepicker').datetimepicker();
-    $(".datepicker").datetimepicker({ sideBySide: true, format: 'DD/MM/YYYY'})
+    $(".datepicker").datetimepicker({ sideBySide: true, format: 'DD/MM/YYYY' })
   });
- </script>
+</script>

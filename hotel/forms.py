@@ -48,7 +48,7 @@ class PaqueteTuristicoForm(ModelForm):
     class Meta:
         model = PaqueteTuristico
         fields = '__all__'
-        exclude = ['hotel','vendido']
+        exclude = ['hotel','vendido','precio']
         widgets = {
             'inicio': DateInput(attrs={'id':'fecha1','type': 'date','min':'','value':'', 'onclick':'fecha_actual();'}),
             'fin': DateInput(attrs={'id':'fecha2','type': 'date','min':'','value':'', 'onclick':'fecha_minima();'})
@@ -61,7 +61,8 @@ class PaqueteTuristicoForm(ModelForm):
         self.fields['inicio'].widget.attrs.update({'class': 'form-control'})
         self.fields['fin'].widget.attrs.update({'class': 'form-control'})
         self.fields['habitaciones'].widget.attrs.update({'class': 'form-control'})
-        self.fields['precio'].widget.attrs.update({'class': 'form-control'})
+       
+
 
 class AgregarTipoAHotelForm(ModelForm):
     class Meta:

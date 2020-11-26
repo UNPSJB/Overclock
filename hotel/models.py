@@ -104,7 +104,9 @@ class Habitacion(models.Model):
             #TODO: Custom exception
             raise Exception("No puedo calcular el precio")
         if self.hotel.temporadas.filter(inicio__lte=fecha, fin__gte=fecha).exists():
+            print("es temp alta" + str(self.numero))
             return precio_por_tipo.alta
+        print("es temp baja" + str(self.numero))
         return precio_por_tipo.baja
 
     def precio_temp_baja(self):
@@ -174,10 +176,10 @@ class PaqueteTuristico(models.Model):
 
     def actualizar_precio(self):
         self.precio=0
-        
+        print(">>>>>>>>>>>>>>>>>>> calculando precio paquete: "+self.nombre+" >>>>>>>>>>>>>>>>>>>")
         habitaciones = Habitacion.objects.filter(paqueteturistico = self)
-        
         for habitacion in habitaciones:
+            print("habitacion: " + str(habitacion.numero) +"precio: $"+ str(habitacion.precio_por_noche(self.inicio)) )
             self.precio += habitacion.precio_por_noche(self.inicio)
 
     def cantidad_dias(self):

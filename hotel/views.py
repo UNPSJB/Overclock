@@ -1,3 +1,4 @@
+from django.db.models import fields
 from django.shortcuts import render
 from typing import Reversible
 import django
@@ -15,6 +16,7 @@ from django.contrib.auth.models import Group, User
 from django.utils import timezone
 from django.views.generic.edit import CreateView
 from core.models import Vendedor, Categoria, TipoHabitacion
+
 
 # Create your views here.
 def hotel(request):
@@ -222,14 +224,16 @@ def paqueteTuristicoHotelCrear(request, hotel):
     form = PaqueteTuristicoForm(request.POST)
     hotelInstancia=get_object_or_404(Hotel, pk=hotel)
     if request.method == "POST":
-            form = PaqueteTuristicoForm(request.POST)
             if form.is_valid():
-                form = PaqueteTuristicoForm(request.POST)
                 paqueteTuristicoInstancia=form.save(commit=False)
-                
                 paqueteTuristicoInstancia.hotel= hotelInstancia
+                paqueteTuristicoInstancia.precio=1
                 paqueteTuristicoInstancia.save()
+                form.save_m2m()
                 return redirect('hotel:paqueteTuristicoHotel', hotel)
+    else:
+        form.fields['habitaciones'].choices=[(c.pk,c.numero) for c in Habitacion.objects.filter(hotel=hotelInstancia)]
+        
     return render(request, "hotel/modals/modal_paqueteTuristicoHotel_crear.html", { "hotel": hotelInstancia, "formulario": form})
 
 #-------------------------- FIN: GESTION PAQUETES TURISTICOS ----------------------------------------

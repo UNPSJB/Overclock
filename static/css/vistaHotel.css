@@ -13,20 +13,22 @@
 }
 
 .tablaDatos{
-    margin-left: 2vh;
+     margin-left: 2vh;
 }
 
+/*------------------- ACA COMIENZA DATA TABLE ------------------*/
+
 .abajo{
-/*    outline: 1px solid red;*/
+   outline: 1px solid red;
 }
    
 .dataTables_filter{
-   /* outline: solid 1px green !important;*/
+    outline: solid 1px green !important;
     width: 50% !important;
     
 }
 .dataTables_length{
-    /*outline: solid 1px red !important;*/
+    outline: solid 1px red !important;
     height: 10vh ;
     width: 50% ;
 }
