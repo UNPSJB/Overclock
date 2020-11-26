@@ -42,6 +42,7 @@ urlpatterns = [
     #Path GESTION TEMPORADAS
     path('temporadaHotel/<hotel>', hviews.temporadaHotel, name="temporadaHotel"),
     path('crearTemporadaHotel/<hotel>',hviews.temporadaHotelCrear, name="modalCrearTemporadaHotel"),
+    path('eliminarTemporada/<int:hotel>/<int:temporada>)', hviews.temporadaEliminar, name="modalEliminarTemporada"),
     #Path GESTION PAQUETES TURISTICOS
     path('paqueteTuristicoHotel/<hotel>', hviews.paqueteTuristicoHotel, name="paqueteTuristicoHotel"),
     path('crearPaqueteTuristicoHotel/<hotel>',hviews.paqueteTuristicoHotelCrear, name="modalCrearPaqueteTuristicoHotel"),

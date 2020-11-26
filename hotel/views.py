@@ -201,6 +201,14 @@ def temporadaHotelCrear(request, hotel):
                 return redirect('hotel:temporadaHotel', hotel)
     return render(request, "hotel/modals/modal_temporadaHotel_crear.html", { "hotel": hotelInstancia, "formulario": form})
 
+def temporadaEliminar(request,hotel,temporada):
+    hotelInstancia =get_object_or_404(Hotel, pk=hotel)
+    temporadaInstancia=get_object_or_404(TemporadaAlta,pk=temporada)
+    if request.method == "POST":
+        temporadaInstancia.delete()
+        
+        return redirect('hotel:temporadaHotel',hotel)
+    return render(request, "hotel/modals/modal_temporadaHotel_eliminar.html",{"hotel":hotelInstancia,'temporada':temporadaInstancia })
 
 #-------------------------- FIN: GESTION TEMPORADAS ----------------------------------------
 
@@ -225,3 +233,4 @@ def paqueteTuristicoHotelCrear(request, hotel):
     return render(request, "hotel/modals/modal_paqueteTuristicoHotel_crear.html", { "hotel": hotelInstancia, "formulario": form})
 
 #-------------------------- FIN: GESTION PAQUETES TURISTICOS ----------------------------------------
+
