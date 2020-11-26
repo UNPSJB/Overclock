@@ -4,7 +4,7 @@ from django.contrib.auth.forms import AuthenticationForm
 from django.forms.fields import EmailField
 from django.forms.widgets import NumberInput
 
-from hotel.models import Hotel, PrecioPorTipo, TemporadaAlta, Habitacion
+from hotel.models import Hotel, PrecioPorTipo, TemporadaAlta, Habitacion, PaqueteTuristico
 from core.models import Servicio, TipoHabitacion, Vendedor
 
 
@@ -44,6 +44,24 @@ class TemporadaHotelForm(ModelForm):
         self.fields['inicio'].widget.attrs.update({'class': 'form-control'})
         self.fields['fin'].widget.attrs.update({'class': 'form-control'})
    
+class PaqueteTuristicoForm(ModelForm):
+    class Meta:
+        model = PaqueteTuristico
+        fields = '__all__'
+        exclude = ['hotel','vendido']
+        widgets = {
+            'inicio': DateInput(attrs={'id':'fecha1','type': 'date','min':'','value':'', 'onclick':'fecha_actual();'}),
+            'fin': DateInput(attrs={'id':'fecha2','type': 'date','min':'','value':'', 'onclick':'fecha_minima();'})
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(PaqueteTuristicoForm, self).__init__(*args, **kwargs)
+        self.fields['nombre'].widget.attrs.update({'class': 'form-control'})
+        self.fields['coeficiente'].widget.attrs.update({'class': 'form-control'})
+        self.fields['inicio'].widget.attrs.update({'class': 'form-control'})
+        self.fields['fin'].widget.attrs.update({'class': 'form-control'})
+        self.fields['habitaciones'].widget.attrs.update({'class': 'form-control'})
+        self.fields['precio'].widget.attrs.update({'class': 'form-control'})
 
 class AgregarTipoAHotelForm(ModelForm):
     class Meta:

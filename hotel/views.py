@@ -5,8 +5,8 @@ from django.forms import forms
 from django.http import request, JsonResponse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
-from hotel.models import Habitacion, Hotel, PrecioPorTipo, TemporadaAlta
-from .forms import HabitacionForm, HotelForm, TemporadaHotelForm, AgregarTipoAHotelForm, HabitacionForm
+from hotel.models import Habitacion, Hotel, PrecioPorTipo, TemporadaAlta, PaqueteTuristico
+from .forms import HabitacionForm, HotelForm, TemporadaHotelForm, AgregarTipoAHotelForm, HabitacionForm, PaqueteTuristicoForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as do_login
@@ -203,3 +203,25 @@ def temporadaHotelCrear(request, hotel):
 
 
 #-------------------------- FIN: GESTION TEMPORADAS ----------------------------------------
+
+#-------------------------- INICIO: GESTION PAQUETES TURISTICOS ----------------------------------------
+
+def paqueteTuristicoHotel(request,hotel):
+    hotelInstancia =get_object_or_404(Hotel, pk=hotel)    
+    return render(request, "hotel/vistaHotelAdmin.html",{"hotel":hotelInstancia })
+    
+def paqueteTuristicoHotelCrear(request, hotel):
+    form = PaqueteTuristicoForm(request.POST)
+    hotelInstancia=get_object_or_404(Hotel, pk=hotel)
+    if request.method == "POST":
+            form = PaqueteTuristicoForm(request.POST)
+            if form.is_valid():
+                form = PaqueteTuristicoForm(request.POST)
+                paqueteTuristicoInstancia=form.save(commit=False)
+                
+                paqueteTuristicoInstancia.hotel= hotelInstancia
+                paqueteTuristicoInstancia.save()
+                return redirect('hotel:paqueteTuristicoHotel', hotel)
+    return render(request, "hotel/modals/modal_paqueteTuristicoHotel_crear.html", { "hotel": hotelInstancia, "formulario": form})
+
+#-------------------------- FIN: GESTION PAQUETES TURISTICOS ----------------------------------------

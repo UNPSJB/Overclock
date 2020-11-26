@@ -262,7 +262,8 @@
         </center>
         <table id="example2" class="table table-striped table-bordered tablaListaHabitacion">
             <button type="button" class="btn btn-success mt-3 mr-4 float-right btn-sm" data-toggle="modal"
-                data-target="#crearLocalidad" onclick="">
+                data-target="#crearPaqueteTuristicoHotel" 
+                onclick="abrir_modal('{% url 'hotel:modalCrearPaqueteTuristicoHotel' hotel.pk %}', '#crearPaqueteTuristicoHotel');">
                 <i class="fas fa-plus-circle"></i>
                 AÑADIR</button>
             <thead>
@@ -305,6 +306,11 @@
             </tbody>
 
         </table>
+    </div>
+
+    <!--Modal crear Paquete Turistico en otro html-->
+
+    <div class="modal fade-scale" id="crearPaqueteTuristicoHotel" tabindex="-1" aria-labelledby="exampleModalLabel">
     </div>
 
 </div>
