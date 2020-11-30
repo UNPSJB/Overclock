@@ -1,4 +1,7 @@
+from datetime import date, datetime
 from django.db.models import fields
+from django.db.models.fields import DateField
+from django.forms.widgets import DateInput
 from django.shortcuts import render
 from typing import Reversible
 import django
@@ -21,12 +24,9 @@ from core.models import Vendedor, Categoria, TipoHabitacion
 # Create your views here.
 def hotel(request):
     colHoteles=Hotel.objects.all()
-    #for hotel in colHoteles:
-        #print(hotel.es_comercializable())
     return render(request, "hotel/hotelAdmin.html",{"colHoteles": colHoteles})
 
 def hotelCrear(request):
-    print("Entre a la vista")
     colHoteles = Hotel.objects.all()
     form = HotelForm(request.POST)
     
@@ -191,14 +191,9 @@ def temporadaHotelCrear(request, hotel):
     if request.method == "POST":
             form = TemporadaHotelForm(request.POST)
             if form.is_valid():
-                print(hotelInstancia)
                 form = TemporadaHotelForm(request.POST)
                 temporadaInstancia=form.save(commit=False)
-                
                 temporadaInstancia.hotel= hotelInstancia
-                print(temporadaInstancia.nombre)
-                print(temporadaInstancia.inicio)
-                print(temporadaInstancia.fin)
                 temporadaInstancia.save()
                 return redirect('hotel:temporadaHotel', hotel)
     return render(request, "hotel/modals/modal_temporadaHotel_crear.html", { "hotel": hotelInstancia, "formulario": form})
@@ -235,6 +230,41 @@ def paqueteTuristicoHotelCrear(request, hotel):
         form.fields['habitaciones'].choices=[(c.pk,c.numero) for c in Habitacion.objects.filter(hotel=hotelInstancia)]
         
     return render(request, "hotel/modals/modal_paqueteTuristicoHotel_crear.html", { "hotel": hotelInstancia, "formulario": form})
+
+def paqueteTuristicoHotelModificar(request,hotel,paquete):
+    hotelInstancia=get_object_or_404(Hotel, pk=hotel)
+    paqueteInstancia=get_object_or_404(PaqueteTuristico, pk=paquete)
+    form = PaqueteTuristicoForm(request.POST or None,instance=paqueteInstancia)
+    if request.method == "POST":
+        print("POST!!!!!!!!!!!!!!!!!")
+        if form.is_valid():
+            print("<<<<<<FORMULARIO VALIDO>>>>>>>>>>>")
+            paquete=form.save(commit=False)
+            paquete.save()
+            return redirect('hotel:paqueteTuristicoHotel', hotel)
+    else:
+        form.fields['habitaciones'].choices=[(c.pk,c.numero) for c in Habitacion.objects.filter(hotel=hotelInstancia)]
+        arregloHabitacionesSeleccionadas = paqueteInstancia.habitaciones.all()
+        preseleccion=[]
+        for habitacion in arregloHabitacionesSeleccionadas:
+                preseleccion.append(habitacion.pk)
+        form.initial['habitaciones'] = preseleccion
+        form.initial['inicio']=str(paqueteInstancia.inicio)
+        form.initial['fin']=str(paqueteInstancia.fin)
+        dicc={'nombre','habitaciones','inicio','fin'}
+        for campo in dicc:
+            form.fields[campo].widget.attrs['style'] = 'display:none;'
+            form.fields[campo].label = ''
+        return render(request, "hotel/modals/modal_paqueteTuristicoHotel_modificar.html",{'formulario':form,'hotel':hotelInstancia,'paquete':paqueteInstancia})
+
+def paqueteTuristicoHotelEliminar(request,hotel,paquete):
+    hotelInstancia=get_object_or_404(Hotel, pk=hotel)
+    paqueteInstancia=get_object_or_404(PaqueteTuristico, pk=paquete)
+    if request.method=='POST':
+        paqueteInstancia.delete()
+        return redirect('hotel:paqueteTuristicoHotel', hotel)
+    return render(request, "hotel/modals/modal_paqueteTuristicoHotelEliminar.html",{'hotel':hotelInstancia,'paquete':paqueteInstancia})
+
 
 #-------------------------- FIN: GESTION PAQUETES TURISTICOS ----------------------------------------
 

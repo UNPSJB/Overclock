@@ -196,10 +196,15 @@ class PaqueteTuristico(models.Model):
         return False
 
     def estoy_vigente(self):
-        return (not self.vendido) and (self.fin < date.today())
+        return (not self.vendido) and (self.fin >= date.today())
+    
+    def estoy_vencido(self):
+        return (self.fin < date.today())
+    
+    def estoy_vendido(self):
+        return (self.vendido)
             
     def marcar_venta(self):
         self.vendido=True
         
-
         

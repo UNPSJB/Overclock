@@ -61,7 +61,6 @@ class PaqueteTuristicoForm(ModelForm):
         self.fields['inicio'].widget.attrs.update({'class': 'form-control'})
         self.fields['fin'].widget.attrs.update({'class': 'form-control'})
         self.fields['habitaciones'].widget.attrs.update({'class': 'form-control'})
-       
 
 
 class AgregarTipoAHotelForm(ModelForm):
