@@ -77,6 +77,12 @@ class Hotel(models.Model):
     def obtener_descuento_por_cantidad(self, cantidad):
         return self.descuentos.filter(cantidad_habitaciones__gte=cantidad).first()
 
+    def get_servicios(self):
+        return Servicio.objects.filter(hotel=self)
+
+    def get_categoria(self):
+        return self.categoria
+
 class PrecioPorTipo(models.Model):
     hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE, related_name='tarifario')
     tipo = models.ForeignKey(TipoHabitacion, on_delete=models.CASCADE, related_name='hoteles')
