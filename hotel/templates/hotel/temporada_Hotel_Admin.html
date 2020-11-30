@@ -42,7 +42,7 @@
 
                 <td>
                     <center>
-                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="" onclick="">
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modificarTemporada" onclick="abrir_modal('{% url 'hotel:modalModificarTemporada' hotel.pk temporada.pk%}','#modificarTemporada');" title="Modificar">
                             <i class="fas fa-edit"></i>
                         </button>
                         <button type="button" class="btn btn-danger" data-toggle="modal"
@@ -68,6 +68,11 @@
          <!--Modal eliminar Temporada en otro html-->
 
      <div class="modal fade-scale" id="eliminarTemporada" tabindex="-1" aria-labelledby="exampleModalLabel">
+    </div>
+
+       <!--Modal modificar Temporada en otro html-->
+
+       <div class="modal fade-scale" id="modificarTemporada" tabindex="-1" aria-labelledby="exampleModalLabel">
     </div>
 
 </div>

@@ -177,8 +177,18 @@
         </center>
         <table id="example1" class="table table-striped table-bordered tablaListaHabitacion">
             <button type="button" class="btn btn-success mt-3 mr-4 float-right btn-sm" data-toggle="modal"
-                data-target="#crearHabitacion"
-                onclick="abrir_modal('{% url 'hotel:modalCrearHabitacion' hotel.pk %}','#crearHabitacion');">
+                data-target="#crearHabitacion" onclick="
+            {% if hotel.tengo_tipos %} abrir_modal('{% url 'hotel:modalCrearHabitacion' hotel.pk %}','#crearHabitacion');
+            {% else %}
+                   Swal.fire({
+                    icon: 'error',
+                    title: 'No hay tipos...',
+                    text: 'Primero tenes que cargar tipos',
+                    
+                  });
+            {% endif %}">
+
+
                 <i class="fas fa-plus-circle"></i>
                 AÑADIR</button>
             <thead>
@@ -215,14 +225,17 @@
                     <td>
                         <center>
                             {% if habitacion.baja %}
-                            <button type="button" class="btn btn-success" data-toggle="modal" data-target="#reciclarHabitacion"
-                            onclick="abrir_modal('{% url 'hotel:modalReciclarHabitacion' hotel.pk habitacion.pk%}','#reciclarHabitacion');" title="Reciclar" >
+                            <button type="button" class="btn btn-success" data-toggle="modal"
+                                data-target="#reciclarHabitacion"
+                                onclick="abrir_modal('{% url 'hotel:modalReciclarHabitacion' hotel.pk habitacion.pk%}','#reciclarHabitacion');"
+                                title="Reciclar">
                                 <i class="fas fa-recycle"></i>
-                            </button> 
+                            </button>
                             {% else %}
                             <button type="button" class="btn btn-danger" data-toggle="modal"
-                            data-target="#eliminarHabitacion"
-                            onclick="abrir_modal('{% url 'hotel:modalEliminarHabitacion' hotel.pk habitacion.pk%}','#eliminarHabitacion');" title="Eliminar">
+                                data-target="#eliminarHabitacion"
+                                onclick="abrir_modal('{% url 'hotel:modalEliminarHabitacion' hotel.pk habitacion.pk%}','#eliminarHabitacion');"
+                                title="Eliminar">
                                 <i class="fas fa-trash"></i>
                             </button>
                             {% endif %}
@@ -243,14 +256,14 @@
     <div class="modal fade-scale" id="crearHabitacion" tabindex="-1" aria-labelledby="exampleModalLabel">
     </div>
 
-     <!--Modal reciclar Habitacion en otro html-->
+    <!--Modal reciclar Habitacion en otro html-->
 
-     <div class="modal fade-scale" id="reciclarHabitacion" tabindex="-1" aria-labelledby="exampleModalLabel">
+    <div class="modal fade-scale" id="reciclarHabitacion" tabindex="-1" aria-labelledby="exampleModalLabel">
     </div>
 
-     <!--Modal eliminar Habitacion en otro html-->
+    <!--Modal eliminar Habitacion en otro html-->
 
-     <div class="modal fade-scale" id="eliminarHabitacion" tabindex="-1" aria-labelledby="exampleModalLabel">
+    <div class="modal fade-scale" id="eliminarHabitacion" tabindex="-1" aria-labelledby="exampleModalLabel">
     </div>
 
 
@@ -261,8 +274,16 @@
         </center>
         <table id="example2" class="table table-striped table-bordered tablaListaHabitacion">
             <button type="button" class="btn btn-success mt-3 mr-4 float-right btn-sm" data-toggle="modal"
-                data-target="#crearPaqueteTuristicoHotel"
-                onclick="abrir_modal('{% url 'hotel:modalCrearPaqueteTuristicoHotel' hotel.pk %}', '#crearPaqueteTuristicoHotel');">
+                data-target="#crearPaqueteTuristicoHotel" onclick="
+            {% if hotel.get_habitaciones %} abrir_modal('{% url 'hotel:modalCrearPaqueteTuristicoHotel' hotel.pk %}', '#crearPaqueteTuristicoHotel');
+            {% else %}
+                   Swal.fire({
+                    icon: 'error',
+                    title: 'No hay habitaciones...',
+                    text: 'Primero tenes que cargar habitaciones',
+                    
+                  });
+            {% endif %}">
                 <i class="fas fa-plus-circle"></i>
                 AÑADIR</button>
             <thead>
@@ -274,7 +295,7 @@
                     <th>Estado</th>
                     <th>Acciones</th>
                 </tr>
-               
+
             </thead>
             <tbody>
 
@@ -295,25 +316,28 @@
                     <td>{{paquete.inicio}}</td>
                     <td>{{paquete.fin}}</td>
                     <td>${{paquete.get_costo}}</td>
-                    <td>{% if paquete.estoy_vendido %} VENDIDO 
-                        {% elif paquete.estoy_vencido %} VENCIDO 
-                        {% else %} VIGENTE 
-                    {% endif %}</td>
+                    <td>{% if paquete.estoy_vendido %} VENDIDO
+                        {% elif paquete.estoy_vencido %} VENCIDO
+                        {% else %} VIGENTE
+                        {% endif %}</td>
                     <td>
                         <center>
                             {% if paquete.estoy_vigente %}
-                            <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modificarPaqueteTuristicoHotel"
-                            onclick="abrir_modal('{% url 'hotel:modalModificarPaqueteTuristicoHotel' hotel.pk paquete.pk%}', '#modificarPaqueteTuristicoHotel');" title="Editar" >
+                            <button type="button" class="btn btn-warning" data-toggle="modal"
+                                data-target="#modificarPaqueteTuristicoHotel"
+                                onclick="abrir_modal('{% url 'hotel:modalModificarPaqueteTuristicoHotel' hotel.pk paquete.pk%}', '#modificarPaqueteTuristicoHotel');"
+                                title="Editar">
                                 <i class="fas fa-edit"></i>
-                            </button> 
+                            </button>
                             {% elif paquete.estoy_vencido %}
                             <button type="button" class="btn btn-danger" data-toggle="modal"
-                            data-target="#eliminarPaqueteTuristicoHotel"
-                            onclick="abrir_modal('{% url 'hotel:modalEliminarPaqueteTuristicoHotel' hotel.pk paquete.pk%}', '#eliminarPaqueteTuristicoHotel');" title="Eliminar">
+                                data-target="#eliminarPaqueteTuristicoHotel"
+                                onclick="abrir_modal('{% url 'hotel:modalEliminarPaqueteTuristicoHotel' hotel.pk paquete.pk%}', '#eliminarPaqueteTuristicoHotel');"
+                                title="Eliminar">
                                 <i class="fas fa-trash"></i>
                             </button>
                             {% elif paquete.estoy_vendido %}
-                                
+
                             {% endif %}
                         </center>
                     </td>
@@ -326,65 +350,65 @@
 
     </div>
 
-  <!--Modal crear Paquete Turistico en otro html-->
+    <!--Modal crear Paquete Turistico en otro html-->
 
-  <div class="modal fade-scale" id="crearPaqueteTuristicoHotel" tabindex="-1" aria-labelledby="exampleModalLabel">
-</div>
+    <div class="modal fade-scale" id="crearPaqueteTuristicoHotel" tabindex="-1" aria-labelledby="exampleModalLabel">
+    </div>
 
-<!--Modal modificar Paquete Turistico en otro html-->
+    <!--Modal modificar Paquete Turistico en otro html-->
 
-<div class="modal fade-scale" id="modificarPaqueteTuristicoHotel" tabindex="-1" aria-labelledby="exampleModalLabel">
-</div>
+    <div class="modal fade-scale" id="modificarPaqueteTuristicoHotel" tabindex="-1" aria-labelledby="exampleModalLabel">
+    </div>
 
-<!--Modal eliminar Paquete Turistico en otro html-->
+    <!--Modal eliminar Paquete Turistico en otro html-->
 
-<div class="modal fade-scale" id="eliminarPaqueteTuristicoHotel" tabindex="-1" aria-labelledby="exampleModalLabel">
-</div>
-
-              
-     
-{% endblock datosVista %}
-{% endblock content %}
+    <div class="modal fade-scale" id="eliminarPaqueteTuristicoHotel" tabindex="-1" aria-labelledby="exampleModalLabel">
+    </div>
 
 
-{% block extrajs %}
 
-<script type="text/javascript">
-    //SCRIPT DE DATATABLE
-   
-    $(document).ready(function () {
-        $('#example1').DataTable();
-        $('#example2').DataTable();       
-    });</script>
+    {% endblock datosVista %}
+    {% endblock content %}
 
 
-<script>
-    $("#vistaHabitaciones").hide();
-    $("#vistaPaquetes").show();
-    $(function () {
-        $('.boton-Habitaciones-Paquetes').click(function () {
-            var state = $(this).val();
-            console.log(state)
-            switch (state) {
-                case "habitaciones":
-                    $("#vistaHabitaciones").show();
-                    $("#vistaPaquetes").hide();
-                    break;
-                case "paquetes":
-                    $("#vistaHabitaciones").hide();
-                    $("#vistaPaquetes").show();
-                    break;
-            }
+    {% block extrajs %}
+
+    <script type="text/javascript">
+        //SCRIPT DE DATATABLE
+
+        $(document).ready(function () {
+            $('#example1').DataTable();
+            $('#example2').DataTable();
+        });</script>
+
+
+    <script>
+        $("#vistaHabitaciones").hide();
+        $("#vistaPaquetes").show();
+        $(function () {
+            $('.boton-Habitaciones-Paquetes').click(function () {
+                var state = $(this).val();
+                console.log(state)
+                switch (state) {
+                    case "habitaciones":
+                        $("#vistaHabitaciones").show();
+                        $("#vistaPaquetes").hide();
+                        break;
+                    case "paquetes":
+                        $("#vistaHabitaciones").hide();
+                        $("#vistaPaquetes").show();
+                        break;
+                }
+            });
         });
-    });
-</script>
-<script src="{% static 'js/dd8c49730d.js' %}"></script>#
+    </script>
+    <script src="{% static 'js/dd8c49730d.js' %}"></script>#
 
-{% endblock extrajs%}
-
+    {% endblock extrajs%}
 
 
-<!--onclick="
+
+    <!--onclick="
             {% if hotel.tengo_tipos %} 
             Swal.fire({
                     icon: 'success',
