@@ -1,7 +1,7 @@
 from django.forms import widgets, MultipleChoiceField, CheckboxSelectMultiple
 from django.forms import ModelForm, ValidationError, forms, DateInput, DateField
 from django.contrib.auth.forms import AuthenticationForm
-from django.forms.fields import EmailField
+from django.forms.fields import CharField, EmailField
 from django.forms.widgets import NumberInput
 
 from hotel.models import Hotel, PrecioPorTipo, TemporadaAlta, Habitacion, PaqueteTuristico
@@ -80,9 +80,14 @@ class HabitacionForm(ModelForm):
         model = Habitacion
         fields='__all__'
         exclude=['hotel','baja']
+      
+        
      
     def __init__(self, *args, **kwargs):
         super(HabitacionForm, self).__init__(*args, **kwargs)
         self.fields['numero'].widget.attrs.update({'class': 'form-control'})
         self.fields['tipo'].widget.attrs.update({'class': 'form-control'})
         
+
+
+    

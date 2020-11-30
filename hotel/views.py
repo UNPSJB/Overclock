@@ -10,7 +10,7 @@ from django.http import request, JsonResponse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from hotel.models import Habitacion, Hotel, PrecioPorTipo, TemporadaAlta, PaqueteTuristico
-from .forms import HabitacionForm, HotelForm, TemporadaHotelForm, AgregarTipoAHotelForm, HabitacionForm, PaqueteTuristicoForm
+from .forms import  HabitacionForm, HotelForm, TemporadaHotelForm, AgregarTipoAHotelForm, HabitacionForm, PaqueteTuristicoForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as do_login
@@ -18,7 +18,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.models import Group, User
 from django.utils import timezone
 from django.views.generic.edit import CreateView
-from core.models import Vendedor, Categoria, TipoHabitacion
+from core.models import Vendedor, Categoria, TipoHabitacion, Servicio
 
 
 # Create your views here.
@@ -270,6 +270,7 @@ def paqueteTuristicoHotelModificar(request,hotel,paquete):
         for campo in dicc:
             form.fields[campo].widget.attrs['style'] = 'display:none;'
             form.fields[campo].label = ''
+        form.fields['coeficiente'].label='coeficiente de descuento'
         return render(request, "hotel/modals/modal_paqueteTuristicoHotel_modificar.html",{'formulario':form,'hotel':hotelInstancia,'paquete':paqueteInstancia})
 
 def paqueteTuristicoHotelEliminar(request,hotel,paquete):
@@ -282,4 +283,31 @@ def paqueteTuristicoHotelEliminar(request,hotel,paquete):
 
 
 #-------------------------- FIN: GESTION PAQUETES TURISTICOS ----------------------------------------
+
+#-------------------------- INICIO: GESTION PAQUETES TURISTICOS ----------------------------------------
+
+def serviciosHotel(request,hotel):
+    hotelInstancia =get_object_or_404(Hotel, pk=hotel)
+    categoria=hotelInstancia.get_categoria()
+    print(categoria.nombre)
+   
+    return render(request, "hotel/servicios_Hotel_Admin.html",{"hotel":hotelInstancia,"categoria":categoria})
+
+def aniadirServicioHotel(request,hotel):
+    hotelInstancia =get_object_or_404(Hotel, pk=hotel)
+    categoria=hotelInstancia.get_categoria()
+    form=HotelForm(request.POST or None,instance=hotelInstancia)
+    if request.method =="POST":
+        pass
+    else:
+        dic={}
+        
+        
+        #listaDeServicios=[]
+        #for servicio in Servicio.objects.all():
+        #    if servicio not in hotelInstancia.get_servicios():
+        #        listaDeServicios.append(get_object_or_404(Servicio, pk=servicio.pk))
+        #print(listaDeServicios)
+        return render(request, "hotel/modals/modal_servicio_Hotel_aniadir.html",{"formulario":form,"hotel":hotelInstancia,"categoria":categoria})
+    
 

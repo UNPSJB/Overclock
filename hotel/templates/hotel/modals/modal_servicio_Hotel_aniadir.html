@@ -2,28 +2,26 @@
     <div class="modal-content">
         <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLabel">
-                AÑADIR TIPO HABITACION A HOTEL
+                AÑADIR SERVICIO EXTRA A HOTEL : {{hotel}}
             </h5>
             <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                 <span>&times;</span>
             </button>
         </div>
-        <form action="{% url 'hotel:modalCrearTipoHabitacion' hotel.pk %}" method="POST">
+        <form action="{% url 'hotel:modalAniadirserviciosHotel' hotel.pk %}" method="POST">
             <div class="modal-body">
 
                 {% csrf_token %}
-                {{formulario.as_p}}
-
+                {{ formulario.as_p }}
+                
+                     
 
             </div>
             <div class="modal-footer">
                 <button type="dismiss" class="cerrar" data-dismiss="modal">Cerrar</button>
-                <button type="submit" name="accion" class="guardar" value="hotel">Guardar</button>
+                <button type="submit" name="accion" class="guardar" value="habitacion">Guardar</button>
 
             </div>
         </form>
-        <script>
-            console.log("estoy por aca!!!!");
-        </script>
     </div>
 </div>
