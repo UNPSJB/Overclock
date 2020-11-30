@@ -176,20 +176,23 @@ class Rol(models.Model):
 
 class Encargado(Rol):
     TIPO = 1
-
+    bajaEncargado = False
     # Clave Autogenerada? un token?
     # clave = models.CharField(max_length=10, default=lambda n = 10: str_alfanumerico(n))
     clave = models.CharField(max_length=10, default="")
 
 class Vendedor(Rol):
     TIPO = 2
-
+    estoyHabilitado = models.BooleanField(default=True) #Baja Logica 
     # Coeficiente de Ganancia
     coeficiente = models.DecimalField(max_digits=3, decimal_places=2, default=Decimal(0))
 
+    def eliminar(self):
+        self.estoyHabilitado = False
+        
 class Cliente(Rol):
     TIPO = 3
-
+    bajaCliente = False
     # Puntos
     puntos = models.PositiveIntegerField(default=0)
 

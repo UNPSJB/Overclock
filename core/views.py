@@ -5,8 +5,8 @@ from django.forms import forms
 from django.http import request, JsonResponse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
-from core.models import Pais, Provincia, Localidad, TipoHabitacion, Servicio, Categoria
-from .forms import PaisForm, LocalidadForm, AutenticacionForm, ProvinciaForm, TipoHabitacionForm, ServicioForm, CategoriaForm
+from core.models import Pais, Provincia, Localidad, TipoHabitacion, Servicio, Categoria, Persona, Vendedor
+from .forms import PaisForm, LocalidadForm, AutenticacionForm, ProvinciaForm, TipoHabitacionForm, ServicioForm, CategoriaForm, VendedorForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as do_login
@@ -288,3 +288,66 @@ def categoriaModificar(request, categoria):
                  
 
     return render(request, "core/modals/modal_categoria_modificar.html", {"colCategorias": colCategorias, "formulario": form, "categoria": categoriaInstancia})
+
+#GESTION VENDEDOR
+
+def vendedor(request):
+    colVendedores=Vendedor.objects.all()
+    return render(request, "core/vendedor.html",{"colVendedores": colVendedores})
+
+
+def vendedorCrear(request):
+    colVendedores = Vendedor.objects.all()
+    form = VendedorForm(request.POST)
+
+    if request.method == "POST":
+            if form.is_valid():
+                #print(form.cleaned_data['email'])
+                form.save()
+                form.instance.hacer_vendedor(form.cleaned_data['usuario'], form.cleaned_data['email'], form.cleaned_data['contrasenia'])
+                return redirect('core:opcionVendedor')
+    return render(request, "core/modals/modal_vendedor_crear.html", {"colVendedores": colVendedores, "formulario": form})
+    
+def vendedorModificar(request, vendedor):
+    vendedorInstancia = get_object_or_404(Vendedor, pk=vendedor)
+    colVendedores = Vendedor.objects.all()
+    if request.method == 'POST':
+        form=VendedorForm(request.POST,instance=vendedorInstancia)
+        if form.is_valid():
+            
+            vendedorInstancia.persona.nombre = request.POST['nombre']
+            vendedorInstancia.persona.apellido = request.POST['apellido']
+            vendedorInstancia.persona.documento = request.POST['documento']
+            vendedorInstancia.persona.tipo_documento = request.POST['tipo_documento']
+            vendedorInstancia.persona.usuario.email = request.POST['email']
+            vendedorInstancia.persona.usuario.username = request.POST['usuario']
+            vendedorInstancia.persona.usuario.password = request.POST['contrasenia']
+            
+            vendedorInstancia.persona.usuario.save()
+            vendedorInstancia.persona.save()
+            vendedorInstancia.save()
+            print(vendedorInstancia.persona.nombre)
+            return redirect('core:opcionVendedor')
+        else:
+            form=VendedorForm(request.POST,instance=vendedorInstancia)
+    else:
+        print(vendedorInstancia)
+        form=VendedorForm(instance=vendedorInstancia)
+        print(vendedorInstancia.persona.nombre)
+        form.fields["nombre"].initial = vendedorInstancia.persona.nombre
+        form.fields["apellido"].initial = vendedorInstancia.persona.apellido
+        form.fields["documento"].initial = vendedorInstancia.persona.documento
+        form.fields["tipo_documento"].initial = vendedorInstancia.persona.tipo_documento
+        form.fields["email"].initial = vendedorInstancia.persona.usuario.email
+        form.fields["usuario"].initial = vendedorInstancia.persona.usuario.username
+        form.fields["contrasenia"].initial = vendedorInstancia.persona.usuario.password
+    return render(request, "core/modals/modal_vendedor_modificar.html", {"colVendedores": colVendedores, "formulario": form, "vendedor": vendedorInstancia})
+ 
+def vendedorEliminar(request, vendedor):
+    vendedorInstancia = get_object_or_404(Vendedor, pk=vendedor)
+    if request.method == "POST":
+        vendedorInstancia.eliminar()
+        vendedorInstancia.save()
+        return redirect('core:opcionVendedor')
+    return render(request, "core/modals/modal_vendedor_eliminar.html",{"vendedor":vendedorInstancia})
+

@@ -1,0 +1,98 @@
+{% extends 'base/base_administrador.html'%}
+{% load static %}
+
+
+{% block headerContenido %}
+{% endblock headerContenido %}
+
+
+{% block content %}
+<div class="formularioRegion" id="vistaLocalidades">
+
+<center><h1 class="my-4">LISTADO DE VENDEDORES</h1></center>
+
+
+    <table id="example1" class="table table-striped table-bordered" style="width:100%">
+
+        <thead>
+
+            <tr>
+                <button type="button" class="btn btn-success ml-4 float-right btn-sm" data-toggle="modal"
+                    data-target="#crearVendedor"
+                    onclick="abrir_modal('{% url 'core:modalCrearVendedor' %}','#crearVendedor');">
+                    
+                    <i class="fas fa-plus-circle"></i>
+                    AÑADIR</button>
+                <th>Nombre</th>
+                <th>
+                    <Center>ACCIONES</Center>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+            {% for vendedor in colVendedores %}
+
+            {% if vendedor.estoyHabilitado %}
+            <tr>
+                
+                <td> {{vendedor}}</td>
+                
+                <td>
+                    <center>
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modificarVendedor"
+                            onclick="abrir_modal('{% url 'core:modalModificarVendedor' vendedor.pk %}','#modificarVendedor');">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#eliminarVendedor"
+                            onclick="abrir_modal('{% url 'core:modalEliminarVendedor' vendedor.pk %}', '#eliminarVendedor');"
+                            title="Eliminar">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </center>
+
+                </td>
+                
+            </tr>
+            {% endif %}
+            {% endfor %}
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Nombre</th>
+                <th>
+                    <Center>ACCIONES</Center>
+                </th>
+
+            </tr>
+        </tfoot>
+    </table>
+    <!--Modal crear Servicio en otro html-->
+
+    <div class="modal fade-scale" id="crearVendedor" tabindex="-1" aria-labelledby="exampleModalLabel">
+    </div>
+    <div class="modal fade-scale" id="modificarVendedor" tabindex="-1" aria-labelledby="exampleModalLabel">
+    </div>
+    <div class="modal fade-scale" id="eliminarVendedor" tabindex="-1" aria-labelledby="exampleModalLabel">
+    </div>
+
+</div>
+
+
+
+
+ 
+{% endblock content %}
+
+{% block extrajs %}
+
+<script type="text/javascript">
+    //SCRIPT DE DATATABLE
+    const $ = jQuery.noConflict();
+    $(document).ready(function () {
+        $('#example1').DataTable();
+    });</script>
+
+{% endblock extrajs%}

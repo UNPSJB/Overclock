@@ -1,7 +1,8 @@
 from django.forms import ModelForm,MultipleChoiceField, CheckboxSelectMultiple, forms, ValidationError
 from django.forms import widgets, MultipleChoiceField, CheckboxSelectMultiple
-from core.models import Localidad, Pais, Provincia, Persona, TipoHabitacion, Servicio, Categoria
+from core.models import Localidad, Pais, Provincia, Persona, TipoHabitacion, Servicio, Categoria, Vendedor
 from django.contrib.auth.forms import AuthenticationForm
+from django.forms.fields import CharField, EmailField
 
 # 
 class PaisForm(ModelForm):
@@ -95,3 +96,30 @@ class CategoriaForm(ModelForm):
          widget=CheckboxSelectMultiple,        
      )
 
+class VendedorForm(ModelForm):
+    email = EmailField(label='email')
+    usuario = CharField(label='nombre de usuario')
+    contrasenia = CharField(label='contraseña')
+    email.widget.attrs.update({'class': 'form-control'})
+    usuario.widget.attrs.update({'class': 'form-control'})
+    contrasenia.widget.attrs.update({'class': 'form-control'})
+    class Meta: 
+        model = Persona
+        fields = '__all__'
+        exclude = [ 'usuario' ]
+    
+    def __init__(self, *args, **kwargs):
+        super(VendedorForm, self).__init__(*args, **kwargs)
+        
+        print(kwargs)
+        self.fields['nombre'].widget.attrs.update({'class': 'form-control'})   
+        self.fields['apellido'].widget.attrs.update({'class': 'form-control'})
+        self.fields['documento'].widget.attrs.update({'class': 'form-control'})
+        self.fields['tipo_documento'].widget.attrs.update({'class': 'form-control'})
+        
+        
+    
+    
+
+
+#user_name, email, password
