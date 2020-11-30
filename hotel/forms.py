@@ -90,4 +90,8 @@ class HabitacionForm(ModelForm):
         
 
 
+class ServicioForm(forms.Form):
+    SERVICIO_CHOICES=(Servicio.objects.all())
+    servicio = MultipleChoiceField(choices = SERVICIO_CHOICES)
+
     

@@ -54,5 +54,6 @@ urlpatterns = [
     #Path GESTION SERVICIOS
     path('serviciosHotel/<hotel>', hviews.serviciosHotel, name="serviciosHotel"),
     path('aniadirserviciosHotel/<hotel>',hviews.aniadirServicioHotel, name="modalAniadirserviciosHotel"),
+    path('eliminarserviciosHotel/<hotel>/<servicio>',hviews.eliminarServicioHotel, name="modalEliminarserviciosHotel"),
     
 ]
