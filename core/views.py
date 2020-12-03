@@ -5,7 +5,8 @@ from django.forms import forms
 from django.http import request, JsonResponse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
-from core.models import Pais, Provincia, Localidad, TipoHabitacion, Servicio, Categoria, Persona, Vendedor, Encargado
+from core.models import Pais, Provincia, Localidad, TipoHabitacion, Servicio, Categoria, Persona, Vendedor, Encargado, Cliente
+from hotel.models import Hotel
 from .forms import PaisForm, LocalidadForm, AutenticacionForm, ProvinciaForm, TipoHabitacionForm, ServicioForm, CategoriaForm, VendedorForm, EncargadoForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
@@ -347,10 +348,23 @@ def vendedorModificar(request, vendedor):
 def vendedorEliminar(request, vendedor):
     vendedorInstancia = get_object_or_404(Vendedor, pk=vendedor)
     if request.method == "POST":
-        vendedorInstancia.eliminar()
-        vendedorInstancia.save()
+        vendedorInstancia.set_baja()
+        colHoteles = Hotel.objects.filter(vendedores = vendedorInstancia.pk)
+        for hotel in colHoteles:
+            hotel.vendedores.remove(vendedorInstancia)
+            hotel.save()
         return redirect('core:opcionVendedor')
     return render(request, "core/modals/modal_vendedor_eliminar.html",{"vendedor":vendedorInstancia})
+
+def vendedorReciclar(request, vendedor):
+    vendedorInstancia =get_object_or_404(Vendedor, pk=vendedor)
+    if request.method == "POST":
+        vendedorInstancia.dar_alta()
+        vendedorInstancia.save()
+        return redirect('core:opcionVendedor')
+    return render(request, "core/modals/modal_vendedor_reciclar.html",{"vendedor":vendedorInstancia})
+
+#                    GESTION ENCARGADO  
 
 def encargadoCrear(request):
     colEncargados = Encargado.objects.all()
@@ -398,3 +412,33 @@ def encargadoEliminar(request, encargado):
         encargadoInstancia.save()
         return redirect('core:opcionVendedor')
     return render(request, "core/modals/modal_encargado_eliminar.html",{"encargado":encargadoInstancia})
+
+def encargadoReciclar(request, encargado):
+    encargadoInstancia =get_object_or_404(Encargado, pk=encargado)
+    if request.method == "POST":
+        encargadoInstancia.dar_alta()
+        encargadoInstancia.save()
+        return redirect('core:opcionVendedor')
+    return render(request, "core/modals/modal_encargado_reciclar.html",{"encargado":encargadoInstancia})
+
+#GESTION CLIENTE
+
+def cliente(request):
+    colClientes=Cliente.objects.all()
+    return render(request, "core/clienteAdmin.html",{"colClientes": colClientes})
+
+def clienteEliminar(request, cliente):
+    clienteInstancia = get_object_or_404(Cliente, pk=cliente)
+    if request.method == "POST":
+        clienteInstancia.set_baja()
+        clienteInstancia.save()
+        return redirect('core:cliente')
+    return render(request, "core/modals/modal_cliente_eliminar.html",{"cliente":clienteInstancia})
+
+def clienteReciclar(request, cliente):
+    clienteInstancia =get_object_or_404(Cliente, pk=cliente)
+    if request.method == "POST":
+        clienteInstancia.dar_alta()
+        clienteInstancia.save()
+        return redirect('core:cliente')
+    return render(request, "core/modals/modal_cliente_reciclar.html",{"cliente":clienteInstancia})

@@ -33,6 +33,7 @@ urlpatterns = [
     path('servicio',views.servicio, name="servicio"),
     path('categoria',views.categoria, name="categoria"),
     path('vendedor', views.vendedor, name='opcionVendedor'),
+    path('clienteAdmin', views.cliente, name='cliente'),
 
     path('crearLocalidad',views.localidadCrear, name="modalCrearLocalidad"),
     path('modificarLocalidad/<ciudad>',views.localidadModificar, name="modalModificarLocalidad"),
@@ -52,8 +53,15 @@ urlpatterns = [
     path('crearVendedor',views.vendedorCrear, name="modalCrearVendedor"),
     path('modificarVendedor/<vendedor>',views.vendedorModificar, name="modalModificarVendedor"),
     path('eliminarVendedor/<vendedor>', views.vendedorEliminar, name="modalEliminarVendedor"),
-
+    path('reciclarVendedor/<vendedor>', views.vendedorReciclar, name="modalReciclarVendedor"),
+    
     path('crearEncargado',views.encargadoCrear, name="modalCrearEncargado"),
     path('modificarEncargado/<encargado>',views.encargadoModificar, name="modalModificarEncargado"),
     path('eliminarEncargado/<encargado>', views.encargadoEliminar, name="modalEliminarEncargado"),
+    path('reciclarEncargado/<encargado>', views.encargadoReciclar, name="modalReciclarEncargado"),
+    
+    path('eliminarCliente/<cliente>', views.clienteEliminar, name="modalEliminarCliente"),
+    path('reciclarCliente/<cliente>', views.clienteReciclar, name="modalReciclarCliente"),
+    
+
 ]

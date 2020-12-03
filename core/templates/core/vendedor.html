@@ -63,6 +63,8 @@
                     AÑADIR</button>
                 <th>Nombre</th>
                 <th>Apellido</th>
+                <th>Tipo</th>
+                <th>Nro de Documento</th>
                 <th>
                     <Center>ACCIONES</Center>
                 </th>
@@ -73,30 +75,38 @@
 
             {% for vendedor in colVendedores %}
 
-            {% if vendedor.estoyHabilitado %}
+            
             <tr>
 
                 <td> {{vendedor.persona.nombre}}</td>
                 <td> {{vendedor.persona.apellido}}</td>
+                <td> {{vendedor.persona.get_tipo_documento_display}}</td>
+                <td> {{vendedor.persona.documento}}</td>
 
                 <td>
                     <center>
-                        <button type="button" class="btn btn-warning" data-toggle="modal"
-                            data-target="#modificarVendedor"
+                        {% if vendedor.estoyHabilitado %}
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modificarVendedor"
                             onclick="abrir_modal('{% url 'core:modalModificarVendedor' vendedor.pk %}','#modificarVendedor');">
                             <i class="fas fa-edit"></i>
                         </button>
                         <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#eliminarVendedor"
-                            onclick="abrir_modal('{% url 'core:modalEliminarVendedor' vendedor.pk %}', '#eliminarVendedor');"
-                            title="Eliminar">
+                            onclick="abrir_modal('{% url 'core:modalEliminarVendedor' vendedor.pk %}', '#eliminarVendedor');" title="Eliminar">
                             <i class="fas fa-trash"></i>
                         </button>
+                        {% else %}
+                        
+                        <button type="button" class="btn btn-success" data-toggle="modal" data-target="#reciclarVendedor"
+                            onclick="abrir_modal('{% url 'core:modalReciclarVendedor' vendedor.pk %}','#reciclarVendedor');" title="Reciclar">
+                            <i class="fas fa-recycle"></i>
+                        </button>
+                        {% endif %}
                     </center>
 
                 </td>
 
             </tr>
-            {% endif %}
+            
             {% endfor %}
 
         </tbody>
@@ -104,6 +114,8 @@
             <tr>
                 <th>Nombre</th>
                 <th>Apellido</th>
+                <th>Tipo</th>
+                <th>Nro de Documento</th>
                 <th>
                     <Center>ACCIONES</Center>
                 </th>
@@ -118,6 +130,8 @@
     <div class="modal fade-scale" id="modificarVendedor" tabindex="-1" aria-labelledby="exampleModalLabel">
     </div>
     <div class="modal fade-scale" id="eliminarVendedor" tabindex="-1" aria-labelledby="exampleModalLabel">
+    </div>
+    <div class="modal fade-scale" id="reciclarVendedor" tabindex="-1" aria-labelledby="exampleModalLabel">
     </div>
 
 </div>
@@ -139,6 +153,8 @@
                     AÑADIR</button>
                 <th>Nombre</th>
                 <th>Apellido</th>
+                <th>Tipo</th>
+                <th>Nro de Documento</th>
                 <th>Clave</th>
                 <th>
                     <Center>ACCIONES</Center>
@@ -149,32 +165,41 @@
 
 
             {% for encargado in colEncargados %}
-            {% if not encargado.bajaEncargado %} 
+            
             <tr>
 
                 <td> {{encargado.persona.nombre}}</td>
                 <td> {{encargado.persona.apellido}}</td>
+                <td> {{encargado.persona.get_tipo_documento_display}}</td>
+                <td> {{encargado.persona.documento}}</td>
                 <td> {{encargado.clave}}</td>
 
                 <td>
                     <center>
-                        <button type="button" class="btn btn-warning" data-toggle="modal"
-                            data-target="#modificarEncargado"
-                            onclick="abrir_modal('{% url 'core:modalModificarEncargado' encargado.pk %}','#modificarEncargado');">
-                            <i class="fas fa-edit"></i>
+                    {% if encargado.bajaEncargado %}
+                        <button type="button" class="btn btn-success" data-toggle="modal"
+                               data-target="#reciclarEncargado"
+                               onclick="abrir_modal('{% url 'core:modalReciclarEncargado' encargado.pk %}','#reciclarEncargado');"
+                               title="Reciclar">
+                               <i class="fas fa-recycle"></i>
                         </button>
-                        <button type="button" class="btn btn-danger" data-toggle="modal"
+                    {% else %}
+                            <button type="button" class="btn btn-danger" data-toggle="modal"
                             data-target="#eliminarEncargado"
                             onclick="abrir_modal('{% url 'core:modalEliminarEncargado' encargado.pk %}','#eliminarEncargado');"
                             title="Eliminar">
                             <i class="fas fa-trash"></i>
-                        </button>
-                    </center>
-
+                            </button>
+                            <button type="button" class="btn btn-warning" data-toggle="modal"
+                            data-target="#modificarEncargado"
+                            onclick="abrir_modal('{% url 'core:modalModificarEncargado' encargado.pk %}','#modificarEncargado');">
+                            <i class="fas fa-edit"></i>
+                            </button>
+                    {% endif %}
+                </center>
                 </td>
 
             </tr>
-            {% endif %}
             {% endfor %}
 
         </tbody>
@@ -182,6 +207,8 @@
             <tr>
                 <th>Nombre</th>
                 <th>Apellido</th>
+                <th>Tipo</th>
+                <th>Nro de Documento</th>
                 <th>Clave</th>
                 <th>
                     <Center>ACCIONES</Center>
@@ -197,6 +224,8 @@
     <div class="modal fade-scale" id="modificarEncargado" tabindex="-1" aria-labelledby="exampleModalLabel">
     </div>
     <div class="modal fade-scale" id="eliminarEncargado" tabindex="-1" aria-labelledby="exampleModalLabel">
+    </div>
+    <div class="modal fade-scale" id="reciclarEncargado" tabindex="-1" aria-labelledby="exampleModalLabel">
     </div>
 
 </div>

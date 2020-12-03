@@ -24,7 +24,7 @@ class Hotel(models.Model):
     categoria = models.ForeignKey(Categoria, on_delete=models.CASCADE)
     servicios = models.ManyToManyField(Servicio)
     tipos = models.ManyToManyField(TipoHabitacion, through='PrecioPorTipo', through_fields=('hotel', 'tipo'))
-    vendedores = models.ManyToManyField(Vendedor)
+    vendedores = models.ManyToManyField(Vendedor)#, related_name="hoteles")
    
     def get_tipos(self):
         return TipoHabitacion.objects.filter(hotel=self)

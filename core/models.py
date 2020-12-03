@@ -199,20 +199,37 @@ class Encargado(Rol):
         self.bajaEncargado = True
         self.save()
 
+    def dar_alta(self):
+        self.bajaEncargado = False 
+        self.save()
+
 class Vendedor(Rol):
     TIPO = 2
     estoyHabilitado = models.BooleanField(default=True) #Baja Logica 
     # Coeficiente de Ganancia
     coeficiente = models.DecimalField(max_digits=3, decimal_places=2, default=Decimal(0))
 
-    def eliminar(self):
+    def set_baja(self):
         self.estoyHabilitado = False
+        self.save()
+
+    def dar_alta(self):
+        self.estoyHabilitado = True 
+        self.save()
         
 class Cliente(Rol):
     TIPO = 3
-    bajaCliente = False
+    bajaCliente = models.BooleanField(default=False) #Baja Logica 
     # Puntos
     puntos = models.PositiveIntegerField(default=0)
+
+    def set_baja(self):
+            self.bajaCliente = True
+            self.save()
+
+    def dar_alta(self):
+        self.bajaCliente = False
+        self.save()
 
 for Klass in [Encargado, Vendedor, Cliente]:
     Rol.register(Klass)
