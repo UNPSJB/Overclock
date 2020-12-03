@@ -52,4 +52,8 @@ urlpatterns = [
     path('crearVendedor',views.vendedorCrear, name="modalCrearVendedor"),
     path('modificarVendedor/<vendedor>',views.vendedorModificar, name="modalModificarVendedor"),
     path('eliminarVendedor/<vendedor>', views.vendedorEliminar, name="modalEliminarVendedor"),
+
+    path('crearEncargado',views.encargadoCrear, name="modalCrearEncargado"),
+    path('modificarEncargado/<encargado>',views.encargadoModificar, name="modalModificarEncargado"),
+    path('eliminarEncargado/<encargado>', views.encargadoEliminar, name="modalEliminarEncargado"),
 ]

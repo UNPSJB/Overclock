@@ -7,10 +7,48 @@
 
 
 {% block content %}
-<div class="formularioRegion" id="vistaLocalidades">
 
-<center><h1 class="my-4">LISTADO DE VENDEDORES</h1></center>
+<div class="switch-toggle switch-3 switch-candy sm row justify-content-center my-4">
 
+
+
+    <input id="vendedor" name="state-d" radio type="radio" checked="" value="vendedor" />
+    <label for="vendedor" onclick="">
+        <h1>Vendedores</h1>
+    </label>
+
+    <input id="encargado" name="state-d" type="radio" checked="" value="encargado" />
+    <label for="encargado" onclick="">
+        <h1>Encargados</h1>
+    </label>
+
+    <style>
+        .switch-toggle {
+            margin-top: 1vh;
+        }
+
+        .switch-toggle input {
+            position: absolute;
+            opacity: 0;
+            border-radius: 5px;
+        }
+
+        .switch-toggle input+label {
+            padding: 7px;
+            float: center;
+            cursor: pointer;
+        }
+
+        .switch-toggle input:checked+label {
+            background: #28a745;
+            border-radius: 5px;
+        }
+    </style>
+</div>
+
+<!-- VISTA VENDEDORES -->
+
+<div class="formularioRegion" id="vistaVendedores">
 
     <table id="example1" class="table table-striped table-bordered" style="width:100%">
 
@@ -20,10 +58,11 @@
                 <button type="button" class="btn btn-success ml-4 float-right btn-sm" data-toggle="modal"
                     data-target="#crearVendedor"
                     onclick="abrir_modal('{% url 'core:modalCrearVendedor' %}','#crearVendedor');">
-                    
+
                     <i class="fas fa-plus-circle"></i>
                     AÑADIR</button>
                 <th>Nombre</th>
+                <th>Apellido</th>
                 <th>
                     <Center>ACCIONES</Center>
                 </th>
@@ -36,12 +75,14 @@
 
             {% if vendedor.estoyHabilitado %}
             <tr>
-                
-                <td> {{vendedor}}</td>
-                
+
+                <td> {{vendedor.persona.nombre}}</td>
+                <td> {{vendedor.persona.apellido}}</td>
+
                 <td>
                     <center>
-                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modificarVendedor"
+                        <button type="button" class="btn btn-warning" data-toggle="modal"
+                            data-target="#modificarVendedor"
                             onclick="abrir_modal('{% url 'core:modalModificarVendedor' vendedor.pk %}','#modificarVendedor');">
                             <i class="fas fa-edit"></i>
                         </button>
@@ -53,7 +94,7 @@
                     </center>
 
                 </td>
-                
+
             </tr>
             {% endif %}
             {% endfor %}
@@ -62,6 +103,7 @@
         <tfoot>
             <tr>
                 <th>Nombre</th>
+                <th>Apellido</th>
                 <th>
                     <Center>ACCIONES</Center>
                 </th>
@@ -80,10 +122,87 @@
 
 </div>
 
+<!-- VISTA ENCARGADOS -->
+
+<div class="formularioRegion" id="vistaEncargados">
+
+    <table id="example2" class="table table-striped table-bordered" style="width:100%">
+
+        <thead>
+
+            <tr>
+                <button type="button" class="btn btn-success ml-4 float-right btn-sm" data-toggle="modal"
+                    data-target="#crearEncargado"
+                    onclick="abrir_modal('{% url 'core:modalCrearEncargado' %}','#crearEncargado');">
+
+                    <i class="fas fa-plus-circle"></i>
+                    AÑADIR</button>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Clave</th>
+                <th>
+                    <Center>ACCIONES</Center>
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+
+            {% for encargado in colEncargados %}
+            {% if not encargado.bajaEncargado %} 
+            <tr>
+
+                <td> {{encargado.persona.nombre}}</td>
+                <td> {{encargado.persona.apellido}}</td>
+                <td> {{encargado.clave}}</td>
+
+                <td>
+                    <center>
+                        <button type="button" class="btn btn-warning" data-toggle="modal"
+                            data-target="#modificarEncargado"
+                            onclick="abrir_modal('{% url 'core:modalModificarEncargado' encargado.pk %}','#modificarEncargado');">
+                            <i class="fas fa-edit"></i>
+                        </button>
+                        <button type="button" class="btn btn-danger" data-toggle="modal"
+                            data-target="#eliminarEncargado"
+                            onclick="abrir_modal('{% url 'core:modalEliminarEncargado' encargado.pk %}','#eliminarEncargado');"
+                            title="Eliminar">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </center>
+
+                </td>
+
+            </tr>
+            {% endif %}
+            {% endfor %}
+
+        </tbody>
+        <tfoot>
+            <tr>
+                <th>Nombre</th>
+                <th>Apellido</th>
+                <th>Clave</th>
+                <th>
+                    <Center>ACCIONES</Center>
+                </th>
+
+            </tr>
+        </tfoot>
+    </table>
+    <!--Modal crear Encargado en otro html-->
+
+    <div class="modal fade-scale" id="crearEncargado" tabindex="-1" aria-labelledby="exampleModalLabel">
+    </div>
+    <div class="modal fade-scale" id="modificarEncargado" tabindex="-1" aria-labelledby="exampleModalLabel">
+    </div>
+    <div class="modal fade-scale" id="eliminarEncargado" tabindex="-1" aria-labelledby="exampleModalLabel">
+    </div>
+
+</div>
 
 
 
- 
 {% endblock content %}
 
 {% block extrajs %}
@@ -93,6 +212,28 @@
     const $ = jQuery.noConflict();
     $(document).ready(function () {
         $('#example1').DataTable();
+        $('#example2').DataTable();
     });</script>
+
+<script>
+    $("#vistaVendedores").hide();
+    $("#vistaEncargados").show();
+    $(function () {
+        $('input').click(function () {
+            var state = $(this).val();
+            console.log(state)
+            switch (state) {
+                case "vendedor":
+                    $("#vistaEncargados").hide();
+                    $("#vistaVendedores").show();
+                    break;
+                case "encargado":
+                    $("#vistaEncargados").show();
+                    $("#vistaVendedores").hide();
+                    break;
+            }
+        });
+    });
+</script>
 
 {% endblock extrajs%}
