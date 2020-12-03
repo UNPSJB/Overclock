@@ -5,6 +5,8 @@ from core.models import Vendedor, Cliente
 from hotel.models import Habitacion, PaqueteTuristico
 from .exceptions import MaxPasajerosException
 
+# a ponerse las pilas
+
 # Liquidar Comision
 class Liquidacion(models.Model):
     fecha = models.DateField(auto_now_add=True)
