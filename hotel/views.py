@@ -10,7 +10,7 @@ from django.http import request, JsonResponse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from hotel.models import Habitacion, Hotel, PrecioPorTipo, TemporadaAlta, PaqueteTuristico
-from .forms import  HabitacionForm, HotelForm, TemporadaHotelForm, AgregarTipoAHotelForm, HabitacionForm, PaqueteTuristicoForm
+from .forms import  HabitacionForm, HotelForm, TemporadaHotelForm, AgregarTipoAHotelForm, HabitacionForm, PaqueteTuristicoForm, VendedorHotelForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as do_login
@@ -310,4 +310,47 @@ def aniadirServicioHotel(request,hotel):
         #print(listaDeServicios)
         return render(request, "hotel/modals/modal_servicio_Hotel_aniadir.html",{"formulario":form,"hotel":hotelInstancia,"categoria":categoria})
     
+#-------------------------- INICIO: GESTION VENDEDORES HOTEL ----------------------------------------
+def vendedoresHotel(request,hotel):
+    hotelInstancia =get_object_or_404(Hotel, pk=hotel)
+    colVendedores = hotelInstancia.get_vendedores()
+   
+    return render(request, "hotel/vendedores_Hotel_Admin.html",{"hotel":hotelInstancia,"colVendedores":colVendedores})
 
+def aniadirVendedorHotel(request, hotel):
+    hotelInstancia =get_object_or_404(Hotel, pk=hotel)
+    colVendedores = hotelInstancia.get_vendedores()
+    
+    if request.method =="POST":
+        diccionario=(dict(request.POST))
+        print(diccionario['vendedores'][0])
+        hotelInstancia.vendedores.add(get_object_or_404(Vendedor,pk=diccionario['vendedores'][0]))
+        hotelInstancia.save()
+        return redirect('hotel:vendedoresHotel', hotel)
+    else:
+        vendedoresNoVinculados = []
+        for vendedor in Vendedor.objects.all():
+            if  vendedor not in colVendedores:
+                vendedoresNoVinculados.append(vendedor)
+
+        form = VendedorHotelForm(vendedoresNoVinculados,hotel)
+        form.initial['vendedores'] = vendedoresNoVinculados
+        #form.fields['listaVendedores'].
+        
+        #listaDeServicios=[]
+        #for servicio in Servicio.objects.all():
+        #    if servicio not in hotelInstancia.get_servicios():
+        #        listaDeServicios.append(get_object_or_404(Servicio, pk=servicio.pk))
+        #print(listaDeServicios)
+        return render(request, "hotel/modals/modal_vendedor_Hotel_aniadir.html",{"form": form,"hotel":hotelInstancia, "colVendedores": vendedoresNoVinculados})
+
+def vendedorHotelEliminar(request,hotel,vendedor):
+    hotelInstancia=get_object_or_404(Hotel, pk=hotel)
+    vendedorInstancia=get_object_or_404(Vendedor, pk=vendedor)
+    if request.method=='POST':
+        hotelInstancia.vendedores.remove(vendedorInstancia)
+        print(hotelInstancia.vendedores)
+        #form.save_m2m()
+        hotelInstancia.save()
+        return redirect('hotel:vendedoresHotel', hotel)
+    return render(request, "hotel/modals/modal_vendedor_hotel_eliminar.html",{'hotel':hotelInstancia,'vendedor':vendedorInstancia})

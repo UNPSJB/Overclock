@@ -103,6 +103,7 @@ class VendedorForm(ModelForm):
     email.widget.attrs.update({'class': 'form-control'})
     usuario.widget.attrs.update({'class': 'form-control'})
     contrasenia.widget.attrs.update({'class': 'form-control'})
+    
     class Meta: 
         model = Persona
         fields = '__all__'
@@ -110,8 +111,6 @@ class VendedorForm(ModelForm):
     
     def __init__(self, *args, **kwargs):
         super(VendedorForm, self).__init__(*args, **kwargs)
-        
-        print(kwargs)
         self.fields['nombre'].widget.attrs.update({'class': 'form-control'})   
         self.fields['apellido'].widget.attrs.update({'class': 'form-control'})
         self.fields['documento'].widget.attrs.update({'class': 'form-control'})

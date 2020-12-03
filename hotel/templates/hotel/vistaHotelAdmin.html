@@ -43,7 +43,8 @@
 {% block tarjeta3 %}
 <div class="card rounded-0">
     <div class="card-header" id="headingOne">
-        <button class="btn btn-link btn-block text-white">
+        <button onclick="location.href='{% url 'hotel:vendedoresHotel' hotel.pk %}'"
+            class="btn btn-link btn-block text-white">
             <center>
                 <h5>Vendedor </h5>
             </center>

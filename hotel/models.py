@@ -80,6 +80,9 @@ class Hotel(models.Model):
     def get_servicios(self):
         return Servicio.objects.filter(hotel=self)
 
+    def get_vendedores(self):
+        return Vendedor.objects.filter(hotel=self)
+        
     def get_categoria(self):
         return self.categoria
 
