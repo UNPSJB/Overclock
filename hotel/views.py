@@ -10,7 +10,7 @@ from django.http import request, JsonResponse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from hotel.models import Habitacion, Hotel, PrecioPorTipo, TemporadaAlta, PaqueteTuristico
-from .forms import  HabitacionForm, HotelForm, TemporadaHotelForm, AgregarTipoAHotelForm, HabitacionForm, PaqueteTuristicoForm, VendedorHotelForm
+from .forms import  HabitacionForm, HotelForm, ServicioForm, TemporadaHotelForm, AgregarTipoAHotelForm, HabitacionForm, PaqueteTuristicoForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as do_login
@@ -251,9 +251,9 @@ def paqueteTuristicoHotelModificar(request,hotel,paquete):
     paqueteInstancia=get_object_or_404(PaqueteTuristico, pk=paquete)
     form = PaqueteTuristicoForm(request.POST or None,instance=paqueteInstancia)
     if request.method == "POST":
-        print("POST!!!!!!!!!!!!!!!!!")
+        #print("POST!!!!!!!!!!!!!!!!!")
         if form.is_valid():
-            print("<<<<<<FORMULARIO VALIDO>>>>>>>>>>>")
+            #print("<<<<<<FORMULARIO VALIDO>>>>>>>>>>>")
             paquete=form.save(commit=False)
             paquete.save()
             return redirect('hotel:paqueteTuristicoHotel', hotel)
@@ -289,27 +289,32 @@ def paqueteTuristicoHotelEliminar(request,hotel,paquete):
 def serviciosHotel(request,hotel):
     hotelInstancia =get_object_or_404(Hotel, pk=hotel)
     categoria=hotelInstancia.get_categoria()
-    print(categoria.nombre)
+    #print(categoria.nombre)
    
     return render(request, "hotel/servicios_Hotel_Admin.html",{"hotel":hotelInstancia,"categoria":categoria})
 
 def aniadirServicioHotel(request,hotel):
     hotelInstancia =get_object_or_404(Hotel, pk=hotel)
     categoria=hotelInstancia.get_categoria()
-    form=HotelForm(request.POST or None,instance=hotelInstancia)
+    form=ServicioForm(request.POST or None)
     if request.method =="POST":
-        pass
+        diccionario=(dict(request.POST))
+        print(diccionario['servicio'])
+        for servicio in diccionario['servicio']:
+            hotelInstancia.servicios.add(get_object_or_404(Servicio,pk=servicio))
+        hotelInstancia.save()
+        return redirect('hotel:serviciosHotel', hotel)
+        
     else:
-        dic={}
-        
-        
-        #listaDeServicios=[]
-        #for servicio in Servicio.objects.all():
-        #    if servicio not in hotelInstancia.get_servicios():
-        #        listaDeServicios.append(get_object_or_404(Servicio, pk=servicio.pk))
+        listaDeServicios=[]
+        for servicio in Servicio.objects.all():
+            if servicio not in hotelInstancia.get_servicios():
+                listaDeServicios.append(get_object_or_404(Servicio, pk=servicio.pk))
+        form.fields['servicio'].choices=[(c.pk,c.nombre) for c in listaDeServicios]
         #print(listaDeServicios)
         return render(request, "hotel/modals/modal_servicio_Hotel_aniadir.html",{"formulario":form,"hotel":hotelInstancia,"categoria":categoria})
     
+<<<<<<< HEAD
 #-------------------------- INICIO: GESTION VENDEDORES HOTEL ----------------------------------------
 def vendedoresHotel(request,hotel):
     hotelInstancia =get_object_or_404(Hotel, pk=hotel)
@@ -354,3 +359,12 @@ def vendedorHotelEliminar(request,hotel,vendedor):
         hotelInstancia.save()
         return redirect('hotel:vendedoresHotel', hotel)
     return render(request, "hotel/modals/modal_vendedor_hotel_eliminar.html",{'hotel':hotelInstancia,'vendedor':vendedorInstancia})
+
+def eliminarServicioHotel(request,hotel,servicio):
+    hotelInstancia =get_object_or_404(Hotel, pk=hotel)
+    servicioInstancia=get_object_or_404(Servicio,pk=servicio)
+    if request.method== "POST":
+        hotelInstancia.servicios.remove(servicioInstancia)
+        return redirect('hotel:serviciosHotel', hotel)
+    return render(request, "hotel/modals/modal_servicio_Hotel_eliminar.html",{"hotel":hotelInstancia,"servicio":servicioInstancia})
+

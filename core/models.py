@@ -151,6 +151,13 @@ class Persona(models.Model):
         self.usuario.groups.add(Group.objects.get(name="Vendedor"))
         self.save()
         return vendedor
+        
+    def hacer_encargado(self, clave):
+        encargado = Encargado()
+        self.agregar_rol(encargado)
+        encargado.set_clave(clave)
+        self.save()
+        return encargado
 
 # Usamos patron roles para
 # Encargados, Clientes, Vendedores
@@ -179,10 +186,18 @@ class Rol(models.Model):
 
 class Encargado(Rol):
     TIPO = 1
-    bajaEncargado = False
+    bajaEncargado = models.BooleanField(default=False)
     # Clave Autogenerada? un token?
     # clave = models.CharField(max_length=10, default=lambda n = 10: str_alfanumerico(n))
     clave = models.CharField(max_length=10, default="")
+    
+    def set_clave(self, clave):
+        self.clave = clave
+        self.save()
+
+    def set_baja(self):
+        self.bajaEncargado = True
+        self.save()
 
 class Vendedor(Rol):
     TIPO = 2

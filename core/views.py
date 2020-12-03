@@ -5,8 +5,8 @@ from django.forms import forms
 from django.http import request, JsonResponse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
-from core.models import Pais, Provincia, Localidad, TipoHabitacion, Servicio, Categoria, Persona, Vendedor
-from .forms import PaisForm, LocalidadForm, AutenticacionForm, ProvinciaForm, TipoHabitacionForm, ServicioForm, CategoriaForm, VendedorForm
+from core.models import Pais, Provincia, Localidad, TipoHabitacion, Servicio, Categoria, Persona, Vendedor, Encargado
+from .forms import PaisForm, LocalidadForm, AutenticacionForm, ProvinciaForm, TipoHabitacionForm, ServicioForm, CategoriaForm, VendedorForm, EncargadoForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as do_login
@@ -293,7 +293,8 @@ def categoriaModificar(request, categoria):
 
 def vendedor(request):
     colVendedores=Vendedor.objects.all()
-    return render(request, "core/vendedor.html",{"colVendedores": colVendedores})
+    colEncargados=Encargado.objects.all()
+    return render(request, "core/vendedor.html",{"colVendedores": colVendedores, "colEncargados": colEncargados})
 
 
 def vendedorCrear(request):
@@ -351,3 +352,49 @@ def vendedorEliminar(request, vendedor):
         return redirect('core:opcionVendedor')
     return render(request, "core/modals/modal_vendedor_eliminar.html",{"vendedor":vendedorInstancia})
 
+def encargadoCrear(request):
+    colEncargados = Encargado.objects.all()
+    form = EncargadoForm(request.POST)
+
+    if request.method == "POST":
+            if form.is_valid():
+                form.save()
+                form.instance.hacer_encargado(form.cleaned_data['clave'])
+                form.save()
+                return redirect('core:opcionVendedor')
+    return render(request, "core/modals/modal_encargado_crear.html", {"colEncargados": colEncargados, "formulario": form})
+
+def encargadoModificar(request, encargado):
+    encargadoInstancia = get_object_or_404(Encargado, pk=encargado)
+    colEncargados = Encargado.objects.all()
+    if request.method == 'POST':
+        form=EncargadoForm(request.POST,instance=encargadoInstancia)
+        if form.is_valid():
+            
+            encargadoInstancia.persona.nombre = request.POST['nombre']
+            encargadoInstancia.persona.apellido = request.POST['apellido']
+            encargadoInstancia.persona.documento = request.POST['documento']
+            encargadoInstancia.persona.tipo_documento = request.POST['tipo_documento']
+            encargadoInstancia.clave = request.POST['clave']
+
+            encargadoInstancia.persona.save()
+            encargadoInstancia.save()
+            return redirect('core:opcionVendedor')
+        else:
+            form=EncargadoForm(request.POST,instance=encargadoInstancia)
+    else:
+        form=EncargadoForm(instance=encargadoInstancia)
+        form.fields["nombre"].initial = encargadoInstancia.persona.nombre
+        form.fields["apellido"].initial = encargadoInstancia.persona.apellido
+        form.fields["documento"].initial = encargadoInstancia.persona.documento
+        form.fields["tipo_documento"].initial = encargadoInstancia.persona.tipo_documento
+        form.fields["clave"].initial = encargadoInstancia.clave
+    return render(request, "core/modals/modal_encargado_modificar.html", {"colEncargados": colEncargados, "formulario": form, "encargado": encargadoInstancia})
+
+def encargadoEliminar(request, encargado):
+    encargadoInstancia = get_object_or_404(Encargado, pk=encargado)
+    if request.method == "POST":
+        encargadoInstancia.set_baja()
+        encargadoInstancia.save()
+        return redirect('core:opcionVendedor')
+    return render(request, "core/modals/modal_encargado_eliminar.html",{"encargado":encargadoInstancia})

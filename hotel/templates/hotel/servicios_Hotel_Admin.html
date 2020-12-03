@@ -33,7 +33,7 @@
                 <td>
                     <center>
                         {% if servicio not in categoria.get_servicios %} <button type="button"
-                            class="btn btn-danger" data-toggle="modal" data-target="#quitarServicio" onclick=""
+                            class="btn btn-danger" data-toggle="modal" data-target="#quitarServicio" onclick="abrir_modal('{% url 'hotel:modalEliminarserviciosHotel' hotel.pk servicio.pk %}','#quitarServicio');"
                             title="Eliminar">
                             <i class="fas fa-trash"></i>
                         </button> {% endif %}
@@ -50,13 +50,13 @@
 
     </table>
 
-    <!--Modal crear temporada Hotel en otro html-->
+    <!--Modal añadir scio Hotel en otro html-->
 
 
     <div class="modal fade-scale" id="aniadirServicio" tabindex="-1" aria-labelledby="exampleModalLabel">
     </div>
 
-    <!--Modal eliminar Temporada en otro html-->
+    <!--Modal eliminar scio en otro html-->
 
     <div class="modal fade-scale" id="quitarServicio" tabindex="-1" aria-labelledby="exampleModalLabel">
     </div>

@@ -96,6 +96,7 @@ class VendedorHotelForm(forms.Form):
         self.fields['vendedores'].queryset = Vendedor.objects.all().exclude(hotel=hotel)
         self.fields['vendedores'].widget.attrs.update({'class': 'form-control'})
 
+class ServicioForm(forms.Form):
+    SERVICIO_CHOICES=(Servicio.objects.all())
+    servicio = MultipleChoiceField(choices = SERVICIO_CHOICES)
 
-    
-        
