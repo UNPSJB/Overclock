@@ -15,6 +15,7 @@ from django.contrib.auth import logout
 from django.contrib.auth.models import Group, User
 from django.utils import timezone
 from hotel import views as hviews
+from venta import views as vviews
 import json
 
 from django.views.generic.edit import CreateView
@@ -50,9 +51,8 @@ def home(request):
                     return redirect("core:administrador")
                 else:
                     # Y le redireccionamos a la portada
-                    return redirect("core:vendedor")
+                    return redirect("core:vendedor", usr)
             else:
-                print("ESTAMOS ACA <=========")
                 return render(request, "home.html", {'form': form})
 
     # Si llegamos al final renderizamos el formulario
@@ -64,9 +64,9 @@ def correctaAdmin(request):
      return redirect("hotel:hotel")
 
 
-def correctaVendedor(request):
+def correctaVendedor(request, usuario):
     # aca van tambien listados de hoteles
-    return render(request, "base/vendedor.html")
+    return redirect("venta:vendedor", usuario)
 
 
 def regionAdmin(request):
