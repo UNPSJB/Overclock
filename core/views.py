@@ -51,7 +51,7 @@ def home(request):
                     return redirect("core:administrador")
                 else:
                     # Y le redireccionamos a la portada
-                    return redirect("core:vendedor", usr)
+                    return redirect("core:vendedor")
             else:
                 return render(request, "home.html", {'form': form})
 
@@ -64,9 +64,9 @@ def correctaAdmin(request):
      return redirect("hotel:hotel")
 
 
-def correctaVendedor(request, usuario):
+def correctaVendedor(request):
     # aca van tambien listados de hoteles
-    return redirect("venta:vendedor", usuario)
+    return redirect("venta:vendedor")
 
 
 def regionAdmin(request):

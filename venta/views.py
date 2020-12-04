@@ -11,11 +11,9 @@ from datetime import datetime
 # Create your views here.
 
 @login_required
-def vendedor(request, usuario):
-    print(request.user.persona)
-    
-    usuarioInstancia = get_object_or_404(User, username=usuario)
-    personaInstancia = get_object_or_404(Persona, usuario = usuarioInstancia.id)
+def vendedor(request):
+       
+    personaInstancia = request.user.persona
     vendedorInstancia = get_object_or_404(Vendedor, persona = personaInstancia.id)
     colHoteles= Hotel.objects.filter(vendedores__persona=vendedorInstancia.persona)
 

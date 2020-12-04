@@ -26,7 +26,7 @@ app_name="ventas"
 urlpatterns = [
     path('logout', cviews.logout),
 
-    path('vendedor/<usuario>',vviews.vendedor, name="vendedor"),
+    path('vendedor',vviews.vendedor, name="vendedor"),
     path('iniciar_venta',vviews.iniciar_venta, name="iniciar_venta"),
    # path('buscarHabitaciones/<fecha_inicio>/<fecha_fin>/<int:cant_pasajeros>/<int:hotel>',vviews.alquilar, name="vistaBuscarHabitacion"),
 ]

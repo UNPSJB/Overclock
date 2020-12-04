@@ -26,7 +26,7 @@ urlpatterns = [
   
     path('logout', views.logout, name="logout"),
     path('homeAdministrador', views.correctaAdmin, name="administrador"),
-    path('hometaVendedor/<usuario>', views.correctaVendedor,name="vendedor"),
+    path('hometaVendedor', views.correctaVendedor,name="vendedor"),
     path('region',views.regionAdmin, name="opcionRegion"),
 
     path('tipoHabitacion',views.tipoHabitacion, name="opcionTipoHabitacion"),
