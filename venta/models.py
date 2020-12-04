@@ -73,7 +73,7 @@ class Factura(models.Model):
 class Alquiler(models.Model):
     factura = models.ForeignKey(Factura, related_name="alquileres", on_delete=models.CASCADE)
     # De un mismo hotel
-    habitaciones = models.ManyToManyField(Habitacion)
+    habitaciones = models.ManyToManyField(Habitacion, related_name="alquileres")
     paquete = models.OneToOneField(PaqueteTuristico, null=True, blank=True, on_delete=models.SET_NULL, related_name="alquiler")
     cantidad_huespedes = models.PositiveSmallIntegerField()
     inicio = models.DateField()

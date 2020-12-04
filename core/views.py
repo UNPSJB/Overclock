@@ -11,7 +11,7 @@ from .forms import PaisForm, LocalidadForm, AutenticacionForm, ProvinciaForm, Ti
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as do_login
-from django.contrib.auth import logout
+from django.contrib.auth import logout as do_logout
 from django.contrib.auth.models import Group, User
 from django.utils import timezone
 from hotel import views as hviews
@@ -77,8 +77,8 @@ def regionAdmin(request):
 
 
 def logout(request):
-    if not request.user.is_authenticated:
-        logout(request)
+    if request.user.is_authenticated:
+        do_logout(request)
     return redirect(home)
 
 

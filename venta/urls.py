@@ -27,5 +27,6 @@ urlpatterns = [
     path('logout', cviews.logout),
 
     path('vendedor/<usuario>',vviews.vendedor, name="vendedor"),
-    path('buscarHabitaciones/<fecha_inicio><fecha_fin><int:cant_pasajeros><int:hotel>',vviews.alquilar, name="vistaBuscarHabitacion"),
+    path('iniciar_venta',vviews.iniciar_venta, name="iniciar_venta"),
+   # path('buscarHabitaciones/<fecha_inicio>/<fecha_fin>/<int:cant_pasajeros>/<int:hotel>',vviews.alquilar, name="vistaBuscarHabitacion"),
 ]

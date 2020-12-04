@@ -1,6 +1,6 @@
 {% extends 'base/vendedor.html'%}
 {% load static %}
-
+{% load hotel %}
 
 {% block headerContenido %}
 {% endblock headerContenido %}
@@ -15,19 +15,25 @@
     </center>
 
     <div>
-        <label for="fecha1"> desde: </label>
-        <input type="date" id="fecha1" name="trip-start" value="" min="" max=""
-            onclick="fecha_actual();">
-        <label for="fecha2"> hasta: </label>   
-        <input type="date" id="fecha2" name="trip-start" value="" min="" max=""
-            onclick="fecha_minima();">
-        <label for="pasajeros" > Pasajeros: </label>
-        <input type="number" id="pasajeros" name="pasajeros" min=1>
+       
+        <form action="{%url 'venta:iniciar_venta'%} " method="POST">
+         {% csrf_token %}
+                    <label for="fecha1"> desde: </label>
+            <input type="date" id="fecha1" name="fecha_inicio" value="" min="" max=""
+                onclick="fecha_actual();">
+            <label for="fecha2"> hasta: </label>   
+            <input type="date" id="fecha2" name="fecha_fin" value="" min="" max=""
+                onclick="fecha_minima();">
+            <label for="pasajeros" > Pasajeros: </label>
+            <input type="number" id="pasajeros" name="pasajeros" min=1>
+            <input type="submit" id="filtrar" name="filtrar" min=1>
+        </form >
     </div>
 
     <table id="example1" class="table table-striped table-bordered" style="width:100%">
         <thead>
             <tr>
+                    <th>Disponible</th>
                     <th>Nombre</th>
                     <th>Localidad</th>
                     <th>Direccion</th>
@@ -47,6 +53,7 @@
             {% endif%}
             " onclick="abrir_vista_hotel({{hotel.pk}});">
                 <div class="pepito">
+                    <td>{%hotel_disponible hotel%}</td>
                     <td>{{hotel.nombre}}</td>
                     <td>{{hotel.localidad}}</td>
                     <td>{{hotel.direccion}}</td>
@@ -61,6 +68,7 @@
         </tbody>
         <tfoot>
             <tr>
+                <th>Disponible</th>
                 <th>Nombre</th>
                 <th>Localidad</th>
                 <th>Direccion</th>
@@ -94,7 +102,11 @@
         var fecha_fin = document.getElementById("fecha2").value;
         var cant_pasajeros = document.getElementById("pasajeros").value;
         console.log( fecha_fin, fecha_inicio , cant_pasajeros, hotel);
-        location.href='{% url 'venta:vistaBuscarHabitacion' fecha_inicio fecha_fin cant_pasajeros hotel %}'
+        
+    
+    
+    
+    
     }
 </script>
 

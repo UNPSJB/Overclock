@@ -4,6 +4,9 @@ from datetime import date, datetime, timedelta
 from core.models import Localidad, Categoria, Servicio, TipoHabitacion, Vendedor, Encargado
 from .exceptions import DescuentoException, TipoHotelException
 
+
+
+
 class HotelManager(models.Manager):
     def en_zona(self, zona):
         return self.model.objects.filter(localidad__in=zona)
@@ -26,6 +29,12 @@ class Hotel(models.Model):
     tipos = models.ManyToManyField(TipoHabitacion, through='PrecioPorTipo', through_fields=('hotel', 'tipo'))
     vendedores = models.ManyToManyField(Vendedor)#, related_name="hoteles")
    
+    def disponible(self, inicio, fin, pasajeros):
+        habitaciones= self.habitaciones.filter(tipo__pasajeros__gte=pasajeros)
+
+        return any([habitacion.disponible(inicio, fin) for habitacion in habitaciones]) 
+    
+    
     def get_tipos(self):
         return TipoHabitacion.objects.filter(hotel=self)
 
@@ -141,6 +150,11 @@ class Habitacion(models.Model):
             total += self.precio_por_noche(desde)
             desde += timedelta(days=1)
         return total
+
+    def disponible(self, desde, hasta):
+        print(desde)
+        #TODO ver cuando esta disponible una habitacion
+        return not self.alquileres.filter(inicio__lte=desde, fin__gte=hasta).exists()
     
     def dar_baja(self):
         self.baja=True
