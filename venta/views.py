@@ -26,13 +26,20 @@ def vendedor(request):
         "fecha_fin": fecha_fin,
          })
 
-'''
-def alquilar(request,fechaInicio,fechaFin,cantPasajeros,hotel):
+
+def buscarHabitaciones(request,hotel):
+    fecha_inicio=  datetime.strptime(request.session['fecha_inicio'], '%Y-%m-%d').date() if "fecha_inicio" in request.session else None
+    fecha_fin=  datetime.strptime(request.session['fecha_fin'], '%Y-%m-%d').date() if "fecha_fin" in request.session else None
     hotelInstancia = get_object_or_404(Hotel, pk=hotel)
     colHabitaciones = hotelInstancia.get_habitaciones()
-    return render(request, "venta/buscarHabitaciones.html", {"habitaciones_disponibles": colHabitaciones})
+    print(colHabitaciones)
+    return render(request, "venta/buscarHabitaciones.html", {
+        "habitaciones_disponibles": colHabitaciones,
+        "fecha_inicio": fecha_inicio,
+        "fecha_fin": fecha_fin,
+        })
 
-'''
+
 def iniciar_venta(request):
     fechaInicio=request.POST['fecha_inicio']
     fechaFin=request.POST['fecha_fin']
@@ -42,7 +49,7 @@ def iniciar_venta(request):
     request.session['pasajeros']=pasajeros
     #request.session['venta']={'fecha_inicio': fechaInicio, '}
 
-    return redirect("venta:vendedor", request.user)
+    return redirect("venta:vendedor")
 
 def cancelar_venta(request):
     request.session.flush()

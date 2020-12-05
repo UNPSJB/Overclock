@@ -1,6 +1,6 @@
 {% extends 'base/vendedor.html'%}
 {% load static %}
-
+{% load hotel %}
 
 {% block headerContenido %}
 {% endblock headerContenido %}
@@ -18,10 +18,10 @@
     
             <tr>
                 <th></th>
-                <th>tipo</th>
-                <th>numero</th>
-                <th>capacidad</th>
-                <th>precio</th>
+                <th>Tipo</th>
+                <th>Numero</th>
+                <th>Capacidad</th>
+                <th>Precio</th>
                 <th>Acciones</th>
             </tr>
         </thead>
@@ -37,9 +37,7 @@
                 <td>{{habitacion.tipo}}</td>
                 <td>{{habitacion.numero}}</td>
                 <td>{{habitacion.tipo.pasajeros}}</td>
-                <td><!-- ${{habitacion.precio_alquiler( fecha_inicio , fecha_fin )}} --></td>
-    
-                <td>${{habitacion.precio_temp_baja }}</td>
+                <td>${% precio_entre_fechas habitacion %}</td>
                 <td>
                     <center>
                         <button type="button" class="btn btn-success" data-toggle="modal" data-target="#alquilarHabitacion"
