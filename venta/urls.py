@@ -29,4 +29,7 @@ urlpatterns = [
     path('vendedor',vviews.vendedor, name="vendedor"),
     path('iniciar_venta',vviews.iniciar_venta, name="iniciar_venta"),
     path('buscarHabitaciones/<hotel>', vviews.buscarHabitaciones, name="buscarHabitaciones"),
+    path('vistaCliente/', vviews.vista_cliente, name="vistaCliente"),
+    path('clienteAniadir/', vviews.cliente_aniadir, name="modalAniadirCliente"),
+    path('clienteModificar/<cliente>', vviews.cliente_modificar, name="modalModificarCliente"),
 ]

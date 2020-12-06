@@ -159,6 +159,13 @@ class Persona(models.Model):
         self.save()
         return encargado
 
+    def hacer_cliente(self):
+        cliente = Cliente()
+        self.agregar_rol(cliente)
+        self.save()
+        return cliente
+
+
 # Usamos patron roles para
 # Encargados, Clientes, Vendedores
 class Rol(models.Model):

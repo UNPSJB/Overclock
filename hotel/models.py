@@ -31,10 +31,9 @@ class Hotel(models.Model):
    
     def disponible(self, inicio, fin, pasajeros):
         habitaciones= self.habitaciones.filter(tipo__pasajeros__gte=pasajeros)
-
         return any([habitacion.disponible(inicio, fin) for habitacion in habitaciones]) 
-    
-    
+
+
     def get_tipos(self):
         return TipoHabitacion.objects.filter(hotel=self)
 
@@ -63,6 +62,14 @@ class Hotel(models.Model):
 
     def get_habitaciones(self):
         return Habitacion.objects.filter(hotel=self)
+
+    def get_habitaciones_busqueda(self,fechai,fechaf,cantPasajeros):
+        habitaciones= self.get_habitaciones()
+        habitacionesBusqueda=[]
+        for habitacion in habitaciones:
+            if habitacion.disponible(fechai,fechaf) and (habitacion.tipo.pasajeros>=cantPasajeros):
+                habitacionesBusqueda.append(habitacion)
+        return habitacionesBusqueda
 
     def get_paquetes(self):
         return PaqueteTuristico.objects.filter(hotel=self)
@@ -160,9 +167,7 @@ class Habitacion(models.Model):
         return total
 
     def disponible(self, desde, hasta):
-        print(desde)
-        #TODO ver cuando esta disponible una habitacion
-        return not self.alquileres.filter(inicio__lte=desde, fin__gte=hasta).exists()
+        return not self.alquileres.filter(inicio__lte=desde, fin__gte=hasta).exists() and not self.paqueteturistico.filter(inicio__lte=desde,fin__gte=hasta).exists()
     
     def get_pasajeros(self):
         return self.tipo.pasajeros
@@ -200,10 +205,10 @@ class Descuento(models.Model):
 class PaqueteTuristico(models.Model):
     nombre = models.CharField(max_length=200)
     coeficiente = models.DecimalField(max_digits=3, decimal_places=2)
-    hotel = models.ForeignKey(Hotel, on_delete=models.CASCADE)
+    hotel = models.ForeignKey(Hotel, related_name='paquetesTuristicos', on_delete=models.CASCADE)
     inicio = models.DateField()
     fin = models.DateField()
-    habitaciones = models.ManyToManyField(Habitacion)
+    habitaciones = models.ManyToManyField(Habitacion, related_name='paqueteturistico')
     vendido = models.BooleanField(default=False)
     precio = models.DecimalField(max_digits=10, decimal_places=2)
 
@@ -249,5 +254,7 @@ class PaqueteTuristico(models.Model):
             capacidad+=habitacion.get_pasajeros()
         return capacidad
 
+    def get_habitaciones(self):
+        return self.habitaciones
         
         
