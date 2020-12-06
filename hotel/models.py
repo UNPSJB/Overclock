@@ -66,6 +66,14 @@ class Hotel(models.Model):
 
     def get_paquetes(self):
         return PaqueteTuristico.objects.filter(hotel=self)
+    
+    def get_paquetes_busqueda(self,fechai,fechaf,cantPasajeros):
+        paquetesEnHotel = self.get_paquetes()
+        paquetesSegunBusqueda=[]
+        for paquete in paquetesEnHotel:
+            if (paquete.inicio<=fechai) and (paquete.fin>=fechaf) and (paquete.get_pasajeros()<=cantPasajeros) and (paquete.estoy_vigente):
+                paquetesSegunBusqueda.append(paquete)
+        return paquetesSegunBusqueda
 
     def get_temporadas(self):
         return TemporadaAlta.objects.filter(hotel=self)
@@ -156,6 +164,9 @@ class Habitacion(models.Model):
         #TODO ver cuando esta disponible una habitacion
         return not self.alquileres.filter(inicio__lte=desde, fin__gte=hasta).exists()
     
+    def get_pasajeros(self):
+        return self.tipo.pasajeros
+
     def dar_baja(self):
         self.baja=True
     
@@ -229,5 +240,14 @@ class PaqueteTuristico(models.Model):
             
     def marcar_venta(self):
         self.vendido=True
+    
+    def get_pasajeros(self):
+        capacidad = 0
+        habitaciones = Habitacion.objects.filter(paqueteturistico = self)
+        for habitacion in habitaciones:
+            print("ESTE ES LA HABITACION N° ",habitacion)
+            capacidad+=habitacion.get_pasajeros()
+        return capacidad
+
         
         

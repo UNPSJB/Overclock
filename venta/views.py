@@ -12,7 +12,6 @@ from datetime import datetime
 
 @login_required
 def vendedor(request):
-       
     personaInstancia = request.user.persona
     vendedorInstancia = get_object_or_404(Vendedor, persona = personaInstancia.id)
     colHoteles= Hotel.objects.filter(vendedores__persona=vendedorInstancia.persona)
@@ -30,11 +29,14 @@ def vendedor(request):
 def buscarHabitaciones(request,hotel):
     fecha_inicio=  datetime.strptime(request.session['fecha_inicio'], '%Y-%m-%d').date() if "fecha_inicio" in request.session else None
     fecha_fin=  datetime.strptime(request.session['fecha_fin'], '%Y-%m-%d').date() if "fecha_fin" in request.session else None
+    pasajeros = int(request.session['pasajeros']) if "pasajeros" in request.session else None
     hotelInstancia = get_object_or_404(Hotel, pk=hotel)
     colHabitaciones = hotelInstancia.get_habitaciones()
+    colPaquetes = hotelInstancia.get_paquetes_busqueda(fecha_inicio,fecha_fin,pasajeros)
     print(colHabitaciones)
-    return render(request, "venta/buscarHabitaciones.html", {
+    return render(request, "venta/buscarHabitaciones.html", {"hotel":hotelInstancia,
         "habitaciones_disponibles": colHabitaciones,
+        "paquetes_disponibles":colPaquetes,
         "fecha_inicio": fecha_inicio,
         "fecha_fin": fecha_fin,
         })
