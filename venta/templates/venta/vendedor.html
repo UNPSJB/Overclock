@@ -15,31 +15,32 @@
     </center>
 
     <div>
-       
-        <form action="{%url 'venta:iniciar_venta'%} " method="POST">
-         {% csrf_token %}
-                    <label for="fecha1"> desde: </label>
-            <input type="date" id="fecha1" name="fecha_inicio" value="" min="" max=""
-                onclick="fecha_actual();">
-            <label for="fecha2"> hasta: </label>   
-            <input type="date" id="fecha2" name="fecha_fin" value="" min="" max=""
-                onclick="fecha_minima();">
-            <label for="pasajeros" > Pasajeros: </label>
-            <input type="number" id="pasajeros" name="pasajeros" min=1>
-            <input type="submit" id="filtrar" name="filtrar" min=1>
-        </form >
+        <center>
+            <h5 class="my-4">PREFERENCIAS DEL CLIENTE</h5>
+        </center>
+
+        <form id="form_preferencias_cliente" onsubmit="return evitar_envio(event)" action="{%url 'venta:iniciar_venta'%} " method="POST" >
+            {% csrf_token %}
+            <label for="fecha1"> desde: </label>
+            <input type="date" id="fecha1" name="fecha_inicio" value="" min="" max="" onclick="fecha_actual();">
+            <label for="fecha2"> hasta: </label>
+            <input type="date" id="fecha2" name="fecha_fin" value="" min="" max="" onclick="fecha_minima();">
+            <label for="pasajeros"> Pasajeros: </label>
+            <input type="number" id="pasajeros" name="pasajeros" value="" min=1>
+            <input type="submit" id="filtrar" name="filtrar">
+        </form>
     </div>
 
     <table id="example1" class="table table-striped table-bordered" style="width:100%">
         <thead>
             <tr>
-                    <th>Nombre</th>
-                    <th>Localidad</th>
-                    <th>Direccion</th>
-                    <th>Email</th>
-                    <th>Telefono</th>
-                    <th>Encargado</th>
-                    <th>Categoria</th>
+                <th>Nombre</th>
+                <th>Localidad</th>
+                <th>Direccion</th>
+                <th>Email</th>
+                <th>Telefono</th>
+                <th>Encargado</th>
+                <th>Categoria</th>
             </tr>
         </thead>
         <tbody>
@@ -49,10 +50,9 @@
             comercializable manito
             {% else %}
             noComercializable manito
-            {% endif%}
-            " onclick="{% if tengo_habitaciones %}
-                location.href='{% url 'venta:buscarHabitaciones' hotel.pk %}'
-            {% endif%}">
+            {% endif%}"
+                onclick="{% if tengo_habitaciones %} location.href='{% url 'venta:buscarHabitaciones' hotel.pk %}'{% endif%}">
+
                 <div class="pepito">
                     <td>{{hotel.nombre}}</td>
                     <td>{{hotel.localidad}}</td>
@@ -79,8 +79,6 @@
             </tr>
         </tfoot>
     </table>
-
-    <!--Modal crear Hotel en otro html-->
 </div>
 
 {% endblock content %}
@@ -95,6 +93,36 @@
     });
 </script>
 
+<script type="text/javascript">
+function evitar_envio(e){
+    e.preventDefault();
+    if(document.getElementById('fecha1').value && document.getElementById('fecha2').value && document.getElementById('pasajeros').value){
+        console.log("Campos completos");
+        Swal.fire({
+            position: 'top-end',
+            icon: 'success',
+            title: 'Preferencias del Cliente Aplicadas',
+            showConfirmButton: false,
+            timer: 1500
+          })
+          setTimeout(function(){
+            document.getElementById('form_preferencias_cliente').submit();  
+            }, 1400);
+        }
+    else{
+        let inicio = fin = pasajeros ="";
+        if(document.getElementById('fecha1').value==''){inicio = (" *Fecha de Inicio* ");}
+        if(document.getElementById('fecha2').value==''){fin=(" *Fecha fin* ");}
+        if(document.getElementById('pasajeros').value==''){pasajeros=(" *Cantidad de Pasajeros* ");}
+        Swal.fire({
+            icon: 'error',
+            title: 'Formulario Incompleto',
+            text: "FALTA COMPLETAR: " + inicio + " " + fin + " " + pasajeros,
+            footer: 'Por favor complete los campos para continuar'
+          })
+    }
+}
+</script>
 
 
 {% endblock extrajs%}
