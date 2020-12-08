@@ -1,4 +1,5 @@
 from datetime import date, datetime
+from django.contrib.auth.decorators import login_required
 from django.db.models import fields
 from django.db.models.fields import DateField
 from django.forms.widgets import DateInput
@@ -18,13 +19,16 @@ from django.contrib.auth import logout
 from django.contrib.auth.models import Group, User
 from django.utils import timezone
 from django.views.generic.edit import CreateView
-from core.models import Vendedor, Categoria, TipoHabitacion, Servicio
+from core.models import Persona, Vendedor, Categoria, TipoHabitacion, Servicio
 
 
 # Create your views here.
+@login_required
 def hotel(request):
+    personaInstancia = request.user.persona
+    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>",personaInstancia)
     colHoteles=Hotel.objects.all()
-    return render(request, "hotel/hotelAdmin.html",{"colHoteles": colHoteles})
+    return render(request, "hotel/hotelAdmin.html",{"colHoteles": colHoteles, "administrador":personaInstancia})
 
 def hotelCrear(request):
     colHoteles = Hotel.objects.all()

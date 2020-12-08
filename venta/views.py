@@ -9,6 +9,7 @@ from datetime import datetime
 
 
 
+
 # Create your views here.
 
 @login_required
@@ -16,14 +17,19 @@ def vendedor(request):
     personaInstancia = request.user.persona
     vendedorInstancia = get_object_or_404(Vendedor, persona = personaInstancia.id)
     colHoteles= Hotel.objects.filter(vendedores__persona=vendedorInstancia.persona)
-
-
     fecha_inicio=  datetime.strptime(request.session['fecha_inicio'], '%Y-%m-%d').date() if "fecha_inicio" in request.session else None
     fecha_fin=  datetime.strptime(request.session['fecha_fin'], '%Y-%m-%d').date() if "fecha_fin" in request.session else None
-    return render(request, "venta/vendedor.html", {"colHoteles": colHoteles,
+    if fecha_inicio:
+        formulario_enviado="enviado"
+    else:
+        formulario_enviado="no_enviado"
+
+    
+    return render(request, "venta/vendedor.html", {"colHoteles": colHoteles,"vendedor":vendedorInstancia,
         "pasajeros": int(request.session['pasajeros']) if "pasajeros" in request.session else None, 
         "fecha_inicio": fecha_inicio,
         "fecha_fin": fecha_fin,
+        "formulario_enviado":formulario_enviado
          })
 
 
@@ -52,7 +58,7 @@ def iniciar_venta(request):
     request.session['pasajeros']=pasajeros
     #request.session['venta']={'fecha_inicio': fechaInicio, '}
 
-    return redirect("venta:vendedor")
+    return redirect('venta:vendedor')
 
 def cancelar_venta(request):
     request.session.flush()

@@ -36,21 +36,25 @@
     <!-- HEADER -->
     <div class="container-fluid mainHeader p-3 fixed-top">
         <div class="row">
-            <div class="col-3">
+            <div class="col-2">
                 {% block header %}
 
                 {% endblock header %}
 
             </div>
-            <div class="col-7">
+            <div class="col-8">
                 {% block headerContenido %}
-
                 {% endblock headerContenido %}
+
+             {% block carrito %}
+             {% endblock carrito %}
             </div>
             <div class="col-2">
-                <button onclick="location.href='/core/logout'" style="text-decoration:none"
-                    class="rounded-1 btn btn-lg btn-outline-light text-white float-right "> Cerrar Sesion
+               
+                <button onclick="location.href='/core/logout'" style="text-decoration:none; align-items:right;"
+                    class="rounded-1 btn btn-lg btn-outline-light text-white float-center mt-1  "> Cerrar Sesion
                 </button>
+                
             </div>
         </div>
     </div>

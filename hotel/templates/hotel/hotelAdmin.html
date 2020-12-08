@@ -1,9 +1,14 @@
 {% extends 'base/base_administrador.html'%}
 {% load static %}
 
+
+{% block header %}
+<button onclick="location.href='/core/homeAdministrador'" style="text-decoration:none"
+    class="rounded-1 btn  btn-outline-light text-white ">Administrador:{% if administrador %}{{administrador.nombre}} {{administrador.apellido}}{% endif %}</button>
+{% endblock header %}
+
 {% block headerContenido %}
 {% endblock headerContenido %}
-
 {% block content %}
 
 <div class="formularioHotel" id="vistaHoteles">
