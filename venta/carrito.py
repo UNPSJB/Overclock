@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
-from hotel.models import Hotel, Habitacion
+from hotel.models import Hotel, Habitacion, PaqueteTuristico
+
 
 class Carrito:
     def __init__(self,request):
@@ -15,8 +16,12 @@ class Carrito:
             print("SE REUSA CARRITO!!!!!!!!")
             self.carrito=carrito
         self.save()
-           
 
+    def save(self):
+        self.session["carrito"]=self.carrito
+        self.session.modified=True
+           
+#*************************GESTION HABITACION DE CARRITO **************************************
     def agregar_habitacion(self,habitacion,desde,hasta,pasajeros):
         claves=list(self.carrito.keys())
         if str(habitacion) not in claves:
@@ -44,9 +49,7 @@ class Carrito:
                 self.carrito[str(habitacion)]["alquiler"].append([str(desde),str(hasta),str(pasajeros)])
         self.save()
 
-    def save(self):
-        self.session["carrito"]=self.carrito
-        self.session.modified=True
+   
     
     def quitar_habitacion(self, habitacion, desde, hasta):
         claves=list(self.carrito.keys())
@@ -61,6 +64,33 @@ class Carrito:
                     if str(desde) and str(hasta) in index:
                         print("borro lo que encontre")
                         self.carrito[str(habitacion)]["alquiler"].remove(index)
+        self.save()
+
+#*************************GESTION PAQUETE DE CARRITO **************************************
+
+    def agregar_paquete(self,paquete,pasajeros):
+        paqueteInstancia=get_object_or_404(PaqueteTuristico,pk=paquete)
+        clave_instancia="p"+str(paqueteInstancia.pk)
+        claves=list(self.carrito.keys())
+        if clave_instancia not in claves:
+            print("entre a crear un alquiler nuevo de otro paquete")
+            self.carrito[clave_instancia]={
+                "paquete_pk":str(paqueteInstancia.pk),
+                "nombre":paqueteInstancia.nombre,
+                "pasajeros":str(pasajeros)                
+                }
+        else:
+            print("imposible agregar")
+        self.save()
+
+    
+    def quitar_paquete(self, paquete):
+        clave_instancia="p"+str(paquete)
+        claves=list(self.carrito.keys())
+        if clave_instancia in claves:
+            del self.carrito[clave_instancia]
+        else:
+            print("no esta el paquete en el carrito")
         self.save()
 
 
