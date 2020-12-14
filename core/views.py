@@ -224,7 +224,7 @@ def servicioCrear(request):
     colServicios = Servicio.objects.all()
     form = ServicioForm(request.POST)
 
-    print("estoy entrando a crear servicios")
+    #print("estoy entrando a crear servicios")
     if request.method == "POST":
         if form.is_valid():
             form.save()
@@ -341,9 +341,9 @@ def vendedorModificar(request, vendedor):
         else:
             form = VendedorForm(request.POST, instance=vendedorInstancia)
     else:
-        print(vendedorInstancia)
+        #print(vendedorInstancia)
         form = VendedorForm(instance=vendedorInstancia)
-        print(vendedorInstancia.persona.nombre)
+        #print(vendedorInstancia.persona.nombre)
         form.fields["nombre"].initial = vendedorInstancia.persona.nombre
         form.fields["apellido"].initial = vendedorInstancia.persona.apellido
         form.fields["documento"].initial = vendedorInstancia.persona.documento

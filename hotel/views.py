@@ -26,7 +26,7 @@ from core.models import Persona, Vendedor, Categoria, TipoHabitacion, Servicio
 @login_required
 def hotel(request):
     personaInstancia = request.user.persona
-    print(">>>>>>>>>>>>>>>>>>>>>>>>>>>",personaInstancia)
+    #print(">>>>>>>>>>>>>>>>>>>>>>>>>>>",personaInstancia)
     colHoteles=Hotel.objects.all()
     return render(request, "hotel/hotelAdmin.html",{"colHoteles": colHoteles, "administrador":personaInstancia})
 
@@ -303,7 +303,7 @@ def aniadirServicioHotel(request,hotel):
     form=ServicioForm(request.POST or None)
     if request.method =="POST":
         diccionario=(dict(request.POST))
-        print(diccionario['servicio'])
+        #print(diccionario['servicio'])
         for servicio in diccionario['servicio']:
             hotelInstancia.servicios.add(get_object_or_404(Servicio,pk=servicio))
         hotelInstancia.save()
@@ -332,7 +332,7 @@ def aniadirVendedorHotel(request, hotel):
     
     if request.method =="POST":
         diccionario=(dict(request.POST))
-        print(diccionario['vendedores'][0])
+        #print(diccionario['vendedores'][0])
         hotelInstancia.vendedores.add(get_object_or_404(Vendedor,pk=diccionario['vendedores'][0]))
         hotelInstancia.save()
         return redirect('hotel:vendedoresHotel', hotel)
@@ -358,7 +358,7 @@ def vendedorHotelEliminar(request,hotel,vendedor):
     vendedorInstancia=get_object_or_404(Vendedor, pk=vendedor)
     if request.method=='POST':
         hotelInstancia.vendedores.remove(vendedorInstancia)
-        print(hotelInstancia.vendedores)
+        #print(hotelInstancia.vendedores)
         #form.save_m2m()
         hotelInstancia.save()
         return redirect('hotel:vendedoresHotel', hotel)

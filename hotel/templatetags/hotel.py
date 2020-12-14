@@ -9,9 +9,8 @@ def hotel_disponible(context, hotel):
     fin = context.get('fecha_fin', None)
     pasajeros = context.get('pasajeros', None)
     if pasajeros is not None:
-        print("Hola")
-        print(pasajeros)
-        print(inicio, fin)
+        #print(pasajeros)
+        #print(inicio, fin)
         return hotel.disponible(inicio, fin, pasajeros)
     else:
         return True 
