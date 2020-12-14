@@ -6,28 +6,66 @@ class Carrito:
         self.request=request
         self.session=request.session
         carrito=self.session.get("carrito")
-        if not carrito:
+        #print(carrito)
+        if carrito==None:
+            print("SE CREA CARRITO!!!!!!!!")
             carrito=self.session["carrito"]={}
-        self.carrito=carrito
+            self.carrito=carrito
+        else:
+            print("SE REUSA CARRITO!!!!!!!!")
+            self.carrito=carrito
+        self.save()
+           
 
-    def agregar_habitacion(self,habitacion,desde,hasta):
-        habitacion=get_object_or_404(Habitacion,pk=habitacion)
-        if str(habitacion.pk) not in self.carrito.keys():
-            self.carrito[habitacion.pk]={
-                "habitacion_pk":habitacion.pk,
-                "hotel_pk":habitacion.hotel,
-                "habitacion_numero":habitacion.numero,
-                "habitacion_precio":str(habitacion.precio_alquiler(desde,hasta)),
-             }
+    def agregar_habitacion(self,habitacion,desde,hasta,pasajeros):
+        claves=list(self.carrito.keys())
+        if str(habitacion) not in claves:
+            print("entre a crear un alquiler nuevo de otra habitacion")
+            self.carrito[habitacion]={
+                "alquiler":[]                
+                }
+            self.carrito[habitacion]["alquiler"].append([str(desde),str(hasta),str(pasajeros)])
+            
+        else:
+            print("reuso la habitacion")
+            periodoDisponible=True
+            alquileres = list(self.carrito[str(habitacion)]["alquiler"])
+            for index in alquileres:
+                print(index)
+                desde_contenido = (str(desde)>=index[0] and str(desde)<=index[1])
+                hasta_contenido = (str(hasta)>=index[0] and str(hasta)<=index[1])
+                esta_contenido = (str(desde)<=index[0] and str(hasta)>=index[1])
+                print(desde_contenido," ",hasta_contenido," ",esta_contenido)
+                if (desde_contenido or hasta_contenido or esta_contenido):
+                    print("no puedo alquilar")
+                    periodoDisponible=False
+                    break
+            if periodoDisponible:
+                self.carrito[str(habitacion)]["alquiler"].append([str(desde),str(hasta),str(pasajeros)])
         self.save()
 
     def save(self):
         self.session["carrito"]=self.carrito
         self.session.modified=True
     
-    def quitar_habitacion(self, habitacion):
-        if habitacion in self.carrito:
-            del self.carrito[habitacion]
-            self.save()
+    def quitar_habitacion(self, habitacion, desde, hasta):
+        claves=list(self.carrito.keys())
+        if str(habitacion) in claves:
+            if len(self.carrito[str(habitacion)]["alquiler"])==1:
+                print("borro Habitacion")
+                del self.carrito[str(habitacion)]
+            else:
+                print("busco alquiler")
+                alquileres = list(self.carrito[str(habitacion)]["alquiler"])
+                for index in alquileres:
+                    if str(desde) and str(hasta) in index:
+                        print("borro lo que encontre")
+                        self.carrito[str(habitacion)]["alquiler"].remove(index)
+        self.save()
+
+
 
     
+
+# Hacer 3 metodos get_alquileres, get_alquileres_habitaciones, get_alquileres_paquetes
+# metodo para crear Factura -> Alquileres carrito.facturar()

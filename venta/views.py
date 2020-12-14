@@ -12,6 +12,8 @@ from venta.carrito import Carrito
 
 @login_required
 def vendedor(request):
+    carrito = Carrito(request)
+    print("contenido de mi carrito antes: ",request.session['carrito'])
     personaInstancia = request.user.persona
     vendedorInstancia = get_object_or_404(Vendedor, persona = personaInstancia.id)
     colHoteles= Hotel.objects.filter(vendedores__persona=vendedorInstancia.persona)
@@ -33,20 +35,16 @@ def vendedor(request):
 
 def buscarHabitaciones(request,hotel):
     carrito = Carrito(request)
-    print("contenido de mi carrito antes: ",request.session['carrito'])
-    
+    print("contenido de mi carrito antes: ",request.session['carrito'])   
     
     fecha_inicio=  datetime.strptime(request.session['fecha_inicio'], '%Y-%m-%d').date() if "fecha_inicio" in request.session else None
     fecha_fin=  datetime.strptime(request.session['fecha_fin'], '%Y-%m-%d').date() if "fecha_fin" in request.session else None
     pasajeros = int(request.session['pasajeros']) if "pasajeros" in request.session else None
     
-    carrito.agregar_habitacion(1,fecha_inicio,fecha_fin)
-    print("contenido de mi carrito al agregar: ",request.session['carrito'])
+    #carrito.agregar_habitacion(1,fecha_inicio,fecha_fin,pasajeros)
+    #print("contenido de mi carrito al agregar: ",request.session['carrito'])
     
-    carrito.agregar_habitacion(1,fecha_inicio,fecha_fin)
-    print("contenido de mi carrito al agregar2da: ",request.session['carrito'])
-    
-    carrito.quitar_habitacion(1)
+    carrito.quitar_habitacion(1,fecha_inicio,fecha_fin)
     print("contenido de mi carrito al quitar: ",request.session['carrito'])
     
     hotelInstancia = get_object_or_404(Hotel, pk=hotel)

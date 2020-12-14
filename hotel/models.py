@@ -250,7 +250,6 @@ class PaqueteTuristico(models.Model):
         capacidad = 0
         habitaciones = Habitacion.objects.filter(paqueteturistico = self)
         for habitacion in habitaciones:
-            print("ESTE ES LA HABITACION N° ",habitacion)
             capacidad+=habitacion.get_pasajeros()
         return capacidad
 
