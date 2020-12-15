@@ -75,9 +75,11 @@ class Carrito:
         if clave_instancia not in claves:
             print("entre a crear un alquiler nuevo de otro paquete")
             self.carrito[clave_instancia]={
-                "paquete_pk":str(paqueteInstancia.pk),
+                "fecha_fin":str(paqueteInstancia.fin),
+                "fecha_inicio":str(paqueteInstancia.inicio),
                 "nombre":paqueteInstancia.nombre,
-                "pasajeros":str(pasajeros)                
+                "paquete_pk":str(paqueteInstancia.pk),
+                "pasajeros":str(pasajeros),    
                 }
         else:
             print("imposible agregar")
@@ -98,20 +100,54 @@ class Carrito:
     def get_alquileres_paquetes(self): 
         col_paquetes=[]
         for key,value in self.carrito.items():
-            if "p" in key:
+            if "p" in str(key):
                 paquete_pk=int(value["paquete_pk"])
-                paqueteInstancia=get_object_or_404(PaqueteTuristico,pk=paquete_pk)
-                col_paquetes.append(paqueteInstancia)
+                venta_paquete = Carrito_paquete(value['nombre'], value['fecha_inicio'], value['fecha_fin'], value['pasajeros'], paquete_pk)
+                col_paquetes.append(venta_paquete)
         return col_paquetes
 
 
     def get_alquileres_habitaciones(self):
         col_habitaciones=[]
-        for key in self.carrito.items():
+        for key,value in self.carrito.items():
+            print(key)
             if "p" not in str(key):
-                habitacionInstancia=get_object_or_404(Habitacion,pk=key)
-                col_habitaciones.append(habitacionInstancia)
+                alquileres = value['alquiler']
+                for alquiler in alquileres:
+                    venta_habitacion = Carrito_habitacion(alquiler[0], alquiler[1], alquiler[2], key)
+                    col_habitaciones.append(venta_habitacion)
         return col_habitaciones
+
+class Carrito_venta:
+    fecha_inicio = 0
+    fecha_fin = 0
+    pasajeros = 0
+    def __init__(self, fecha_inicio, fecha_fin, pasajeros):
+        self.fecha_inicio = fecha_inicio
+        self.fecha_fin = fecha_fin
+        self.pasajeros = pasajeros
+
+class Carrito_habitacion(Carrito_venta):
+    habitacion = None
+    def __init__(self, fecha_inicio, fecha_fin, pasajeros, habitacion):
+        Carrito_venta.__init__(self, fecha_inicio, fecha_fin, pasajeros)
+        self.habitacion = habitacion
+    
+
+    def __str__(self):
+        return("Numero: " + self.habitacion + ", " + "Fecha inicio: "+ self.fecha_inicio + ", " + "Fecha fin: "+self.fecha_fin)
+
+
+class Carrito_paquete(Carrito_venta):
+    paquete = None
+    nombre = ""
+    def __init__(self, nombre, fecha_inicio, fecha_fin, pasajeros, paquete):
+        Carrito_venta.__init__(self, fecha_inicio, fecha_fin, pasajeros)
+        self.nombre = nombre
+        self.paquete = paquete
+
+    def __str__(self):
+        return("Nombre: " + self.nombre + ", " + "Fecha inicio: "+ self.fecha_inicio + ", " + "Fecha fin: "+self.fecha_fin)
 
 # Hacer 3 metodos get_alquileres, get_alquileres_habitaciones, get_alquileres_paquetes
 # metodo para crear Factura -> Alquileres carrito.facturar()

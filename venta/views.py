@@ -48,8 +48,11 @@ def buscarHabitaciones(request,hotel):
     #print("contenido de mi carrito al quitar: ",request.session['carrito'])
     
     carrito.agregar_habitacion(1,fecha_inicio,fecha_fin,pasajeros)
-  
-    #print(carrito.get_alquileres_habitaciones())
+    carrito.agregar_paquete(1,1)
+    
+
+    print(carrito.get_alquileres_habitaciones()[0])
+    print(carrito.get_alquileres_paquetes())
 
     hotelInstancia = get_object_or_404(Hotel, pk=hotel)
     colHabitaciones = hotelInstancia.get_habitaciones_busqueda(fecha_inicio,fecha_fin,pasajeros)
