@@ -95,7 +95,23 @@ class Carrito:
 
 
 
-    
+    def get_alquileres_paquetes(self): 
+        col_paquetes=[]
+        for key,value in self.carrito.items():
+            if "p" in key:
+                paquete_pk=int(value["paquete_pk"])
+                paqueteInstancia=get_object_or_404(PaqueteTuristico,pk=paquete_pk)
+                col_paquetes.append(paqueteInstancia)
+        return col_paquetes
+
+
+    def get_alquileres_habitaciones(self):
+        col_habitaciones=[]
+        for key in self.carrito.items():
+            if "p" not in str(key):
+                habitacionInstancia=get_object_or_404(Habitacion,pk=key)
+                col_habitaciones.append(habitacionInstancia)
+        return col_habitaciones
 
 # Hacer 3 metodos get_alquileres, get_alquileres_habitaciones, get_alquileres_paquetes
 # metodo para crear Factura -> Alquileres carrito.facturar()
