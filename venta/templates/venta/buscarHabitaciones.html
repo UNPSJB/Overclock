@@ -109,7 +109,7 @@
                     <td>
                         <center>
                             <button type="button" class="btn btn-success" data-toggle="modal"
-                                data-target="#alquilarHabitacion" onclick="" title="Alquilar"> <i
+                                data-target="#alquilarHabitacion" onclick=location.href="{% url 'venta:alquilarHabitacion' habitacion.pk hotel.pk %}" title="Alquilar"> <i
                                     class="fas fa-shopping-cart"></i> </button>
                         </center>
                     </td>

@@ -135,7 +135,7 @@ class Carrito_habitacion(Carrito_venta):
     
 
     def __str__(self):
-        return("Numero: " + self.habitacion + ", " + "Fecha inicio: "+ self.fecha_inicio + ", " + "Fecha fin: "+self.fecha_fin)
+        return("Numero: " + str(self.habitacion) + ", " + "Fecha inicio: "+ self.fecha_inicio + ", " + "Fecha fin: "+self.fecha_fin)
 
 
 class Carrito_paquete(Carrito_venta):

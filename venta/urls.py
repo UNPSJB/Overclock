@@ -32,4 +32,5 @@ urlpatterns = [
     path('vistaCliente/', vviews.vista_cliente, name="vistaCliente"),
     path('clienteAniadir/', vviews.cliente_aniadir, name="modalAniadirCliente"),
     path('clienteModificar/<cliente>', vviews.cliente_modificar, name="modalModificarCliente"),
+    path('alquilarHabitacion/<habitacion>/<hotel>', vviews.alquilar_habitacion, name="alquilarHabitacion"),
 ]

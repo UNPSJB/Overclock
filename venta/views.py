@@ -47,15 +47,38 @@ def buscarHabitaciones(request,hotel):
     #carrito.quitar_habitacion(1,fecha_inicio,fecha_fin)
     #print("contenido de mi carrito al quitar: ",request.session['carrito'])
     
-    carrito.agregar_habitacion(1,fecha_inicio,fecha_fin,pasajeros)
-    carrito.agregar_paquete(1,1)
+    fecha_inicio_propia= datetime(2020, 12, 17).date()
+    fecha_fin_propia= datetime(2020, 12, 19).date()
+    
+    #carrito.agregar_habitacion(6,fecha_inicio_propia,fecha_fin_propia,pasajeros)
+    #carrito.agregar_paquete(1,1)
     
 
-    print(carrito.get_alquileres_habitaciones()[0])
-    print(carrito.get_alquileres_paquetes())
+    #print(carrito.get_alquileres_habitaciones()[0])
+    #print(carrito.get_alquileres_paquetes())
 
     hotelInstancia = get_object_or_404(Hotel, pk=hotel)
     colHabitaciones = hotelInstancia.get_habitaciones_busqueda(fecha_inicio,fecha_fin,pasajeros)
+    ventas_habitaciones_en_carrito=carrito.get_alquileres_habitaciones()
+    for venta in ventas_habitaciones_en_carrito:
+        fecha_inicio_venta=datetime.strptime(venta.fecha_inicio, '%Y-%m-%d').date()
+        fecha_fin_venta=datetime.strptime(venta.fecha_fin, '%Y-%m-%d').date()
+        for habitacion in colHabitaciones:
+            
+            
+
+            pksiguales=str(habitacion.pk)==venta.habitacion
+            inicio_alquiler_en_fechas_ingresadas=(fecha_inicio_venta>=fecha_inicio and fecha_inicio_venta<=fecha_fin)
+            fin_alquiler_en_fechas_ingresadas=(fecha_fin_venta>=fecha_inicio and fecha_fin_venta<=fecha_fin)
+            contenido_fechas=(fecha_inicio_venta<=fecha_inicio and fecha_fin_venta>=fecha_fin)
+            
+            
+            
+            if (pksiguales and (inicio_alquiler_en_fechas_ingresadas or fin_alquiler_en_fechas_ingresadas or contenido_fechas)):
+                
+                colHabitaciones.remove(habitacion)
+                
+
     colPaquetes = hotelInstancia.get_paquetes_busqueda(fecha_inicio,fecha_fin,pasajeros)
     
     return render(request, "venta/buscarHabitaciones.html", {"hotel":hotelInstancia,
@@ -64,6 +87,17 @@ def buscarHabitaciones(request,hotel):
         "fecha_inicio": fecha_inicio,
         "fecha_fin": fecha_fin
         })
+
+def alquilar_habitacion(request, habitacion, hotel):
+    
+    carrito = Carrito(request)
+    fecha_inicio=  datetime.strptime(request.session['fecha_inicio'], '%Y-%m-%d').date() if "fecha_inicio" in request.session else None
+    fecha_fin=  datetime.strptime(request.session['fecha_fin'], '%Y-%m-%d').date() if "fecha_fin" in request.session else None
+    pasajeros = int(request.session['pasajeros']) if "pasajeros" in request.session else None
+    carrito.agregar_habitacion(habitacion, fecha_inicio, fecha_fin, pasajeros)
+
+    
+    return redirect("venta:buscarHabitaciones", hotel)
 
 
 def iniciar_venta(request):
