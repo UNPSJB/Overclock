@@ -2,14 +2,19 @@
 {% load static %}
 
 {% block header %}
-<button onclick="location.href='/venta/vendedor'" style="text-decoration:none"
-    class="rounded-1 btn btn-lg btn-outline-light text-white ml-4 mt-1"> VENDEDOR </button>
+
 {% endblock header %}
+
+{% block carritoz %}
 {% block carrito %}
-<button onclick="location.href='#'" style="text-decoration:none"
-    class="rounded-1 btn btn-lg btn-outline-light text-white float-right mt-2"><i class="fas fa-shopping-cart"></i>
+<button onclick="abrir_carrito();" style="text-decoration:none"
+    class="rounded-1 btn btn-lg btn-outline-secondary text-white float-right mt-2" > <i
+        class="fas fa-shopping-cart"><span class="badge badge-danger ml-2 mt-0" style="font-size:10px;"
+            id="carrito_contador">{%block carrito_contador %} {% endblock carrito_contador%}</span></i>
 </button>
 {% endblock carrito %}
+{% endblock carritoz %}
+
 
 
 
@@ -19,10 +24,9 @@
 </p>
 
 <p>
-    <h1>LISTADO DE HOTELES, EL DATE PICKER ETC</h1>
-    </p>
+<h1>LISTADO DE HOTELES, EL DATE PICKER ETC</h1>
+</p>
 {% endblock %}}
 
 {% block extrajs %}
 {% endblock %}
-

@@ -1,5 +1,6 @@
 from django.shortcuts import get_object_or_404
 from hotel.models import Hotel, Habitacion, PaqueteTuristico
+from datetime import datetime
 
 
 class Carrito:
@@ -20,6 +21,15 @@ class Carrito:
     def save(self):
         self.session["carrito"]=self.carrito
         self.session.modified=True
+    
+    def get_cantidad(self):
+        count=0
+        for key,value in self.carrito.items():
+            if "p" in key:
+                count+=1
+            else:
+                count+=len(value["alquiler"])
+        return count
            
 #*************************GESTION HABITACION DE CARRITO **************************************
     def agregar_habitacion(self,habitacion,desde,hasta,pasajeros):
@@ -75,8 +85,8 @@ class Carrito:
         if clave_instancia not in claves:
             print("entre a crear un alquiler nuevo de otro paquete")
             self.carrito[clave_instancia]={
-                "fecha_fin":str(paqueteInstancia.fin),
                 "fecha_inicio":str(paqueteInstancia.inicio),
+                "fecha_fin":str(paqueteInstancia.fin),
                 "nombre":paqueteInstancia.nombre,
                 "paquete_pk":str(paqueteInstancia.pk),
                 "pasajeros":str(pasajeros),    
@@ -87,7 +97,10 @@ class Carrito:
 
     
     def quitar_paquete(self, paquete):
-        clave_instancia="p"+str(paquete)
+        if "p" in paquete:
+            clave_instancia=paquete
+        else:
+            clave_instancia="p"+str(paquete)
         claves=list(self.carrito.keys())
         if clave_instancia in claves:
             del self.carrito[clave_instancia]
@@ -117,6 +130,43 @@ class Carrito:
                     venta_habitacion = Carrito_habitacion(alquiler[0], alquiler[1], alquiler[2], key)
                     col_habitaciones.append(venta_habitacion)
         return col_habitaciones
+    
+#mostrar_carrito arma un diccionario para mostrar en el datatable en vistaCarrito, tanto paquetes como habitaciones
+
+    def mostrar_carrito(self): 
+        #hotel,descripcion,fechainicio,fechafin,costounitario,subtotal
+        total=0
+        col_paquetes=[]
+        for key,value in self.carrito.items():
+            if "p" in str(key):
+                col_paquetes.append(get_object_or_404(PaqueteTuristico,pk=value["paquete_pk"]))
+        lista_ventas={}
+        if col_paquetes:
+            for item in col_paquetes:
+                lista_ventas["p"+str(item.pk)]={
+                    "hotel":item.hotel.nombre,
+                    "descripcion":"Paquete: "+ item.nombre,
+                    "fecha_inicio":str(item.inicio),
+                    "fecha_fin":str(item.fin),
+                    "costo_unitario":str(item.get_costo()),
+                    "subtotal":str(item.get_costo())}
+                total+=float(item.get_costo())
+        
+        for key,value in self.carrito.items():
+            if "p" not in str(key):
+                habitacion=(get_object_or_404(Habitacion,pk=key))
+                for alquiler in range(len(value["alquiler"])): # alquiler itera sobre la cantidad de veces alquilada la misma habitacion
+                    clave=str(alquiler)+"-"+str(habitacion.pk)
+                    lista_ventas[clave]={
+                        "hotel":habitacion.hotel.nombre,
+                        "descripcion":"Habitacion n°: "+ str(habitacion.numero),
+                        "fecha_inicio":str(value["alquiler"][alquiler][0]),
+                        "fecha_fin":str(value["alquiler"][alquiler][1]),
+                        "costo_unitario":str(habitacion.precio_por_noche(datetime.strptime(str(value["alquiler"][alquiler][0]), '%Y-%m-%d').date())),
+                        "subtotal":str(habitacion.precio_alquiler(datetime.strptime(str(value["alquiler"][alquiler][0]), '%Y-%m-%d').date(),datetime.strptime(value["alquiler"][alquiler][1], '%Y-%m-%d').date()))}
+                    total+=float(habitacion.precio_alquiler(datetime.strptime(str(value["alquiler"][alquiler][0]), '%Y-%m-%d').date(),datetime.strptime(str(value["alquiler"][alquiler][1]), '%Y-%m-%d').date()))
+        lista_ventas["total"]={str(total)}
+        return lista_ventas
 
 class Carrito_venta:
     fecha_inicio = 0

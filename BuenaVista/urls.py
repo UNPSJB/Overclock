@@ -18,6 +18,8 @@ from django.contrib.admin.sites import all_sites
 from django.urls import path, include
 from core import views
 from hotel import views as hviews
+from venta import views as vviews
+
 
 
 

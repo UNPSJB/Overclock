@@ -32,3 +32,8 @@ function fecha_minima() {
         fecha2.min = fecha1.value;
     }
 }
+
+function abrir_carrito(){
+    console.log("carrito")
+    location.href="/venta/vistaCarrito";
+}

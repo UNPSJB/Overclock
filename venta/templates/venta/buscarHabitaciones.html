@@ -2,9 +2,16 @@
 {% load static %}
 {% load hotel %}
 
-{% block headerContenido %}
-{% endblock headerContenido %}
+{% block header %}
+<button onclick="location.href='/venta/vendedor'" style="text-decoration:none"
+    class="rounded-1 btn btn-sm btn-outline-secondary text-white ml-4 mt-1"> VENDEDOR: {{vendedor.persona.nombre.upper}}
+    {{vendedor.persona.apellido.upper}} </button>
+{% endblock header %}
 
+{% block carritoz %}
+
+{%block carrito_contador %} {%if not contador%}0{% else %}{{contador}} {% endif %}{% endblock carrito_contador%}
+{% endblock carritoz %}
 
 {% block content %}
 <!--  #######################  DATOS DEL HOTEL  #######################-->
@@ -108,9 +115,10 @@
                     <td>${% precio_entre_fechas habitacion %}</td>
                     <td>
                         <center>
-                            <button type="button" class="btn btn-success" data-toggle="modal"
-                                data-target="#alquilarHabitacion" onclick=location.href="{% url 'venta:alquilarHabitacion' habitacion.pk hotel.pk %}" title="Alquilar"> <i
-                                    class="fas fa-shopping-cart"></i> </button>
+                            <button type="button" class="btn btn-success"
+                                onclick=location.href="{% url 'venta:alquilarHabitacion' habitacion.pk hotel.pk %}"
+                                title="Alquilar">
+                                <i class="fas fa-shopping-cart"></i> </button>
                         </center>
                     </td>
                 </tr>
@@ -130,7 +138,7 @@
             <h1 class="my-4">LISTADO DE PAQUETES DISPONIBLES</h1>
         </center>
         <table id="example2" class="table table-striped table-bordered tablaListaHabitacion">
-           
+
             <thead>
                 <tr>
                     <th>Nombre</th>
@@ -159,9 +167,10 @@
                     <td>{{paquete.get_pasajeros}}</td>
                     <td>
                         <center>
-                            <button type="button" class="btn btn-success" data-toggle="modal"
-                                data-target="#alquilarHabitacion" onclick="" title="Alquilar"> <i
-                                    class="fas fa-shopping-cart"></i> </button>
+                            <button type="button" class="btn btn-success"
+                            onclick=location.href="{% url 'venta:alquilarPaquete' paquete.pk hotel.pk %}"
+                            title="Alquilar">
+                            <i class="fas fa-shopping-cart"></i> </button>
                         </center>
                     </td>
                 </tr>

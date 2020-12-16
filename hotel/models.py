@@ -78,7 +78,7 @@ class Hotel(models.Model):
         paquetesEnHotel = self.get_paquetes()
         paquetesSegunBusqueda=[]
         for paquete in paquetesEnHotel:
-            if (paquete.inicio<=fechai) and (paquete.fin>=fechaf) and (paquete.get_pasajeros()<=cantPasajeros) and (paquete.estoy_vigente):
+            if (paquete.inicio>=fechai) and (paquete.fin<=fechaf) and (paquete.get_pasajeros()>=cantPasajeros) and (paquete.estoy_vigente()):
                 paquetesSegunBusqueda.append(paquete)
         return paquetesSegunBusqueda
 
