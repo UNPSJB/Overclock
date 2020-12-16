@@ -158,3 +158,19 @@ def vista_carrito(request):
     contador=carrito.get_cantidad()
     total=float(str(coleccion_ventas['total']).strip("['|{|}]"))
     return render(request,"venta/carrito.html",{"vendedor":vendedorInstancia, "contador":contador, "coleccion_ventas":coleccion_ventas,"total":total})
+
+
+def quitar_paquete_carrito(request, paquete):
+    carrito=Carrito(request)
+    carrito.quitar_paquete(paquete.strip("p"))
+    return redirect('venta:vistaCarrito')
+
+def quitar_habitacion_carrito(request, habitacion, desde, hasta):
+    carrito=Carrito(request)
+    print("holaaaaaaaaaa ", habitacion)
+    habitacion=habitacion.split("-")
+    print("holaaaaaaaaaa ", habitacion)
+    fecha_desde=datetime.strptime(desde, '%Y-%m-%d').date()
+    fecha_hasta=datetime.strptime(hasta, '%Y-%m-%d').date()
+    carrito.quitar_habitacion(habitacion[1], fecha_desde, fecha_hasta)
+    return redirect('venta:vistaCarrito')

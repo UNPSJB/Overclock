@@ -58,9 +58,11 @@
 
                 <td>
                     <center>
-                        <button type="button" class="btn btn-danger" onclick="" title="Eliminar">
+
+                        <button type="button" class="btn btn-danger" {% if "p" in key %} onclick="location.href='{% url 'venta:quitarPaqueteCarrito' key %}' " {% else %} onclick="location.href='{% url 'venta:quitarHabitacionCarrito' key value.fecha_inicio value.fecha_fin %}' "{% endif %} title="Eliminar">
                             <i class="fas fa-trash"></i>
                         </button>
+
                     </center>
                 </td>
             </tr>
