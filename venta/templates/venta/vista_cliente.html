@@ -1,17 +1,6 @@
-{% extends 'base/vendedor.html'%}
-{% load static %}
-{% load hotel %}
-{% block header %}
-<button onclick="location.href='/venta/vendedor'" style="text-decoration:none"
-    class="rounded-1 btn btn-sm btn-outline-secondary text-white ml-4 mt-1"> VENDEDOR: {{vendedor.persona.nombre.upper}}
-    {{vendedor.persona.apellido.upper}} </button>
-{% endblock header %}
-
-{% block carritoz %}
-
-{%block carrito_contador %} {%if not contador%}0{% else %}{{contador}} {% endif %}{% endblock carrito_contador%}
-{% endblock carritoz %}
-{% block content %}
+{% extends 'base/vendedor.html'%} {% load static %} {% load hotel %} {% block header %}
+<button onclick="location.href='/venta/vendedor'" style="text-decoration:none" class="rounded-1 btn btn-sm btn-outline-secondary text-white ml-4 mt-1"> VENDEDOR: {{vendedor.persona.nombre.upper}}
+    {{vendedor.persona.apellido.upper}} </button> {% endblock header %} {% block carritoz %} {%block carrito_contador %} {%if not contador%}0{% else %}{{contador}} {% endif %}{% endblock carrito_contador%} {% endblock carritoz %} {% block content %}
 
 <center>
     <h1 class="my-4">LISTADO DE CLIENTES</h1>
@@ -28,8 +17,7 @@
         <thead>
 
             <tr>
-                <button type="button" class="btn btn-success  mr-4 float-right btn-sm" data-toggle="modal"
-                    data-target="#aniadirCliente" onclick="abrir_modal('{% url 'venta:modalAniadirCliente' %}','#aniadirCliente');">
+                <button type="button" class="btn btn-success  mr-4 float-right btn-sm" data-toggle="modal" data-target="#aniadirCliente" onclick="abrir_modal('{% url 'venta:modalAniadirCliente' %}','#aniadirCliente');">
                     <i class="fas fa-plus-circle"></i>
                     AÑADIR</button>
                 <th>Nombre</th>
@@ -40,13 +28,15 @@
                 <th>
                     <Center>Modificar</Center>
                 </th>
+                <th>
+                    <Center>Seleccionar</Center>
+                </th>
             </tr>
         </thead>
         <tbody>
 
 
-            {% for cliente in colClientes %}
-            {% if not cliente.bajaCliente %}
+            {% for cliente in colClientes %} {% if not cliente.bajaCliente %}
             <tr>
 
                 <td> {{cliente.persona.nombre}}</td>
@@ -57,23 +47,32 @@
 
                 <td>
                     <center>
-                        
-                        <button type="button" class="btn btn-warning" data-toggle="modal" 
-                            data-target="#modificarCliente" onclick="abrir_modal('{% url 'venta:modalModificarCliente' cliente.pk  %}','#modificarCliente');" title="Editar">
+
+                        <button type="button" class="btn btn-warning" data-toggle="modal" data-target="#modificarCliente" onclick="abrir_modal('{% url 'venta:modalModificarCliente' cliente.pk  %}','#modificarCliente');" title="Editar">
                             <i class="fas fa-edit"></i>
                         </button>
 
-                       
+
+                    </center>
+
+                </td>
+                <td>
+                    <center>
+
+                        <button type="button" class="btn btn-warning" onclick="location.href='{% url 'venta:seleccionarCliente' cliente.persona.id %}' " title="Seleccionar">
+                            <i class="fas fa-check-square"></i>
+                        </button>
+
+
                     </center>
 
                 </td>
 
             </tr>
-            {% endif %}
-            {% endfor %}
+            {% endif %} {% endfor %}
 
         </tbody>
-        
+
 </table>
 <!--Modales en otro html-->
 
@@ -85,16 +84,15 @@
 
 </div>
 
-{% endblock content %}
-
-{% block extrajs %}
+{% endblock content %} {% block extrajs %}
 
 <script type="text/javascript">
     //SCRIPT DE DATATABLE
     const $ = jQuery.noConflict();
-    $(document).ready(function () {
+    $(document).ready(function() {
         $('#example1').DataTable();
-    });</script>
+    });
+</script>
 
 
 {% endblock extrajs%}

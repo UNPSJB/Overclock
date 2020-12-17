@@ -180,9 +180,10 @@ class Carrito:
 
     def set_cliente(self, cliente):
         self.cliente=cliente
+        self.save()
 
     def get_cliente(self):
-        cliente= get_object_or_404(Cliente, persona=self.cliente)
+        cliente= get_object_or_404(Cliente, persona =self.cliente)
         return cliente
 
 

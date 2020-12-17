@@ -37,5 +37,7 @@ urlpatterns = [
     path('vistaCarrito/', vviews.vista_carrito, name="vistaCarrito"),
     path('quitarPaquete/<paquete>', vviews.quitar_paquete_carrito, name="quitarPaqueteCarrito"),
     path('quitarHabitacion/<habitacion>/<desde>/<hasta>', vviews.quitar_habitacion_carrito, name="quitarHabitacionCarrito"),
+    path('seleccionarCliente/<cliente>' , vviews.seleccionar_cliente, name="seleccionarCliente"),
+
 
 ]

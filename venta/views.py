@@ -158,6 +158,7 @@ def vista_carrito(request):
     contador=carrito.get_cantidad()
     total=float(str(coleccion_ventas['total']).strip("['|{|}]"))
     print(carrito.get_vendedor().persona.nombre)
+    print(carrito.get_cliente().persona.nombre)
     return render(request,"venta/carrito.html",{"vendedor":vendedorInstancia, "contador":contador, "coleccion_ventas":coleccion_ventas,"total":total})
 
 
@@ -175,3 +176,11 @@ def quitar_habitacion_carrito(request, habitacion, desde, hasta):
     fecha_hasta=datetime.strptime(hasta, '%Y-%m-%d').date()
     carrito.quitar_habitacion(habitacion[1], fecha_desde, fecha_hasta)
     return redirect('venta:vistaCarrito')
+
+
+def seleccionar_cliente(request, cliente):
+    carrito=Carrito(request)
+    carrito.set_cliente(cliente)
+    print(carrito.cliente)
+    return redirect("venta:vendedor")
+
