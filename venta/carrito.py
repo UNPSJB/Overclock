@@ -6,7 +6,7 @@ from datetime import datetime
 
 class Carrito:
     vendedor=0
-    cliente=0
+    cliente=None
     def __init__(self,request):
         self.request=request
         self.session=request.session
@@ -20,6 +20,7 @@ class Carrito:
             print("SE REUSA CARRITO!!!!!!!!")
             self.carrito=carrito
             
+        self.cliente=self.session.get("cliente")
         self.vendedor=self.request.user.persona.id
         self.save()
 
@@ -179,12 +180,15 @@ class Carrito:
         return vendedor
 
     def set_cliente(self, cliente):
-        self.cliente=cliente
+        self.cliente=self.session["cliente"]=cliente
         self.save()
 
     def get_cliente(self):
-        cliente= get_object_or_404(Cliente, persona =self.cliente)
-        return cliente
+        if self.cliente!= None:
+            cliente= get_object_or_404(Cliente, persona =self.cliente)
+            return cliente
+        else:
+            return None
 
 
 class Carrito_venta:

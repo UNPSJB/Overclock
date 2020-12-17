@@ -74,7 +74,11 @@
     </table>
     <div class="row mt-2">
         <div class="col-10 ml-4" style="background-color:rgb(185, 182, 182);"> <h3>TOTAL: ${{total}}</h3></div>
-        <div class="col-1"><button class="btn  btn-success">FACTURAR</button> </div>
+        <div class="col-1"><button class="btn btn-success" {% if cliente is None %} onclick="Swal.fire({
+            icon: 'error',
+            title: 'No se puede facturar sin seleccionar un Cliente',
+            text: 'Ingrese a menu cliente y seleccione uno...',
+        });" {% else %} onClick="console.log('A FACTURARRRRRR!!!!')" {% endif %}>FACTURAR</button> </div>
     </div>
     
 

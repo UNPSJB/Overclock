@@ -13,6 +13,10 @@ from venta.carrito import Carrito
 @login_required
 def vendedor(request):
     carrito = Carrito(request)
+    if carrito.get_cliente()!=None: 
+        print(carrito.get_cliente().persona.nombre)
+    else:
+        print("Aun no se ha seleccionado Cliente")
     contador=carrito.get_cantidad()
     print("contenido de mi carrito antes: ",request.session['carrito'])
     personaInstancia = request.user.persona
@@ -156,10 +160,14 @@ def vista_carrito(request):
     personaInstancia = request.user.persona
     vendedorInstancia = get_object_or_404(Vendedor, persona = personaInstancia.id)
     contador=carrito.get_cantidad()
+    cliente=carrito.get_cliente()
+    try:
+        print(cliente.persona.nombre)
+    except Exception:
+        print("no hay persona seleccionada")
     total=float(str(coleccion_ventas['total']).strip("['|{|}]"))
     print(carrito.get_vendedor().persona.nombre)
-    print(carrito.get_cliente().persona.nombre)
-    return render(request,"venta/carrito.html",{"vendedor":vendedorInstancia, "contador":contador, "coleccion_ventas":coleccion_ventas,"total":total})
+    return render(request,"venta/carrito.html",{"cliente":cliente,"vendedor":vendedorInstancia, "contador":contador, "coleccion_ventas":coleccion_ventas,"total":total})
 
 
 def quitar_paquete_carrito(request, paquete):
@@ -181,6 +189,5 @@ def quitar_habitacion_carrito(request, habitacion, desde, hasta):
 def seleccionar_cliente(request, cliente):
     carrito=Carrito(request)
     carrito.set_cliente(cliente)
-    print(carrito.cliente)
     return redirect("venta:vendedor")
 
