@@ -1,9 +1,12 @@
 from django.shortcuts import get_object_or_404
 from hotel.models import Hotel, Habitacion, PaqueteTuristico
+from core.models import Cliente, Vendedor
 from datetime import datetime
 
 
 class Carrito:
+    vendedor=0
+    cliente=0
     def __init__(self,request):
         self.request=request
         self.session=request.session
@@ -16,6 +19,8 @@ class Carrito:
         else:
             print("SE REUSA CARRITO!!!!!!!!")
             self.carrito=carrito
+            
+        self.vendedor=self.request.user.persona.id
         self.save()
 
     def save(self):
@@ -168,6 +173,19 @@ class Carrito:
         lista_ventas["total"]={str(total)}
         return lista_ventas
 
+
+    def get_vendedor(self):
+        vendedor= get_object_or_404(Vendedor, persona=self.vendedor)
+        return vendedor
+
+    def set_cliente(self, cliente):
+        self.cliente=cliente
+
+    def get_cliente(self):
+        cliente= get_object_or_404(Cliente, persona=self.cliente)
+        return cliente
+
+
 class Carrito_venta:
     fecha_inicio = 0
     fecha_fin = 0
@@ -199,5 +217,3 @@ class Carrito_paquete(Carrito_venta):
     def __str__(self):
         return("Nombre: " + self.nombre + ", " + "Fecha inicio: "+ self.fecha_inicio + ", " + "Fecha fin: "+self.fecha_fin)
 
-# Hacer 3 metodos get_alquileres, get_alquileres_habitaciones, get_alquileres_paquetes
-# metodo para crear Factura -> Alquileres carrito.facturar()

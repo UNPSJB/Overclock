@@ -157,6 +157,7 @@ def vista_carrito(request):
     vendedorInstancia = get_object_or_404(Vendedor, persona = personaInstancia.id)
     contador=carrito.get_cantidad()
     total=float(str(coleccion_ventas['total']).strip("['|{|}]"))
+    print(carrito.get_vendedor().persona.nombre)
     return render(request,"venta/carrito.html",{"vendedor":vendedorInstancia, "contador":contador, "coleccion_ventas":coleccion_ventas,"total":total})
 
 
