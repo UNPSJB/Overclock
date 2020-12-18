@@ -59,7 +59,15 @@
         <td>{{alquiler.fin}}</td>
         <td>{{alquiler.total}}</td>
       </tr>
-
+      {% for habitacion in alquiler.habitaciones.all %}
+      <tr>
+        <td></td>
+        <td>{{habitacion.tipo.nombre}} {{habitacion.numero}}</td>
+        <td>{{alquiler.inicio}}</td>
+        <td>{{alquiler.fin}}</td>
+        <td></td>
+      </tr>
+      {% endfor %}
       {% else %} 
 
       <tr>
@@ -69,6 +77,16 @@
         <td>{{alquiler.fin}}</td>
         <td>{{alquiler.total}}</td>
       </tr>
+
+      {% for habitacion in alquiler.paquete.get_habitaciones %}
+      <tr>
+        <td></td>
+        <td>{{habitacion.tipo.nombre}} {{habitacion.numero}}</td>
+        <td>{{alquiler.inicio}}</td>
+        <td>{{alquiler.fin}}</td>
+        <td></td>
+      </tr>
+      {% endfor %}
 
       {% endif %}
       
