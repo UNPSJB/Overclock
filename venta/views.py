@@ -1,4 +1,4 @@
-from venta.models import Factura
+from venta.models import Factura, Tipo_pago
 from venta.forms import ClienteForm
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from hotel.models import Hotel, PaqueteTuristico
@@ -207,9 +207,34 @@ def facturar_carrito(request):
 
     coleccion_ventas = carrito.mostrar_carrito()
     total_carrito=float(str(coleccion_ventas['total']).strip("['|{|}]"))
-    print(total_carrito)
-    print(factura.alquileres)
-    return render(request,"venta/facturar_carrito.html",{"factura":factura})
+
+    alcanzanPuntos= factura.cliente.puntos>= int(factura.total())+1
+    
+
+
+
+    return render(request,"venta/facturar_carrito.html",{"factura":factura, "alcanzanPuntos": alcanzanPuntos })
+
+def pagar_factura(request, factura):
+    seleccionTipoPago=request.POST.get('opcionTipoPago')
+    facturita= get_object_or_404(Factura, pk=factura)
+
+    if seleccionTipoPago=="Puntos":
+        
+        facturita.cliente.quitar_puntos(facturita)
+        
+    else:
+        if seleccionTipoPago=="Efectivo":
+            print("puntos antes: ", facturita.cliente.puntos)
+            facturita.cliente.agregar_puntos(facturita)
+            print("puntos despues: ", facturita.cliente.puntos)
+        
+    tipoPago= get_object_or_404(Tipo_pago, nombre=seleccionTipoPago)
+    facturita.tipo_pago=tipoPago
+    facturita.save()
+
+    
+    return redirect("venta:vendedor")
 
 
 

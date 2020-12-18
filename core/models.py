@@ -238,13 +238,13 @@ class Cliente(Rol):
         self.bajaCliente = False
         self.save()
 
-    def agregar_puntos(factura):
-        puntosFactura= int(factura.total()*0.2)
+    def agregar_puntos(self, factura):
+        puntosFactura= int(factura.total()/5)
         self.puntos+=puntosFactura
         self.save()
 
-    def quitar_puntos(factura):
-        puntosFactura= int(factura.total()*0.2)
+    def quitar_puntos(self, factura):
+        puntosFactura= int(factura.total())
         self.puntos-=puntosFactura
         self.save()
 

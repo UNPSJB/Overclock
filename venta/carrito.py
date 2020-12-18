@@ -7,6 +7,7 @@ from datetime import datetime
 class Carrito:
     vendedor=0
     cliente=None
+    
     def __init__(self,request):
         self.request=request
         self.session=request.session
