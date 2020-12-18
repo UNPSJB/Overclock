@@ -64,7 +64,8 @@ class Factura(models.Model):
         alquiler.habitaciones.add(habitacion)
         descuento = hotel.obtener_descuento(alquiler.habitaciones.all())
         alquiler.total = sum([h.precio_alquiler(desde, hasta) for h in alquiler.habitaciones.all()])
-        alquiler.total -= alquiler.total * descuento.coeficiente
+        if descuento is not None:
+            alquiler.total -= alquiler.total * descuento.coeficiente
         alquiler.save()
         return alquiler
 
@@ -72,6 +73,7 @@ class Factura(models.Model):
         for habitacion in (paquete.habitaciones.all()):
             alquiler = self.alquilar_habitacion(habitacion, habitacion.tipo.pasajeros, paquete.inicio, paquete.fin, paquete=paquete) 
         alquiler.total -= alquiler.total * paquete.coeficiente
+        alquiler.paquete=paquete
         alquiler.save()
         paquete.marcar_venta()
         paquete.save()
@@ -95,3 +97,13 @@ class Alquiler(models.Model):
     fin = models.DateField()
     total = models.DecimalField(max_digits=20, decimal_places=2, default=Decimal(0))
     #PaqueteTuristico.objects.filter(alquiler__isnull=True) para obtener paquetes no vendidos!
+
+    def get_hotel(self):
+        print("HOTEL DE M:", self.habitaciones.all().first().hotel)
+        return self.habitaciones.all().first().hotel
+
+    def get_habitaciones(self):
+        return self.habitaciones.all()
+
+    def get_cantidad_habitaciones(self):
+        return self.habitaciones.all().count()    

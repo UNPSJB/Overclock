@@ -257,6 +257,6 @@ class PaqueteTuristico(models.Model):
         return capacidad
 
     def get_habitaciones(self):
-        return self.habitaciones
+        return self.habitaciones.all()
         
         
