@@ -33,7 +33,7 @@ class Liquidacion(models.Model):
 class Tipo_pago(models.Model):
     nombre= models.CharField(max_length=200, unique=True)
      
-    def pagar_factura(factura):
+    def pagar_factura(self,factura):
         #puntosNecesarios=int(factura.total()*0,2)
         #if factura.cliente.puntos>=puntosNecesarios:
         self.monto=factura.total()
