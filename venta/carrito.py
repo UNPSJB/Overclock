@@ -190,6 +190,13 @@ class Carrito:
         else:
             return None
 
+#habitacion, huespedes, desde, hasta
+    def get_paquetes_para_alquilar(self):
+        coleccion_paquetes=self.get_alquileres_paquetes()
+        coleccion_a_facturar=[]
+        for paquete in coleccion_paquetes:
+            coleccion_a_facturar.append(get_object_or_404(PaqueteTuristico,pk=paquete.paquete))
+        return coleccion_a_facturar
 
 class Carrito_venta:
     fecha_inicio = 0

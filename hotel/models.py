@@ -246,6 +246,9 @@ class PaqueteTuristico(models.Model):
     def marcar_venta(self):
         self.vendido=True
     
+    def cancelar_venta(self):
+        self.vendido=False
+
     def get_pasajeros(self):
         capacidad = 0
         habitaciones = Habitacion.objects.filter(paqueteturistico = self)

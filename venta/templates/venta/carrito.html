@@ -78,7 +78,7 @@
             icon: 'error',
             title: 'No se puede facturar sin seleccionar un Cliente',
             text: 'Ingrese a menu cliente y seleccione uno...',
-        });" {% else %} onClick="console.log('A FACTURARRRRRR!!!!')" {% endif %}>FACTURAR</button> </div>
+        });" {% else %} onClick="location.href='{% url 'venta:facturarCarrito' %}'" {% endif %}>FACTURAR</button> </div>
     </div>
     
 

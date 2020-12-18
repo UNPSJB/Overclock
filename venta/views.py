@@ -1,3 +1,4 @@
+from venta.models import Factura
 from venta.forms import ClienteForm
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
 from hotel.models import Hotel, PaqueteTuristico
@@ -190,4 +191,24 @@ def seleccionar_cliente(request, cliente):
     carrito=Carrito(request)
     carrito.set_cliente(cliente)
     return redirect("venta:vendedor")
+
+def facturar_carrito(request):
+    carrito=Carrito(request)
+    personaInstancia = request.user.persona
+    vendedorInstancia = get_object_or_404(Vendedor, persona = personaInstancia.id)
+    cliente=carrito.get_cliente()
+    factura=Factura()
+    factura.set_magico(vendedorInstancia,cliente)
+    factura.save()
+    coleccion_alquileres_habitaciones=(carrito.get_alquileres_habitaciones())
+    factura.alquilar_habitaciones(coleccion_alquileres_habitaciones)
+    for paquete in carrito.get_paquetes_para_alquilar():
+        factura.alquilar_paquete(paquete)
+
+    coleccion_ventas = carrito.mostrar_carrito()
+    total_carrito=float(str(coleccion_ventas['total']).strip("['|{|}]"))
+    print(total_carrito)
+    print(factura.alquileres)
+    return redirect('venta:vistaCarrito')
+
 

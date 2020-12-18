@@ -1,6 +1,9 @@
+from datetime import datetime
 from django.conf import settings
 from django.db import models
 from decimal import Decimal
+
+from django.shortcuts import get_object_or_404
 from core.models import Vendedor, Cliente
 from hotel.models import Habitacion, PaqueteTuristico
 from .exceptions import MaxPasajerosException
@@ -35,10 +38,17 @@ class Factura(models.Model):
     # Tipo, Monto
     fecha = models.DateField(auto_now_add=True)
 
+    def set_magico(self,vendedor,cliente):
+        self.cliente=cliente
+        self.vendedor=vendedor
+
     def alquilar_habitaciones(self, habitaciones_con_fecha):
         alquileres = []
-        for (habitacion, huespedes, desde, hasta) in habitaciones_con_fecha:
-            alquiler = self.alquilar_habitacion(habitacion, huespedes, desde, hasta)
+        for alquiler_habitacion in habitaciones_con_fecha:
+            habitacion=get_object_or_404(Habitacion, pk=alquiler_habitacion.habitacion)
+            fecha_inicio_venta=datetime.strptime(alquiler_habitacion.fecha_inicio, '%Y-%m-%d').date()
+            fecha_fin_venta=datetime.strptime(alquiler_habitacion.fecha_fin, '%Y-%m-%d').date()
+            alquiler = self.alquilar_habitacion(habitacion, int(alquiler_habitacion.pasajeros), fecha_inicio_venta,fecha_fin_venta)
             if alquiler not in alquileres:
                 alquileres.append(alquiler)
         return alquileres 
@@ -56,18 +66,21 @@ class Factura(models.Model):
         alquiler.total = sum([h.precio_alquiler(desde, hasta) for h in alquiler.habitaciones.all()])
         alquiler.total -= alquiler.total * descuento.coeficiente
         alquiler.save()
-        #TODO: Aplicar descuento
         return alquiler
 
-    def alquilar_paquete(self, paquete, huespedes):
-        for index, habitacion in enumerate(paquete.habitaciones.all()):
-            alquiler = self.alquilar_habitacion(habitacion, huespedes[index], paquete.inicio, paquete.fin, paquete=paquete) 
+    def alquilar_paquete(self, paquete):
+        for habitacion in (paquete.habitaciones.all()):
+            alquiler = self.alquilar_habitacion(habitacion, habitacion.tipo.pasajeros, paquete.inicio, paquete.fin, paquete=paquete) 
         alquiler.total -= alquiler.total * paquete.coeficiente
         alquiler.save()
+        paquete.marcar_venta()
+        paquete.save()
         return alquiler
     
     def total(self):
         return sum([a.total for a in self.alquileres.all()])
+
+    
 
 # Alquiler
 class Alquiler(models.Model):
