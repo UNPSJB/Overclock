@@ -209,10 +209,6 @@ def facturar_carrito(request):
     total_carrito=float(str(coleccion_ventas['total']).strip("['|{|}]"))
 
     alcanzanPuntos= factura.cliente.puntos>= int(factura.total())+1
-    
-
-
-
     return render(request,"venta/facturar_carrito.html",{"factura":factura, "alcanzanPuntos": alcanzanPuntos })
 
 def pagar_factura(request, factura):
@@ -232,10 +228,20 @@ def pagar_factura(request, factura):
     tipoPago= get_object_or_404(Tipo_pago, nombre=seleccionTipoPago)
     facturita.tipo_pago=tipoPago
     facturita.save()
-
-    
     return redirect("venta:vendedor")
 
+
+def cancelar_venta(request,factura):
+    print("CANCELANDO VENTAAAAAAAAAA!!!!!")
+    facturita= get_object_or_404(Factura, pk=factura)
+    print(facturita.tipo_pago)
+    for alquiler in facturita.get_alquileres():
+        if alquiler.paquete is not None:
+            print(alquiler.paquete.nombre)
+            alquiler.paquete.cancelar_venta()
+    facturita.delete()
+    print(facturita.pk)
+    return redirect("venta:vendedor")
 
 
 

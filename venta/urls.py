@@ -40,5 +40,5 @@ urlpatterns = [
     path('seleccionarCliente/<cliente>' , vviews.seleccionar_cliente, name="seleccionarCliente"),
     path('facturarCarrito/' , vviews.facturar_carrito, name="facturarCarrito"),
     path('pagarFactura/<factura>' , vviews.pagar_factura, name="pagarFactura"),
-
+    path('cancelarFactura/<factura>' , vviews.cancelar_venta, name="cancelarFactura")
 ]

@@ -245,9 +245,11 @@ class PaqueteTuristico(models.Model):
             
     def marcar_venta(self):
         self.vendido=True
+        self.save()
     
     def cancelar_venta(self):
         self.vendido=False
+        self.save()
 
     def get_pasajeros(self):
         capacidad = 0
