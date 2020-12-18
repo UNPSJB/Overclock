@@ -103,6 +103,7 @@ def tipoHabitacionCrear(request,hotel):
                 tipoHabitacionRecibido=formulario.save(commit=False)
                 tipoHabitacionRecibido.hotel= hotelInstancia
                 tipoHabitacionRecibido.save()
+                hotelInstancia
                 return redirect('hotel:tipoHabitacionHotel', hotel)
     return render(request, "hotel/modals/modal_tipoHabitacionHotel_crear.html",{"hotel": hotelInstancia,"formulario":formulario})
 
