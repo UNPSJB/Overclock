@@ -80,16 +80,18 @@ def hotelModificar(request, hotel):
 
 
 def detalleHotel(request,hotel):
+    personaInstancia = request.user.persona
     hotelInstancia =get_object_or_404(Hotel, pk=hotel)  
-    return render(request, "hotel/vistaHotelAdmin.html",{"hotel":hotelInstancia })
+    return render(request, "hotel/vistaHotelAdmin.html",{"hotel":hotelInstancia,"administrador":personaInstancia})
 
 
 #-------------------------- INICIO: TIPO DE HABITACION ----------------------------------------
 
 def vistaTipoHabitacionHotel(request,hotel):
+    personaInstancia = request.user.persona
     hotelInstancia =get_object_or_404(Hotel, pk=hotel)
     tarifas_hotel=hotelInstancia.tarifario.all()
-    return render(request, "hotel/tipoHabitacion_Hotel_Admin.html",{"hotel":hotelInstancia, "tarifas":tarifas_hotel })
+    return render(request, "hotel/tipoHabitacion_Hotel_Admin.html",{"hotel":hotelInstancia, "tarifas":tarifas_hotel,"administrador":personaInstancia })
 
 def tipoHabitacionCrear(request,hotel):
     formulario=AgregarTipoAHotelForm(request.POST)
@@ -185,8 +187,9 @@ def habitacionReciclar(request,hotel,habitacion):
 #-------------------------- INICIO: GESTION TEMPORADAS ----------------------------------------
 
 def temporadaHotel(request,hotel):
+    personaInstancia = request.user.persona
     hotelInstancia =get_object_or_404(Hotel, pk=hotel)    
-    return render(request, "hotel/temporada_Hotel_Admin.html",{"hotel":hotelInstancia })
+    return render(request, "hotel/temporada_Hotel_Admin.html",{"hotel":hotelInstancia,"administrador":personaInstancia })
 
 
 def temporadaHotelCrear(request, hotel):
@@ -231,8 +234,9 @@ def temporadaModificar(request,hotel,temporada):
 #-------------------------- INICIO: GESTION PAQUETES TURISTICOS ----------------------------------------
 
 def paqueteTuristicoHotel(request,hotel):
+    personaInstancia = request.user.persona
     hotelInstancia =get_object_or_404(Hotel, pk=hotel)    
-    return render(request, "hotel/vistaHotelAdmin.html",{"hotel":hotelInstancia })
+    return render(request, "hotel/vistaHotelAdmin.html",{"hotel":hotelInstancia,"administrador":personaInstancia })
     
 def paqueteTuristicoHotelCrear(request, hotel):
     form = PaqueteTuristicoForm(request.POST)
@@ -291,11 +295,12 @@ def paqueteTuristicoHotelEliminar(request,hotel,paquete):
 #-------------------------- INICIO: GESTION PAQUETES TURISTICOS ----------------------------------------
 
 def serviciosHotel(request,hotel):
+    personaInstancia = request.user.persona
     hotelInstancia =get_object_or_404(Hotel, pk=hotel)
     categoria=hotelInstancia.get_categoria()
     #print(categoria.nombre)
    
-    return render(request, "hotel/servicios_Hotel_Admin.html",{"hotel":hotelInstancia,"categoria":categoria})
+    return render(request, "hotel/servicios_Hotel_Admin.html",{"hotel":hotelInstancia,"categoria":categoria,"administrador":personaInstancia})
 
 def aniadirServicioHotel(request,hotel):
     hotelInstancia =get_object_or_404(Hotel, pk=hotel)
@@ -321,10 +326,11 @@ def aniadirServicioHotel(request,hotel):
 
 #-------------------------- INICIO: GESTION VENDEDORES HOTEL ----------------------------------------
 def vendedoresHotel(request,hotel):
+    personaInstancia = request.user.persona
     hotelInstancia =get_object_or_404(Hotel, pk=hotel)
     colVendedores = hotelInstancia.get_vendedores()
    
-    return render(request, "hotel/vendedores_Hotel_Admin.html",{"hotel":hotelInstancia,"colVendedores":colVendedores})
+    return render(request, "hotel/vendedores_Hotel_Admin.html",{"hotel":hotelInstancia,"colVendedores":colVendedores,"administrador":personaInstancia})
 
 def aniadirVendedorHotel(request, hotel):
     hotelInstancia =get_object_or_404(Hotel, pk=hotel)

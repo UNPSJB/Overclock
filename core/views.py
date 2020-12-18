@@ -68,10 +68,11 @@ def correctaVendedor(request):
 
 
 def regionAdmin(request):
+    personaInstancia = request.user.persona
     paises = Pais.objects.all()
     provincias = Provincia.objects.all()
     localidades = Localidad.objects.all()
-    return render(request, "core/regionAdmin.html", {"paises": paises, "localidades": localidades, "provincias": provincias})
+    return render(request, "core/regionAdmin.html", {"paises": paises, "localidades": localidades, "provincias": provincias,"administrador":personaInstancia})
 
 
 def logout(request):
@@ -184,8 +185,9 @@ def paisModificar(request, pais):
 
 
 def tipoHabitacion(request):
+    personaInstancia = request.user.persona
     tiposHabitaciones = TipoHabitacion.objects.all()
-    return render(request, "core/tipoHabitacionAdmin.html", {"tiposHabitaciones": tiposHabitaciones})
+    return render(request, "core/tipoHabitacionAdmin.html", {"tiposHabitaciones": tiposHabitaciones,"administrador":personaInstancia})
 
 
 # dasdasd
@@ -216,8 +218,9 @@ def tipoHabitacionModificar(request, tipoHabitacion):
 
 
 def servicio(request):
+    personaInstancia = request.user.persona
     colServicios = Servicio.objects.all()
-    return render(request, "core/servicioAdmin.html", {"colServicios": colServicios})
+    return render(request, "core/servicioAdmin.html", {"colServicios": colServicios,"administrador":personaInstancia})
 
 
 def servicioCrear(request):
@@ -252,8 +255,9 @@ def serviciosModificar(request, servicio):
 
 
 def categoria(request):
+    personaInstancia = request.user.persona
     colCategorias = Categoria.objects.all()
-    return render(request, "core/categoriaAdmin.html", {"colCategorias": colCategorias})
+    return render(request, "core/categoriaAdmin.html", {"colCategorias": colCategorias,"administrador":personaInstancia})
 
 
 def categoriaCrear(request):
@@ -299,9 +303,10 @@ def categoriaModificar(request, categoria):
 
 
 def vendedor(request):
+    personaInstancia = request.user.persona
     colVendedores = Vendedor.objects.all()
     colEncargados = Encargado.objects.all()
-    return render(request, "core/vendedor.html", {"colVendedores": colVendedores, "colEncargados": colEncargados})
+    return render(request, "core/vendedor.html", {"colVendedores": colVendedores, "colEncargados": colEncargados,"administrador":personaInstancia})
 
 
 def vendedorCrear(request):
@@ -439,8 +444,9 @@ def encargadoReciclar(request, encargado):
 
 
 def cliente(request):
+    personaInstancia = request.user.persona
     colClientes = Cliente.objects.all()
-    return render(request, "core/clienteAdmin.html", {"colClientes": colClientes})
+    return render(request, "core/clienteAdmin.html", {"colClientes": colClientes,"administrador":personaInstancia})
 
 
 def clienteEliminar(request, cliente):

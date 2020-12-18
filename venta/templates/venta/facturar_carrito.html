@@ -1,7 +1,11 @@
 {% extends 'base/vendedor.html'%} {% load static %} {% load hotel %} 
 {% block header %}
 <button
-  onclick="location.href='/venta/vendedor'"
+  onclick="Swal.fire({
+    icon: 'error',
+    title: 'Unicas opciones en Facturacion son Pagar y Cancelar',
+    text: 'Seleccione una opcion valida',
+});"
   style="text-decoration: none"
   class="rounded-1 btn btn-sm btn-outline-secondary text-white ml-4 mt-1"
 >
@@ -54,7 +58,7 @@
       {% if alquiler.paquete is  None %}
       <tr>
         <td>{{alquiler.get_hotel}}</td>
-        <td>{{alquiler.get_cantidad_habitaciones}} HABITACIONES</td>
+        <td>{{alquiler.get_cantidad_habitaciones}} {%if alquiler.get_cantidad_habitaciones is not 1 %}HABITACIONES {%else%} HABITACION {% endif %} </td>
         <td>{{alquiler.inicio}}</td>
         <td>{{alquiler.fin}}</td>
         <td>{{alquiler.total}}</td>
@@ -72,7 +76,7 @@
 
       <tr>
         <td>{{alquiler.get_hotel}}</td>
-        <td>PAQUETE: {{alquiler.paquete.nombre}}  {{alquiler.get_cantidad_habitaciones}} HABITACIONES</td>
+        <td>PAQUETE: {{alquiler.paquete.nombre}}  {{alquiler.get_cantidad_habitaciones}} {%if alquiler.get_cantidad_habitaciones is not 1 %}HABITACIONES {%else%} HABITACION {% endif %}</td>
         <td>{{alquiler.inicio}}</td>
         <td>{{alquiler.fin}}</td>
         <td>{{alquiler.total}}</td>
