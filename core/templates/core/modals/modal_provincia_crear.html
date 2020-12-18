@@ -8,7 +8,7 @@
                 <span>&times;</span>
             </button>
         </div>
-        <form method="POST">
+        <form action="{% url 'core:modalCrearProvincia' %}"method="POST">
             <div class="modal-body">
 
                 {% csrf_token %}

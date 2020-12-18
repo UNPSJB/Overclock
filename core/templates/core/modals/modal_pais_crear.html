@@ -25,15 +25,3 @@
         </form>
     </div>
 </div>
-
-<script>
-    $(function () {
-        var token = jQuery("[name=csrfmiddlewaretoken]").val();
-        $("form").submit(function (e) {
-            e.preventDefault();
-            var datosFormulario = $('form').serializeArray();
-            if(datosFormulario[1].value=='Juan')
-                alert('');
-        });
-    });
-</script>
