@@ -38,7 +38,7 @@ class Factura(models.Model):
     # Tipo, Monto
     fecha = models.DateField(auto_now_add=True)
 
-    def set_magico(self,vendedor,cliente):
+    def set_atributos(self,vendedor,cliente):
         self.cliente=cliente
         self.vendedor=vendedor
 
@@ -80,7 +80,9 @@ class Factura(models.Model):
     def total(self):
         return sum([a.total for a in self.alquileres.all()])
 
-    
+    def get_alquileres(self):
+        return Alquiler.objects.filter(factura=self)
+        
 
 # Alquiler
 class Alquiler(models.Model):

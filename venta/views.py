@@ -198,7 +198,7 @@ def facturar_carrito(request):
     vendedorInstancia = get_object_or_404(Vendedor, persona = personaInstancia.id)
     cliente=carrito.get_cliente()
     factura=Factura()
-    factura.set_magico(vendedorInstancia,cliente)
+    factura.set_atributos(vendedorInstancia,cliente)
     factura.save()
     coleccion_alquileres_habitaciones=(carrito.get_alquileres_habitaciones())
     factura.alquilar_habitaciones(coleccion_alquileres_habitaciones)
@@ -209,6 +209,6 @@ def facturar_carrito(request):
     total_carrito=float(str(coleccion_ventas['total']).strip("['|{|}]"))
     print(total_carrito)
     print(factura.alquileres)
-    return redirect('venta:vistaCarrito')
+    return render(request,"venta/facturar_carrito.html",{"factura":factura})
 
 
