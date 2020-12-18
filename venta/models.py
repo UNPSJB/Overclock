@@ -30,12 +30,24 @@ class Liquidacion(models.Model):
             f.save()
         return liquidacion
 
+class Tipo_pago(models.Model):
+    nombre= models.CharField(max_length=200, unique=True)
+     
+    def pagar_factura(factura):
+        #puntosNecesarios=int(factura.total()*0,2)
+        #if factura.cliente.puntos>=puntosNecesarios:
+        self.monto=factura.total()
+        factura.tipo_pago=self
+        #factura.cliente.quitar_puntos(factura)
+        factura.save()
+        #factura.cliente.agregar_puntos(factura)
+
+
 class Factura(models.Model):
     cliente = models.ForeignKey(Cliente, on_delete=models.CASCADE)
     vendedor = models.ForeignKey(Vendedor, on_delete=models.CASCADE)
     liquidacion = models.ForeignKey(Liquidacion, null=True, blank=True, on_delete=models.SET_NULL)
-    # medio_de_pago
-    # Tipo, Monto
+    tipo_pago=models.ForeignKey(Tipo_pago, null=True, blank=True, on_delete=models.SET_NULL)
     fecha = models.DateField(auto_now_add=True)
 
     def set_atributos(self,vendedor,cliente):
@@ -107,3 +119,12 @@ class Alquiler(models.Model):
 
     def get_cantidad_habitaciones(self):
         return self.habitaciones.all().count()    
+
+
+
+
+        
+        
+
+
+

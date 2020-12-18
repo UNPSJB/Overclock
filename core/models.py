@@ -227,7 +227,7 @@ class Vendedor(Rol):
 class Cliente(Rol):
     TIPO = 3
     bajaCliente = models.BooleanField(default=False) #Baja Logica 
-    # Puntos
+    
     puntos = models.PositiveIntegerField(default=0)
 
     def set_baja(self):
@@ -236,6 +236,16 @@ class Cliente(Rol):
 
     def dar_alta(self):
         self.bajaCliente = False
+        self.save()
+
+    def agregar_puntos(factura):
+        puntosFactura= int(factura.total()*0.2)
+        self.puntos+=puntosFactura
+        self.save()
+
+    def quitar_puntos(factura):
+        puntosFactura= int(factura.total()*0.2)
+        self.puntos-=puntosFactura
         self.save()
 
 for Klass in [Encargado, Vendedor, Cliente]:

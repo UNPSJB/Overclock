@@ -212,3 +212,5 @@ def facturar_carrito(request):
     return render(request,"venta/facturar_carrito.html",{"factura":factura})
 
 
+
+

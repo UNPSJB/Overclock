@@ -95,6 +95,7 @@
       {% endfor %}
     </tbody>
   </table>
+
   <div class="row mt-2">
     <div class="col-10 ml-4" style="background-color: rgb(185, 182, 182)">
       <h3>TOTAL: ${{factura.total}}</h3>
@@ -102,15 +103,9 @@
     <div class="col-1">
       <button
         class="btn btn-success"
-        {%  if    cliente     is    None     %}
-        onclick="Swal.fire({
-            icon: 'error',
-            title: 'No se puede facturar sin seleccionar un Cliente',
-            text: 'Ingrese a menu cliente y seleccione uno...',
-        });"
-        {%       else       %}
+        
         onClick="location.href='{% url 'venta:facturarCarrito' %}'"
-        {%       endif  %}
+        
       >
         PAGAR
       </button>
