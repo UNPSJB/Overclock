@@ -19,18 +19,18 @@
 
 
 
-    <input id="ciudad" name="state-d" radio type="radio" checked="" value="ciudad" />
-    <label for="ciudad" onclick="">
+    <input id="ciudad" name="state-d" radio type="radio"  value="ciudad" />
+    <label for="ciudad" onclick='seleccionarEstado("ciudad")'>
         <h1>Localidades</h1>
     </label>
 
-    <input id="provincia" name="state-d" type="radio" checked="" value="provincia" />
-    <label for="provincia" onclick="">
+    <input id="provincia" name="state-d" type="radio"  value="provincia" />
+    <label for="provincia" onclick='seleccionarEstado("provincia")'>
         <h1>Provincias</h1>
     </label>
 
-    <input id="pais" name="state-d" type="radio" checked="" value="pais" />
-    <label for="pais" onclick="">
+    <input id="pais" name="state-d" type="radio"  value="pais" />
+    <label for="pais" onclick='seleccionarEstado("pais")'>
         <h1>Paises</h1>
     </label>
 
@@ -292,32 +292,38 @@
 
 
 <script>
-    $("#vistaPais").show();
-    $("#vistaLocalidades").hide();
-    $("#vistaProvincia").hide();
-    $(function () {
-        $('input').click(function () {
-            var state = $(this).val();
-            console.log(state)
-            switch (state) {
-                case "provincia":
-                    $("#vistaPais").hide();
-                    $("#vistaLocalidades").hide();
-                    $("#vistaProvincia").show();
-                    break;
-                case "pais":
-                    $("#vistaPais").show();
-                    $("#vistaLocalidades").hide();
-                    $("#vistaProvincia").hide();
-                    break;
-                case "ciudad":
-                    $("#vistaPais").hide();
-                    $("#vistaLocalidades").show();
-                    $("#vistaProvincia").hide();
-                    break;
-            }
-        });
-    });
+    let state = sessionStorage.getItem("region") || "ciudad";
+    document.getElementById(state).setAttribute("checked" , "")
+    mostrarListado(state)
+    console.log(state)
+    
+    function seleccionarEstado(estado){
+        sessionStorage.setItem("region" , estado)
+        document.getElementById(estado).setAttribute("checked" , "")
+        mostrarListado(estado)
+    }
+
+
+    function mostrarListado(state){
+        switch (state) {
+            case "provincia":
+                document.getElementById("vistaPais").style.display = "none";
+                document.getElementById("vistaLocalidades").style.display = "none";
+                document.getElementById("vistaProvincia").style.display = "block";
+                break;
+            case "pais":
+                document.getElementById("vistaPais").style.display = "block";
+                document.getElementById("vistaLocalidades").style.display = "none";
+                document.getElementById("vistaProvincia").style.display = "none";
+                break;
+            case "ciudad":
+                document.getElementById("vistaPais").style.display = "none";
+                document.getElementById("vistaLocalidades").style.display = "block";
+                document.getElementById("vistaProvincia").style.display = "none";
+                break;
+        }
+    }
+
 </script>
 
 

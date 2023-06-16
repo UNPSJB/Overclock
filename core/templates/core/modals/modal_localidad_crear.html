@@ -8,7 +8,7 @@
                 <span>&times;</span>
             </button>
         </div>
-        <form action="{% url 'core:modalCrearLocalidad' %}"method="POST">
+        <form action="{% url 'core:modalCrearLocalidad' %}" id="crear-localidad" method="POST">
             <div class="modal-body">
 
                 {% csrf_token %}
@@ -22,3 +22,4 @@
         </form>
     </div>
 </div>
+
