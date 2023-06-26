@@ -49,6 +49,11 @@
     margin: 0px 3vh 0px 3vh;
 }
 
+.posicion-checkbox{
+    left: 40px;
+    padding-left: 35px;
+}
+
 .modal-dialog-scrollable .modal-body {
     overflow-y: auto;
 }

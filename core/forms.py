@@ -89,7 +89,7 @@ class CategoriaForm(ModelForm):
         super(CategoriaForm, self).__init__(*args, **kwargs)
         self.fields['nombre'].widget.attrs.update({'class': 'form-control'})   
         self.fields['estrellas'].widget.attrs.update({'class': 'form-control'})
-        self.fields['servicios'].widget.attrs.update({'class': 'form-check-input form-check-label laSeleccionBox'})
+        self.fields['servicios'].widget.attrs.update({'class': 'form-check-input form-check-label posicion-checkbox'})
         self.fields['servicios'].choices=[(c.pk,c.nombre) for c in Servicio.objects.all()]
 
     servicios = MultipleChoiceField(
