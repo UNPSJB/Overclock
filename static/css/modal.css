@@ -49,10 +49,6 @@
     margin: 0px 3vh 0px 3vh;
 }
 
-.errorList li {
-    display: none;
-}
-
 .modal-dialog-scrollable .modal-body {
     overflow-y: auto;
 }
