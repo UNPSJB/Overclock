@@ -124,9 +124,20 @@ def paisCrear(request):
         else:
             formPais = PaisForm(data=request.POST)
             erroresDelFormulario = formPais.errors
+            print(erroresDelFormulario)
             return render(request, "core/modals/modal_pais_crear.html", {"paises": paises, "formulario": formPais, "errores": erroresDelFormulario})
     return render(request, "core/modals/modal_pais_crear.html", {"paises": paises, "formulario": formPais})
 
+# def paisCrear(request):
+#     if request.method == "POST":
+#         pais_nombre = request.POST.get("nombre")
+#         if not Pais.objects.filter(nombre=pais_nombre).exists():
+#             Pais.objects.create(nombre=pais_nombre)
+#         return redirect('core:opcionRegion')
+#     else:
+#         formPais = PaisForm()
+
+#     return render(request, "core/modals/modal_pais_crear.html", {"formulario": formPais})
 
 # se recibe la el objeto ciudad que corresponde a la linea donde se encontraba el boton modificar
 def localidadModificar(request, ciudad):
