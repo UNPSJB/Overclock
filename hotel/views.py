@@ -99,12 +99,17 @@ def tipoHabitacionCrear(request,hotel):
     if request.method == "POST":
             formulario=AgregarTipoAHotelForm(request.POST)
             if formulario.is_valid():
-                formulario=AgregarTipoAHotelForm(request.POST)
-                tipoHabitacionRecibido=formulario.save(commit=False)
-                tipoHabitacionRecibido.hotel= hotelInstancia
-                tipoHabitacionRecibido.save()
-                hotelInstancia
-                return redirect('hotel:tipoHabitacionHotel', hotel)
+                precioBaja = request.POST["baja"]
+                precioAlta = request.POST["alta"]
+                if((float(precioBaja) >= 0) and (float(precioAlta)>=0)):
+                    formulario=AgregarTipoAHotelForm(request.POST)
+                    tipoHabitacionRecibido=formulario.save(commit=False)
+                    tipoHabitacionRecibido.hotel= hotelInstancia
+                    tipoHabitacionRecibido.save()
+                    hotelInstancia
+                    return redirect('hotel:tipoHabitacionHotel', hotel)
+                else:
+                    print("sdfkhskdf")
     return render(request, "hotel/modals/modal_tipoHabitacionHotel_crear.html",{"hotel": hotelInstancia,"formulario":formulario})
 
 
