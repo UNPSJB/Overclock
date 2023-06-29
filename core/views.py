@@ -79,23 +79,7 @@ def logout(request):
     if request.user.is_authenticated:
         do_logout(request)
     return redirect(home)
-
-
-
-def localidadExiste(nombre , provincia):
-    print(nombre)
-    print(provincia)
-    existe = False
-    localidades = Localidad.objects.all()
-    for x in localidades:
-        if x.nombre == nombre:
-            print("encontrado")
-            valor = x.provincia.pk
-            print(valor)
-            if str(valor) == provincia:
-                print("entreee")
-                existe = True  
-    return existe        
+     
 
 def localidadCrear(request):
     # tomo todas las localidades (la idea aca es usarlas para controlar entradas)
@@ -104,13 +88,15 @@ def localidadCrear(request):
     formLocalidad = LocalidadForm(request.POST)
     if request.method == "POST":  # si se usa el envio ....
         if formLocalidad.is_valid():  # si es valido el formulario ...
-            nombreEleccion = request.POST["nombre"] 
-            provinciaEleccion =  request.POST["provincia"]
-            if not localidadExiste(nombreEleccion,provinciaEleccion):
-                formLocalidad.save()  # se graba!
-                return redirect('core:opcionRegion')  # se redirige hacia region
+            formLocalidad.save()  # se graba!
+            return redirect('core:opcionRegion')  # se redirige hacia region
+        else:
+            formLocalidad = LocalidadForm(data=request.POST)
+            erroresDelFormulario = formLocalidad.errors
+            return render(request,  "core/modals/modal_localidad_crear.html", {"localidades": localidades, "formulario": formLocalidad , "errores": erroresDelFormulario})
     # si el metodo es GET se renderiza el modal con un formulario vacio
     return render(request, "core/modals/modal_localidad_crear.html", {"localidades": localidades, "formulario": formLocalidad})
+
 
 def provinciaCrear(request):
     provincias = Provincia.objects.all()

@@ -39,6 +39,9 @@ class Localidad(models.Model):
 
     def __str__(self):
         return self.nombre
+    
+    class Meta:
+        unique_together = (('nombre', 'provincia'), )
 
 # Servicios, Categorias
 class Servicio(models.Model):
