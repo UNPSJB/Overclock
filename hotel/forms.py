@@ -72,8 +72,21 @@ class AgregarTipoAHotelForm(ModelForm):
     def __init__(self, *args, **kwargs):
         super(AgregarTipoAHotelForm, self).__init__(*args, **kwargs)
         self.fields['tipo'].widget.attrs.update({'class': 'form-control'})
-        self.fields['baja'].widget.attrs.update({'class': 'form-control'})
-        self.fields['alta'].widget.attrs.update({'class': 'form-control'})
+        self.fields['baja'].widget.attrs.update({'class': 'form-control' ,'min': '0' ,'required': 'required'})
+        self.fields['alta'].widget.attrs.update({'class': 'form-control' ,'min': '0' ,'required': 'required'})
+
+    def clean(self):
+            cleaned_data = super(AgregarTipoAHotelForm, self).clean()
+            baja = cleaned_data.get('baja')
+            alta = cleaned_data.get('alta')
+
+            if baja is not None and baja < 0:
+                self.add_error('baja', 'El valor debe ser igual o mayor que 0.')
+
+            if alta is not None and alta < 0:
+                self.add_error('alta', 'El valor debe ser igual o mayor que 0.')
+
+            return cleaned_data
 
 class HabitacionForm(ModelForm):
     class Meta:

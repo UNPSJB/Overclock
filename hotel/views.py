@@ -93,24 +93,40 @@ def vistaTipoHabitacionHotel(request,hotel):
     tarifas_hotel=hotelInstancia.tarifario.all()
     return render(request, "hotel/tipoHabitacion_Hotel_Admin.html",{"hotel":hotelInstancia, "tarifas":tarifas_hotel,"administrador":personaInstancia })
 
-def tipoHabitacionCrear(request,hotel):
-    formulario=AgregarTipoAHotelForm(request.POST)
-    hotelInstancia =get_object_or_404(Hotel, pk=hotel)
+
+
+
+def tipoHabitacionCrear(request, hotel):
+    hotelInstancia = get_object_or_404(Hotel, pk=hotel)
+
     if request.method == "POST":
-            formulario=AgregarTipoAHotelForm(request.POST)
-            if formulario.is_valid():
-                precioBaja = request.POST["baja"]
-                precioAlta = request.POST["alta"]
-                if((float(precioBaja) >= 0) and (float(precioAlta)>=0)):
-                    formulario=AgregarTipoAHotelForm(request.POST)
-                    tipoHabitacionRecibido=formulario.save(commit=False)
-                    tipoHabitacionRecibido.hotel= hotelInstancia
-                    tipoHabitacionRecibido.save()
-                    hotelInstancia
-                    return redirect('hotel:tipoHabitacionHotel', hotel)
-                else:
-                    print("sdfkhskdf")
-    return render(request, "hotel/modals/modal_tipoHabitacionHotel_crear.html",{"hotel": hotelInstancia,"formulario":formulario})
+        formulario = AgregarTipoAHotelForm(request.POST)
+
+        if formulario.is_valid():
+            precioBaja = formulario.cleaned_data["baja"]
+            precioAlta = formulario.cleaned_data["alta"]
+
+            if precioBaja >= 0 and precioAlta >= 0:
+                tipoHabitacionRecibido = formulario.save(commit=False)
+                tipoHabitacionRecibido.hotel = hotelInstancia
+                tipoHabitacionRecibido.save()
+                return redirect('hotel:tipoHabitacionHotel', hotel)
+        else:
+            print("dasdasdasdasdasdasdasdasdasdasdasd")
+            print(formulario.errors)
+            print("poirtpyoierptyoipretiypoeritp")
+            return render(request, "hotel/modals/modal_tipoHabitacionHotel_crear.html", {
+                "hotel": hotelInstancia,
+                "formulario": formulario,
+                "errores": formulario.errors
+            })
+    else:
+        formulario = AgregarTipoAHotelForm()
+
+    return render(request, "hotel/modals/modal_tipoHabitacionHotel_crear.html", {
+        "hotel": hotelInstancia,
+        "formulario": formulario
+    })
 
 
 def tipoHabitacionModificar(request,hotel,tipo):
