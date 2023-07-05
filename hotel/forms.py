@@ -3,6 +3,7 @@ from django.forms import ModelForm, ValidationError, forms, DateInput, DateField
 from django.contrib.auth.forms import AuthenticationForm
 from django.forms.fields import CharField, EmailField
 from django.forms.widgets import NumberInput
+from django import forms
 
 from hotel.models import Hotel, PrecioPorTipo, TemporadaAlta, Habitacion, PaqueteTuristico
 from core.models import Servicio, TipoHabitacion, Vendedor, Persona
@@ -44,20 +45,25 @@ class TemporadaHotelForm(ModelForm):
         self.fields['inicio'].widget.attrs.update({'class': 'form-control'})
         self.fields['fin'].widget.attrs.update({'class': 'form-control'})
    
-class PaqueteTuristicoForm(ModelForm):
+class PaqueteTuristicoForm(forms.ModelForm):
+    habitaciones = forms.MultipleChoiceField(
+        choices=[],
+        widget=forms.SelectMultiple(attrs={'class': 'form-control'})
+    )
+
     class Meta:
         model = PaqueteTuristico
         fields = '__all__'
-        exclude = ['hotel','vendido','precio']
+        exclude = ['hotel', 'vendido', 'precio']
         widgets = {
-            'inicio': DateInput(attrs={'id':'fecha1','type': 'date','min':'','value':'', 'onclick':'fecha_actual();'}),
-            'fin': DateInput(attrs={'id':'fecha2','type': 'date','min':'','value':'', 'onclick':'fecha_minima();'})
+            'inicio': forms.DateInput(attrs={'id': 'fecha1', 'type': 'date', 'min': '', 'value': '', 'onclick': 'fecha_actual();'}),
+            'fin': forms.DateInput(attrs={'id': 'fecha2', 'type': 'date', 'min': '', 'value': '', 'onclick': 'fecha_minima();'})
         }
 
     def __init__(self, *args, **kwargs):
         super(PaqueteTuristicoForm, self).__init__(*args, **kwargs)
         self.fields['nombre'].widget.attrs.update({'class': 'form-control'})
-        self.fields['coeficiente'].widget.attrs.update({'class': 'form-control'})
+        self.fields['coeficiente'].widget.attrs.update({'class': 'form-control', 'min':'0', 'max':'1'})
         self.fields['inicio'].widget.attrs.update({'class': 'form-control'})
         self.fields['fin'].widget.attrs.update({'class': 'form-control'})
         self.fields['habitaciones'].widget.attrs.update({'class': 'form-control'})
