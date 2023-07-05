@@ -93,19 +93,40 @@ def vistaTipoHabitacionHotel(request,hotel):
     tarifas_hotel=hotelInstancia.tarifario.all()
     return render(request, "hotel/tipoHabitacion_Hotel_Admin.html",{"hotel":hotelInstancia, "tarifas":tarifas_hotel,"administrador":personaInstancia })
 
-def tipoHabitacionCrear(request,hotel):
-    formulario=AgregarTipoAHotelForm(request.POST)
-    hotelInstancia =get_object_or_404(Hotel, pk=hotel)
+
+
+
+def tipoHabitacionCrear(request, hotel):
+    hotelInstancia = get_object_or_404(Hotel, pk=hotel)
+
     if request.method == "POST":
-            formulario=AgregarTipoAHotelForm(request.POST)
-            if formulario.is_valid():
-                formulario=AgregarTipoAHotelForm(request.POST)
-                tipoHabitacionRecibido=formulario.save(commit=False)
-                tipoHabitacionRecibido.hotel= hotelInstancia
+        formulario = AgregarTipoAHotelForm(request.POST)
+
+        if formulario.is_valid():
+            precioBaja = formulario.cleaned_data["baja"]
+            precioAlta = formulario.cleaned_data["alta"]
+
+            if precioBaja >= 0 and precioAlta >= 0:
+                tipoHabitacionRecibido = formulario.save(commit=False)
+                tipoHabitacionRecibido.hotel = hotelInstancia
                 tipoHabitacionRecibido.save()
-                hotelInstancia
                 return redirect('hotel:tipoHabitacionHotel', hotel)
-    return render(request, "hotel/modals/modal_tipoHabitacionHotel_crear.html",{"hotel": hotelInstancia,"formulario":formulario})
+        else:
+            print("dasdasdasdasdasdasdasdasdasdasdasd")
+            print(formulario.errors)
+            print("poirtpyoierptyoipretiypoeritp")
+            return render(request, "hotel/modals/modal_tipoHabitacionHotel_crear.html", {
+                "hotel": hotelInstancia,
+                "formulario": formulario,
+                "errores": formulario.errors
+            })
+    else:
+        formulario = AgregarTipoAHotelForm()
+
+    return render(request, "hotel/modals/modal_tipoHabitacionHotel_crear.html", {
+        "hotel": hotelInstancia,
+        "formulario": formulario
+    })
 
 
 def tipoHabitacionModificar(request,hotel,tipo):
@@ -239,21 +260,55 @@ def paqueteTuristicoHotel(request,hotel):
     hotelInstancia =get_object_or_404(Hotel, pk=hotel)    
     return render(request, "hotel/vistaHotelAdmin.html",{"hotel":hotelInstancia,"administrador":personaInstancia })
     
-def paqueteTuristicoHotelCrear(request, hotel):
-    form = PaqueteTuristicoForm(request.POST)
-    hotelInstancia=get_object_or_404(Hotel, pk=hotel)
-    if request.method == "POST":
-            if form.is_valid():
-                paqueteTuristicoInstancia=form.save(commit=False)
-                paqueteTuristicoInstancia.hotel= hotelInstancia
-                paqueteTuristicoInstancia.precio=1
-                paqueteTuristicoInstancia.save()
-                form.save_m2m()
-                return redirect('hotel:paqueteTuristicoHotel', hotel)
+
+def hay_fechas_superpuestas(fecha_inicio, fecha_fin , fecha_inicio_paquete , fecha_fin_paquete):
+
+    if((fecha_inicio <= fecha_inicio_paquete) and (fecha_fin >= fecha_fin_paquete)):
+        return True
     else:
-        form.fields['habitaciones'].choices=[(c.pk,c.numero) for c in Habitacion.objects.filter(hotel=hotelInstancia)]
-        
-    return render(request, "hotel/modals/modal_paqueteTuristicoHotel_crear.html", { "hotel": hotelInstancia, "formulario": form})
+        if(fecha_inicio_paquete <= fecha_inicio <= fecha_fin_paquete):
+            return True
+        else:
+            if(fecha_inicio_paquete <= fecha_fin <= fecha_fin_paquete):
+                return True
+    return False
+    
+
+def paqueteTuristicoHotelCrear(request, hotel):
+    id_hotel = hotel
+    form = PaqueteTuristicoForm(request.POST)
+    hotel_actual=get_object_or_404(Hotel, pk=id_hotel)
+    if request.method == "POST":
+        fecha_inicio = request.POST['inicio']
+        fecha_fin = request.POST['fin']
+        id_habitaciones = request.POST.getlist('habitaciones')
+        for id_habitacion in id_habitaciones:
+            habitacion = Habitacion.objects.get(id=id_habitacion)  
+            paquetes = habitacion.paqueteturistico.all() 
+            for paquete in paquetes:
+                if (hay_fechas_superpuestas(fecha_inicio ,fecha_fin , str(paquete.inicio), str(paquete.fin))):
+                    form.fields['habitaciones'].choices=[(c.pk,c.numero) for c in Habitacion.objects.filter(hotel=hotel_actual)]
+                    return render(request, "hotel/modals/modal_paqueteTuristicoHotel_crear.html", { "hotel": hotel_actual, "formulario": form})        
+         
+            # Crear un nuevo objeto PaqueteTuristico
+            nuevo_paquete = PaqueteTuristico.objects.create(
+                nombre=request.POST['nombre'],
+                coeficiente = request.POST['coeficiente'],
+                hotel = hotel_actual,
+                inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d').date(),
+                fin = datetime.strptime(fecha_fin, '%Y-%m-%d').date(),
+                vendido=False,
+                precio= 1
+            )
+            
+            # Agregar las habitaciones seleccionadas al nuevo paquete
+            for id_habitacion in id_habitaciones:
+                habitacion = Habitacion.objects.get(id=id_habitacion)
+                nuevo_paquete.habitaciones.add(habitacion)
+            return redirect('hotel:paqueteTuristicoHotel', id_hotel)             
+    form.fields['habitaciones'].choices=[(c.pk,c.numero) for c in Habitacion.objects.filter(hotel=hotel_actual)]
+    return render(request, "hotel/modals/modal_paqueteTuristicoHotel_crear.html", { "hotel": hotel_actual, "formulario": form})
+
 
 def paqueteTuristicoHotelModificar(request,hotel,paquete):
     hotelInstancia=get_object_or_404(Hotel, pk=hotel)

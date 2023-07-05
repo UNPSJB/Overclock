@@ -15,7 +15,7 @@ class Pais(models.Model):
         return self.nombre
 
 class Provincia(models.Model):
-    nombre = models.CharField(max_length=200)
+    nombre = models.CharField(max_length=200 , unique=True)
     pais = models.ForeignKey(Pais, on_delete=models.CASCADE)
 
     def __str__(self):
@@ -39,6 +39,9 @@ class Localidad(models.Model):
 
     def __str__(self):
         return self.nombre
+    
+    class Meta:
+        unique_together = (('nombre', 'provincia'), )
 
 # Servicios, Categorias
 class Servicio(models.Model):
