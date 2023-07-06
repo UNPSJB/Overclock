@@ -1,3 +1,4 @@
+from venta.helpers import cliente_existe
 from venta.models import Factura, Tipo_pago
 from venta.forms import ClienteForm
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
@@ -118,10 +119,14 @@ def vista_cliente(request):
     contador=carrito.get_cantidad()
     return render(request, "venta/vista_cliente.html", {"colClientes": colClientes,"vendedor":vendedorInstancia,"contador":contador})
 
+
 def cliente_aniadir(request):
-    colClientes = Cliente.objects.all()
     form = ClienteForm(request.POST)
     if request.method == "POST":
+        dni_nuevo_cliente = request.POST['documento']
+        if cliente_existe(dni_nuevo_cliente):
+            form.add_error('documento', 'DNI ya existe en el sistema')
+            return render(request,"venta/modals/modal_aniadir_cliente.html",{"formulario":form})
         if form.is_valid():
             form.save()
             form.instance.hacer_cliente()                
