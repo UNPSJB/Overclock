@@ -3,7 +3,7 @@
 {% load hotel %}
 
 {% block header %}
-<button onclick="location.href='/venta/vendedor'" style="text-decoration:none"
+<button onclick="  location.href='/venta/vendedor'" style="text-decoration:none"
     class="rounded-1 btn btn-sm btn-outline-secondary text-white ml-4 mt-1"> VENDEDOR: {{vendedor.persona.nombre.upper}}
     {{vendedor.persona.apellido.upper}} </button>
 {% endblock header %}
@@ -31,12 +31,15 @@
             action="{%url 'venta:iniciar_venta'%} " method="POST">
             {% csrf_token %}
             <label for="fecha1"> desde: </label>
-            <input type="date" id="fecha1" name="fecha_inicio" value="" min="" max="" onclick="fecha_actual();">
+            <input type="date" id="fecha1" name="fecha_inicio" value="{{ request.session.fecha_inicio }}" min="" max="" onclick="fecha_actual();">
             <label for="fecha2"> hasta: </label>
-            <input type="date" id="fecha2" name="fecha_fin" value="" min="" max="" onclick="fecha_minima();">
+            <input type="date" id="fecha2" name="fecha_fin" value="{{ request.session.fecha_fin }}" min="" max="" onclick="fecha_minima();">
             <label for="pasajeros"> Pasajeros: </label>
-            <input type="number" id="pasajeros" name="pasajeros" value="" min=1>
+            <input type="number" id="pasajeros" name="pasajeros" value="{{ request.session.pasajeros }}" min=1>
             <input type="submit" id="filtrar" name="filtrar">
+            <button><a href="{%url 'venta:limpiar_preferencias'%}"> limpiar Preferencias</a></button>
+            
+
         </form>
 
     </div>
@@ -105,7 +108,9 @@
     });
 </script>
 
+
 <script type="text/javascript">
+ 
     function evitar_envio(e) {
         e.preventDefault();
         if (document.getElementById('fecha1').value && document.getElementById('fecha2').value && document.getElementById('pasajeros').value) {
@@ -116,7 +121,7 @@
                 showConfirmButton: false,
                 timer: 500
             })
-
+            
             setTimeout(function () {
                 document.getElementById('form_preferencias_cliente').submit();
             }, 500);

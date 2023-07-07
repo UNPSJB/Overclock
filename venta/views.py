@@ -10,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from venta.carrito import Carrito
 
+
 # Create your views here.
 
 @login_required
@@ -249,4 +250,13 @@ def cancelar_venta(request,factura):
     return redirect("venta:vendedor")
 
 
+def limpiar_preferencias(request):
+
+    if 'fecha_inicio' in request.session:
+        del request.session['fecha_inicio']
+    if 'fecha_fin' in request.session:
+        del request.session['fecha_fin']
+    if 'pasajeros' in request.session:
+        del request.session['pasajeros']
+    return redirect("venta:vendedor")
 
