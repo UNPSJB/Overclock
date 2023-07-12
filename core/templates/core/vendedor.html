@@ -16,13 +16,13 @@
 
 
 
-    <input id="vendedor" name="state-d" radio type="radio" checked="" value="vendedor" />
-    <label for="vendedor" onclick="">
+    <input id="vendedor" name="state-d" radio type="radio"  value="vendedor" />
+    <label for="vendedor" onclick='seleccionarEstado("vendedor")'>
         <h1>Vendedores</h1>
     </label>
 
-    <input id="encargado" name="state-d" type="radio" checked="" value="encargado" />
-    <label for="encargado" onclick="">
+    <input id="encargado" name="state-d" type="radio"  value="encargado" />
+    <label for="encargado" onclick='seleccionarEstado("encargado")'>
         <h1>Encargados</h1>
     </label>
 
@@ -239,16 +239,17 @@
 {% endblock content %}
 
 {% block extrajs %}
+<!-- const $ = jQuery.noConflict(); -->
 
 <script type="text/javascript">
     //SCRIPT DE DATATABLE
-    const $ = jQuery.noConflict();
+    
     $(document).ready(function () {
         $('#example1').DataTable();
         $('#example2').DataTable();
     });</script>
 
-<script>
+<!-- <script>
     $("#vistaVendedores").hide();
     $("#vistaEncargados").show();
     $(function () {
@@ -267,6 +268,34 @@
             }
         });
     });
+</script> -->
+
+<script>
+    let state = sessionStorage.getItem("persona") || "vendedor";
+    document.getElementById(state).setAttribute("checked" , "")
+    mostrarListado(state)
+    console.log(state)
+    
+    function seleccionarEstado(estado){
+        sessionStorage.setItem("persona" , estado)
+        document.getElementById(estado).setAttribute("checked" , "")
+        mostrarListado(estado)
+    }
+
+
+    function mostrarListado(state){
+        switch (state) {
+            case "vendedor":
+                document.getElementById("vistaEncargados").style.display = "none";
+                document.getElementById("vistaVendedores").style.display = "block";
+                break;
+            case "encargado":
+                document.getElementById("vistaEncargados").style.display = "block";
+                document.getElementById("vistaVendedores").style.display = "none";
+                break;
+        }
+    }
+
 </script>
 
 {% endblock extrajs%}
