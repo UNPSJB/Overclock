@@ -42,6 +42,7 @@ def home(request):
             # Verificamos las credenciales del usuario
             user = authenticate(username=username, password=password)
 
+
             # Si existe un usuario con ese nombre y contraseña
             if user is not None:
                 # Hacemos el login manualmente

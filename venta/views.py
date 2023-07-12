@@ -194,6 +194,9 @@ def quitar_habitacion_carrito(request, habitacion, desde, hasta):
 
 
 def seleccionar_cliente(request, cliente):
+    persona = Persona.objects.get(id = cliente)
+    request.session['nombre_cliente']= persona.nombre
+    request.session['apellido_cliente']=  persona.apellido
     carrito=Carrito(request)
     carrito.set_cliente(cliente)
     return redirect("venta:vendedor")
@@ -258,5 +261,10 @@ def limpiar_preferencias(request):
         del request.session['fecha_fin']
     if 'pasajeros' in request.session:
         del request.session['pasajeros']
+    if 'nombre_cliente' in request.session:
+        del request.session['nombre_cliente']
+    if 'apellido_cliente' in request.session:
+        del request.session['apellido_cliente']
+        print("elimie apellidooo")
     return redirect("venta:vendedor")
 

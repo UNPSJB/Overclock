@@ -64,6 +64,9 @@ a:link, a:visited, a:active a{
     border-right-style: solid  !important;
     border-right-width: 3px !important;
     border-right-color: green !important;
+    border-bottom-style: solid  !important;
+    border-bottom-width: 3px !important;
+    border-bottom-color: green !important;
     background-color: lightgrey !important;
     border-collapse: collapse !important;
  
@@ -76,6 +79,9 @@ a:link, a:visited, a:active a{
     border-right-style: solid  !important;
     border-right-width: 3px !important;
     border-right-color: red !important;
+    border-bottom-style: solid  !important;
+    border-bottom-width: 3px !important;
+    border-bottom-color: red !important;
     background-color: lightgrey !important;
     border-collapse: collapse !important;
  

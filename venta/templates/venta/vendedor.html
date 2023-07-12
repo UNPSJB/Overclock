@@ -24,7 +24,14 @@
 
     <div>
         <center>
-            <h5 class="my-4">PREFERENCIAS DEL CLIENTE</h5>
+            <h5 class="my-4">PREFERENCIAS DEL CLIENTE : {%if request.session.nombre_cliente%}
+                                                            {{ request.session.nombre_cliente }}
+                                                            {{ request.session.apellido_cliente }}
+                                                        {% else %}
+                                                            No se selecciono cliente
+                                                        {% endif %}
+                                                            
+            </h5>
         </center>
 
         <form id="form_preferencias_cliente" onsubmit="return evitar_envio(event)"
