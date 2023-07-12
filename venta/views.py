@@ -9,6 +9,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from venta.carrito import Carrito
+from venta.services import cargar_liquidaciones_pendientes, liquidar_liquidaciones_pendientes
 
 
 # Create your views here.
@@ -260,3 +261,38 @@ def limpiar_preferencias(request):
         del request.session['pasajeros']
     return redirect("venta:vendedor")
 
+def listado_liquidaciones(request):
+    if request.method == "POST":
+        fecha_inicio = request.POST['fecha_inicio']
+        fecha_fin = request.POST['fecha_fin']
+        liquidaciones_pendientes = cargar_liquidaciones_pendientes(fecha_inicio, fecha_fin)
+        context = {
+            "liquidaciones_pendientes": liquidaciones_pendientes,
+            "fecha_inicio": fecha_inicio,
+            "fecha_fin": fecha_fin,
+        }
+        return render(request, "venta/listado_liquidaciones.html",context)
+    else:
+        context = {
+            "liquidaciones_pendientes": [],
+        }
+        return render(request, "venta/listado_liquidaciones.html",context)
+
+        # fecha_inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d').date()
+        # fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d').date()
+        # liquidar_liquidaciones_pendientes(fecha_inicio, fecha_fin)
+def liquidar(request):
+    if request.method == 'POST':
+        fecha_inicio = request.POST.get('fecha_inicio')
+        fecha_fin = request.POST.get('fecha_fin')
+
+        # Realiza cualquier lógica de liquidación con las fechas recibidas
+        # fecha_inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d').date()
+        # fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d').date()
+        # fecha_inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d').date()
+        # fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d').date()
+        liquidar_liquidaciones_pendientes(fecha_inicio, fecha_fin)
+
+    # Realiza cualquier otra lógica necesaria
+
+    return render(request, 'venta/listado_liquidaciones.html')
