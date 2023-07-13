@@ -270,6 +270,7 @@ def limpiar_preferencias(request):
     return redirect("venta:vendedor")
 
 def listado_liquidaciones(request):
+    personaInstancia = request.user.persona
     if request.method == "POST":
         fecha_inicio = request.POST['fecha_inicio']
         fecha_fin = request.POST['fecha_fin']
@@ -278,29 +279,19 @@ def listado_liquidaciones(request):
             "liquidaciones_pendientes": liquidaciones_pendientes,
             "fecha_inicio": fecha_inicio,
             "fecha_fin": fecha_fin,
+            "administrador":personaInstancia,
         }
         return render(request, "venta/listado_liquidaciones.html",context)
     else:
         context = {
             "liquidaciones_pendientes": [],
+            "administrador":personaInstancia,
         }
         return render(request, "venta/listado_liquidaciones.html",context)
 
-        # fecha_inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d').date()
-        # fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d').date()
-        # liquidar_liquidaciones_pendientes(fecha_inicio, fecha_fin)
 def liquidar(request):
     if request.method == 'POST':
         fecha_inicio = request.POST.get('fecha_inicio')
         fecha_fin = request.POST.get('fecha_fin')
-
-        # Realiza cualquier lógica de liquidación con las fechas recibidas
-        # fecha_inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d').date()
-        # fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d').date()
-        # fecha_inicio = datetime.strptime(fecha_inicio, '%Y-%m-%d').date()
-        # fecha_fin = datetime.strptime(fecha_fin, '%Y-%m-%d').date()
         liquidar_liquidaciones_pendientes(fecha_inicio, fecha_fin)
-
-    # Realiza cualquier otra lógica necesaria
-
     return render(request, 'venta/listado_liquidaciones.html')
