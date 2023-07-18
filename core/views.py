@@ -5,8 +5,10 @@ from django.forms import forms
 from django.http import request, JsonResponse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
+from core.helpers import campo_valido_sin_numeros
 from core.models import Pais, Provincia, Localidad, TipoHabitacion, Servicio, Categoria, Persona, Vendedor, Encargado, Cliente
 from hotel.models import Hotel
+from venta.services import documento_valido
 from .forms import PaisForm, LocalidadForm, AutenticacionForm, ProvinciaForm, TipoHabitacionForm, ServicioForm, CategoriaForm, VendedorForm, EncargadoForm
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
@@ -127,16 +129,6 @@ def paisCrear(request):
             return render(request, "core/modals/modal_pais_crear.html", {"paises": paises, "formulario": formPais, "errores": erroresDelFormulario})
     return render(request, "core/modals/modal_pais_crear.html", {"paises": paises, "formulario": formPais})
 
-# def paisCrear(request):
-#     if request.method == "POST":
-#         pais_nombre = request.POST.get("nombre")
-#         if not Pais.objects.filter(nombre=pais_nombre).exists():
-#             Pais.objects.create(nombre=pais_nombre)
-#         return redirect('core:opcionRegion')
-#     else:
-#         formPais = PaisForm()
-
-#     return render(request, "core/modals/modal_pais_crear.html", {"formulario": formPais})
 
 # se recibe la el objeto ciudad que corresponde a la linea donde se encontraba el boton modificar
 def localidadModificar(request, ciudad):
@@ -243,8 +235,6 @@ def servicio(request):
 def servicioCrear(request):
     colServicios = Servicio.objects.all()
     form = ServicioForm(request.POST)
-
-    #print("estoy entrando a crear servicios")
     if request.method == "POST":
         if form.is_valid():
             form.save()
@@ -281,9 +271,12 @@ def categoriaCrear(request):
     colCategorias = Categoria.objects.all()
     form = CategoriaForm(request.POST)
     if request.method == "POST":
-        if form.is_valid():
-            form.save()
-            return redirect('core:categoria')
+        nueva_categoria = request.POST["nombre"]
+        nombre_campo = "nombre"
+        if campo_valido_sin_numeros(nueva_categoria , form , nombre_campo ):
+            if form.is_valid():
+                form.save()
+                return redirect('core:categoria')
     return render(request, "core/modals/modal_categoria_crear.html", {"colCategorias": colCategorias, "formulario": form})
 
 
@@ -329,14 +322,14 @@ def vendedor(request):
 def vendedorCrear(request):
     colVendedores = Vendedor.objects.all()
     form = VendedorForm(request.POST)
-
     if request.method == "POST":
-        if form.is_valid():
-            # print(form.cleaned_data['email'])
-            form.save()
-            form.instance.hacer_vendedor(
-                form.cleaned_data['usuario'], form.cleaned_data['email'], form.cleaned_data['contrasenia'])
-            return redirect('core:opcionVendedor')
+        dni_nuevo_cliente = request.POST['documento']
+        if documento_valido(dni_nuevo_cliente , form):
+            if form.is_valid():
+                form.save()
+                form.instance.hacer_vendedor(
+                    form.cleaned_data['usuario'], form.cleaned_data['email'], form.cleaned_data['contrasenia'])
+                return redirect('core:opcionVendedor')
     return render(request, "core/modals/modal_vendedor_crear.html", {"colVendedores": colVendedores, "formulario": form})
 
 
@@ -402,13 +395,14 @@ def vendedorReciclar(request, vendedor):
 def encargadoCrear(request):
     colEncargados = Encargado.objects.all()
     form = EncargadoForm(request.POST)
-
     if request.method == "POST":
-        if form.is_valid():
-            form.save()
-            form.instance.hacer_encargado(form.cleaned_data['clave'])
-            form.save()
-            return redirect('core:opcionVendedor')
+        dni_nuevo_cliente = request.POST['documento']
+        if documento_valido(dni_nuevo_cliente , form):
+            if form.is_valid():
+                form.save()
+                form.instance.hacer_encargado(form.cleaned_data['clave'])
+                form.save()
+                return redirect('core:opcionVendedor')
     return render(request, "core/modals/modal_encargado_crear.html", {"colEncargados": colEncargados, "formulario": form})
 
 

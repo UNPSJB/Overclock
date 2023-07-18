@@ -10,6 +10,7 @@ from django.forms import forms
 from django.http import request, JsonResponse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
+from hotel.helpers import habitacion_duplicada
 from hotel.models import Habitacion, Hotel, PrecioPorTipo, TemporadaAlta, PaqueteTuristico
 from .forms import  HabitacionForm, HotelForm, ServicioForm, TemporadaHotelForm, AgregarTipoAHotelForm, HabitacionForm, PaqueteTuristicoForm, VendedorHotelForm
 from django.contrib.auth.forms import AuthenticationForm
@@ -171,7 +172,9 @@ def habitacionCrear(request,hotel):
     hotelInstancia =get_object_or_404(Hotel, pk=hotel)
     formulario=HabitacionForm(request.POST)
     if request.method == "POST":
-            if formulario.is_valid():
+        numero_habitacion_nuevo = request.POST["numero"]
+        if formulario.is_valid():
+            if not (habitacion_duplicada(numero_habitacion_nuevo , hotel ,formulario)):
                 habitacionInstancia=formulario.save(commit=False)
                 habitacionInstancia.hotel= hotelInstancia
                 habitacionInstancia.save()
@@ -315,9 +318,7 @@ def paqueteTuristicoHotelModificar(request,hotel,paquete):
     paqueteInstancia=get_object_or_404(PaqueteTuristico, pk=paquete)
     form = PaqueteTuristicoForm(request.POST or None,instance=paqueteInstancia)
     if request.method == "POST":
-        #print("POST!!!!!!!!!!!!!!!!!")
         if form.is_valid():
-            #print("<<<<<<FORMULARIO VALIDO>>>>>>>>>>>")
             paquete=form.save(commit=False)
             paquete.save()
             return redirect('hotel:paqueteTuristicoHotel', hotel)
@@ -354,8 +355,6 @@ def serviciosHotel(request,hotel):
     personaInstancia = request.user.persona
     hotelInstancia =get_object_or_404(Hotel, pk=hotel)
     categoria=hotelInstancia.get_categoria()
-    #print(categoria.nombre)
-   
     return render(request, "hotel/servicios_Hotel_Admin.html",{"hotel":hotelInstancia,"categoria":categoria,"administrador":personaInstancia})
 
 def aniadirServicioHotel(request,hotel):
@@ -364,7 +363,6 @@ def aniadirServicioHotel(request,hotel):
     form=ServicioForm(request.POST or None)
     if request.method =="POST":
         diccionario=(dict(request.POST))
-        #print(diccionario['servicio'])
         for servicio in diccionario['servicio']:
             hotelInstancia.servicios.add(get_object_or_404(Servicio,pk=servicio))
         hotelInstancia.save()
@@ -376,7 +374,6 @@ def aniadirServicioHotel(request,hotel):
             if servicio not in hotelInstancia.get_servicios():
                 listaDeServicios.append(get_object_or_404(Servicio, pk=servicio.pk))
         form.fields['servicio'].choices=[(c.pk,c.nombre) for c in listaDeServicios]
-        #print(listaDeServicios)
         return render(request, "hotel/modals/modal_servicio_Hotel_aniadir.html",{"formulario":form,"hotel":hotelInstancia,"categoria":categoria})
     
 
@@ -394,7 +391,6 @@ def aniadirVendedorHotel(request, hotel):
     
     if request.method =="POST":
         diccionario=(dict(request.POST))
-        #print(diccionario['vendedores'][0])
         hotelInstancia.vendedores.add(get_object_or_404(Vendedor,pk=diccionario['vendedores'][0]))
         hotelInstancia.save()
         return redirect('hotel:vendedoresHotel', hotel)
@@ -406,13 +402,6 @@ def aniadirVendedorHotel(request, hotel):
 
         form = VendedorHotelForm(vendedoresNoVinculados,hotel)
         form.initial['vendedores'] = vendedoresNoVinculados
-        #form.fields['listaVendedores'].
-        
-        #listaDeServicios=[]
-        #for servicio in Servicio.objects.all():
-        #    if servicio not in hotelInstancia.get_servicios():
-        #        listaDeServicios.append(get_object_or_404(Servicio, pk=servicio.pk))
-        #print(listaDeServicios)
         return render(request, "hotel/modals/modal_vendedor_Hotel_aniadir.html",{"form": form,"hotel":hotelInstancia, "colVendedores": vendedoresNoVinculados})
 
 def vendedorHotelEliminar(request,hotel,vendedor):

@@ -45,7 +45,7 @@ class Localidad(models.Model):
 
 # Servicios, Categorias
 class Servicio(models.Model):
-    nombre = models.CharField(max_length=200)
+    nombre = models.CharField(max_length=200 , unique=True)
     descripcion = models.CharField(max_length=800)
 
     def __str__(self):
@@ -72,7 +72,7 @@ class Categoria(models.Model):
     )
    
     estrellas = models.PositiveSmallIntegerField(choices=ESTRELLAS)
-    nombre = models.CharField(max_length=200)
+    nombre = models.CharField(max_length=200 , unique= True)
     servicios = models.ManyToManyField(Servicio)
 
     def estrellasStr(self):
@@ -88,7 +88,7 @@ class Categoria(models.Model):
 
 # Tipo De Habitacion
 class TipoHabitacion(models.Model):
-    nombre = models.CharField(max_length=200)
+    nombre = models.CharField(max_length=200 , unique= True)
     descripcion = models.CharField(max_length=800)
     pasajeros = models.PositiveSmallIntegerField()
     # Cuartos para cuando el tipo es Departamento

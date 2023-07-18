@@ -170,8 +170,8 @@
             {% else %}
                    Swal.fire({
                     icon: 'error',
-                    title: 'No hay tipos...',
-                    text: 'Primero tenes que cargar tipos',
+                    title: 'No hay tipos de habitaciones...',
+                    text: 'Primero tenes que cargar tipos de habitacion',
                     
                   });
             {% endif %}">
@@ -393,22 +393,3 @@
     <script src="{% static 'js/dd8c49730d.js' %}"></script>#
 
     {% endblock extrajs%}
-
-
-
-    <!--onclick="
-            {% if hotel.tengo_tipos %} 
-            Swal.fire({
-                    icon: 'success',
-                    title: 'Hay Tipos de Habitacion',
-                    text: 'Sos un groso segui adelante',
-                    footer: '<a href>Like?</a>'
-                  })
-                   {% else %}
-                   Swal.fire({
-                    icon: 'error',
-                    title: 'No hay tipos...',
-                    text: 'Primero tenes que cargar tipos',
-                    footer: '<a href>Sos huevon?</a>'
-                  })
-                   {% endif %}">-->

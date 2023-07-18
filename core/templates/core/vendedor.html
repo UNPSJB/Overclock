@@ -14,8 +14,6 @@
 
 <div class="switch-toggle switch-3 switch-candy sm row justify-content-center my-4">
 
-
-
     <input id="vendedor" name="state-d" radio type="radio"  value="vendedor" />
     <label for="vendedor" onclick='seleccionarEstado("vendedor")'>
         <h1>Vendedores</h1>
@@ -248,27 +246,6 @@
         $('#example1').DataTable();
         $('#example2').DataTable();
     });</script>
-
-<!-- <script>
-    $("#vistaVendedores").hide();
-    $("#vistaEncargados").show();
-    $(function () {
-        $('input').click(function () {
-            var state = $(this).val();
-            console.log(state)
-            switch (state) {
-                case "vendedor":
-                    $("#vistaEncargados").hide();
-                    $("#vistaVendedores").show();
-                    break;
-                case "encargado":
-                    $("#vistaEncargados").show();
-                    $("#vistaVendedores").hide();
-                    break;
-            }
-        });
-    });
-</script> -->
 
 <script>
     let state = sessionStorage.getItem("persona") || "vendedor";
