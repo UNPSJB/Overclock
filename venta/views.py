@@ -1,15 +1,14 @@
-from venta.helpers import cliente_existe
+
 from venta.models import Factura, Tipo_pago
 from venta.forms import ClienteForm
-from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
+from django.shortcuts import render, redirect, get_object_or_404
 from hotel.models import Hotel, PaqueteTuristico
 from core.models import Persona, Vendedor, Cliente
-from hotel.models import Hotel, Habitacion, TipoHabitacion
-from django.contrib.auth.models import User
+from hotel.models import Hotel
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from venta.carrito import Carrito
-from venta.services import cargar_liquidaciones_pendientes, liquidar_liquidaciones_pendientes
+from venta.services import cargar_liquidaciones_pendientes, documento_valido, liquidar_liquidaciones_pendientes
 
 
 # Create your views here.
@@ -126,17 +125,12 @@ def cliente_aniadir(request):
     form = ClienteForm(request.POST)
     if request.method == "POST":
         dni_nuevo_cliente = request.POST['documento']
-        if cliente_existe(dni_nuevo_cliente):
-            form.add_error('documento', 'DNI ya existe en el sistema')
-            return render(request,"venta/modals/modal_aniadir_cliente.html",{"formulario":form})
-        if form.is_valid():
-            form.save()
-            form.instance.hacer_cliente()                
-            return redirect('venta:vistaCliente')
-    return render(request,"venta/modals/modal_aniadir_cliente.html",{"formulario":form})
-
-
-    
+        if documento_valido(dni_nuevo_cliente , form):
+            if form.is_valid():
+                form.save()
+                form.instance.hacer_cliente()                
+                return redirect('venta:vistaCliente')
+    return render(request,"venta/modals/modal_aniadir_cliente.html",{"formulario":form})    
 
 def cliente_modificar(request,cliente):
     clienteInstancia=get_object_or_404(Cliente,pk=cliente)
@@ -281,6 +275,7 @@ def listado_liquidaciones(request):
             "fecha_fin": fecha_fin,
             "administrador":personaInstancia,
         }
+        print(f'retornando este arreglo : {liquidaciones_pendientes}')
         return render(request, "venta/listado_liquidaciones.html",context)
     else:
         context = {

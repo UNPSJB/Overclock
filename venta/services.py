@@ -1,6 +1,7 @@
 from datetime import datetime
 from core.models import Vendedor
 from venta.models import Factura, Liquidacion
+from venta.helpers import cliente_existe
 
 def buscar_monto_total_liquidaciones_pendientes(fecha_inicio, fecha_fin, vendedor):
     facturas = Factura.objects.filter(
@@ -44,3 +45,14 @@ def liquidar_liquidaciones_pendientes(fecha_inicio, fecha_fin):
         for factura_pendiente_de_liquidar in facturas_pendiente_de_liquidar:
             factura_pendiente_de_liquidar.liquidacion = liquidacion
             factura_pendiente_de_liquidar.save()
+            
+
+def documento_valido(dni_nuevo , form):
+    if not dni_nuevo.isnumeric():
+        form.add_error('documento', 'ingrese un documento valido')
+        return False
+    if cliente_existe(dni_nuevo):
+        form.add_error('documento', 'DNI ya existe en el sistema')
+        return False
+    return True
+        
