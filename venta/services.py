@@ -1,5 +1,5 @@
 from datetime import datetime
-from core.models import Vendedor
+from core.models import Persona, Vendedor
 from venta.models import Factura, Liquidacion
 from venta.helpers import cliente_existe
 
@@ -21,12 +21,17 @@ def cargar_liquidaciones_pendientes(fecha_inicio, fecha_fin):
             persona_dict = {
                     'nombre': vendedor.persona.nombre,
                     'apellido': vendedor.persona.apellido,
+                    'documento': vendedor.persona.documento,
                     'monto_total': monto_total_pendiente,
                 }
             facturas_pendientes.append(persona_dict)
     return facturas_pendientes
 
 def buscar_facturas_pendiente_de_liquidar(fecha_inicio, fecha_fin, vendedor):
+    print("===========================")
+    print(fecha_fin)
+    print(fecha_inicio)
+    print(vendedor)
     facturas = Factura.objects.filter(
         liquidacion__isnull=True,
         vendedor=vendedor,
@@ -34,11 +39,11 @@ def buscar_facturas_pendiente_de_liquidar(fecha_inicio, fecha_fin, vendedor):
     )
     return facturas
 
-def liquidar_liquidaciones_pendientes(fecha_inicio, fecha_fin):
-    vendedores = Vendedor.objects.all()
-    for vendedor in vendedores:
-      facturas_pendiente_de_liquidar = buscar_facturas_pendiente_de_liquidar(fecha_inicio, fecha_fin, vendedor)
-      if len(facturas_pendiente_de_liquidar) > 0:
+def liquidar_liquidaciones_pendientes(fecha_inicio, fecha_fin, documento):
+    persona = Persona.objects.get(documento = documento)
+    vendedor = Vendedor.objects.get(persona = persona)
+    facturas_pendiente_de_liquidar = buscar_facturas_pendiente_de_liquidar(fecha_inicio, fecha_fin, vendedor)
+    if len(facturas_pendiente_de_liquidar) > 0:
         monto_total = buscar_monto_total_liquidaciones_pendientes(fecha_inicio, fecha_fin, vendedor)
         liquidacion = Liquidacion(abonado=datetime.now(), vendedor=vendedor, total=monto_total)
         liquidacion.save()

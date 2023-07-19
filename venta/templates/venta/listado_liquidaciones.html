@@ -71,7 +71,9 @@
                     <tr>
                         <th>Nombre</th>
                         <th>Apellido</th>
+                        <th>Documento</th>
                         <th>Monto</th>
+                        <th>Accion</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -79,7 +81,10 @@
                     <tr>
                         <td> {{liquidacion_pendiente.nombre}}</td>
                         <td> {{liquidacion_pendiente.apellido}}</td>
+                        <td> {{liquidacion_pendiente.documento}}</td>
                         <td> ${{liquidacion_pendiente.monto_total}}</td>
+                        <td><button> <a href="{% url 'venta:liquidar' liquidacion_pendiente.documento fecha_inicio fecha_fin %}"> abonar </a> </button></td>
+                        
                     </tr>
                         {% empty %}
                         <tr>
@@ -91,19 +96,13 @@
                     <tr>
                     <th>Nombre</th>
                     <th>Apellido</th>
+                    <th>Documento</th>
                     <th>Monto</th>
+                    <th>Accion</th>
                     </tr>
                 </tfoot>
             </table>
         </div>
-        {% if liquidaciones_pendientes %}
-            <form action="{% url 'venta:liquidar' %}" method="POST" onsubmit="  return valoresCargados()">
-            {% csrf_token %}
-            <input type="hidden" name="fecha_inicio" id ="fecha_inicio" value="{{ fecha_inicio }}">
-            <input type="hidden" name="fecha_fin" id ="fecha_fin" value="{{ fecha_fin }}">
-            <input type="submit" value="Liquidar" id="boton_liquidar">
-            </form> 
-        {% endif %}
     </table>
 </div>
 

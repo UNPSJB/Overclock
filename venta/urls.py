@@ -43,5 +43,5 @@ urlpatterns = [
     path('cancelarFactura/<factura>' , vviews.cancelar_venta, name="cancelarFactura"),
     path('limpiarPreferencias' , vviews.limpiar_preferencias, name="limpiar_preferencias"),
     path('listado_liquidaciones', vviews.listado_liquidaciones, name="listado_liquidaciones"),
-    path('liquidar/', vviews.liquidar, name='liquidar'),
+    path('liquidar/<documento>/<fecha_inicio>/<fecha_fin>', vviews.liquidar, name='liquidar'),
 ]

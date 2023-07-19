@@ -284,9 +284,14 @@ def listado_liquidaciones(request):
         }
         return render(request, "venta/listado_liquidaciones.html",context)
 
-def liquidar(request):
-    if request.method == 'POST':
-        fecha_inicio = request.POST.get('fecha_inicio')
-        fecha_fin = request.POST.get('fecha_fin')
-        liquidar_liquidaciones_pendientes(fecha_inicio, fecha_fin)
-    return render(request, 'venta/listado_liquidaciones.html')
+def liquidar(request, documento, fecha_inicio, fecha_fin):
+    personaInstancia = request.user.persona
+    liquidar_liquidaciones_pendientes(fecha_inicio, fecha_fin, documento)
+    liquidaciones_pendientes = cargar_liquidaciones_pendientes(fecha_inicio, fecha_fin)
+    context = {
+        "liquidaciones_pendientes": liquidaciones_pendientes,
+        "fecha_inicio": fecha_inicio,
+        "fecha_fin": fecha_fin,
+        "administrador":personaInstancia,
+    }
+    return render(request, 'venta/listado_liquidaciones.html', context)
