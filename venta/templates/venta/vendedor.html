@@ -67,25 +67,25 @@
             {% for hotel in colHoteles %}
             {% hotel_disponible hotel as tengo_habitaciones %}
             <tr class="{% if tengo_habitaciones %}
-            comercializable manito
-            {% else %}
-            noComercializable manito
-            {% endif%}" {% if tengo_habitaciones %} onclick="evitar_ingreso({{hotel.pk}});" {% else %} onclick="Swal.fire({ icon: 'error',
-                title: 'Preferencias no arroja resultados',
-                text: 'La busqueda no arroja resultados en este Hotel',
-                });" {% endif %}>
+                    comercializable manito
+                    {% else %}
+                    noComercializable manito
+                    {% endif%}" {% if tengo_habitaciones %} onclick="evitar_ingreso({{hotel.pk}});" {% else %} onclick="Swal.fire({ icon: 'error',
+                        title: 'Preferencias no arroja resultados',
+                        text: 'La busqueda no arroja resultados en este Hotel',
+                        });" {% endif %}>
 
-                <div class="pepito">
-                    <td>{{hotel.nombre}}</td>
-                    <td>{{hotel.localidad}}</td>
-                    <td>{{hotel.direccion}}</td>
-                    <td>{{hotel.email}}</td>
-                    <td>{{hotel.telefono}}</td>
-                    <td>{{hotel.encargado.persona.nombre}} {{hotel.encargado.persona.apellido}}</td>
-                    <td>{{hotel.categoria.nombre}}</td>
+                        <div class="pepito">
+                            <td>{{hotel.nombre}}</td>
+                            <td>{{hotel.localidad}}</td>
+                            <td>{{hotel.direccion}}</td>
+                            <td>{{hotel.email}}</td>
+                            <td>{{hotel.telefono}}</td>
+                            <td>{{hotel.encargado.persona.nombre}} {{hotel.encargado.persona.apellido}}</td>
+                            <td>{{hotel.categoria.nombre}}</td>
 
-                </div>
-            </tr>
+                        </div>
+                </tr>
             {% endfor %}
         </tbody>
         <tfoot>

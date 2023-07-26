@@ -31,6 +31,7 @@ def vendedor(request):
         formulario_enviado="enviado"
     else:
         formulario_enviado="no_enviado"
+    
     return render(request, "venta/vendedor.html", {"colHoteles": colHoteles,"vendedor":vendedorInstancia,
         "pasajeros": int(request.session['pasajeros']) if "pasajeros" in request.session else None, 
         "fecha_inicio": fecha_inicio,
@@ -295,3 +296,5 @@ def liquidar(request, documento, fecha_inicio, fecha_fin):
         "administrador":personaInstancia,
     }
     return render(request, 'venta/listado_liquidaciones.html', context)
+
+
