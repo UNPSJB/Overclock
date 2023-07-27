@@ -38,11 +38,11 @@
             action="{%url 'venta:iniciar_venta'%} " method="POST">
             {% csrf_token %}
             <label for="fecha1"> desde: </label>
-            <input type="date" id="fecha1" name="fecha_inicio" value="{{ request.session.fecha_inicio }}" min="" max="" onclick="fecha_actual();">
+            <input type="date" id="fecha1" name="fecha_inicio" value="{{ fecha_inicio }}" min="" max="" onclick="fecha_actual();">
             <label for="fecha2"> hasta: </label>
-            <input type="date" id="fecha2" name="fecha_fin" value="{{ request.session.fecha_fin }} " min=" max=" onclick="fecha_minima();">
+            <input type="date" id="fecha2" name="fecha_fin" value= "{{ fecha_fin }}" min=" max=" onclick="fecha_minima();">
             <label for="pasajeros"> Pasajeros: </label>
-            <input type="number" id="pasajeros" name="pasajeros" value="{{ request.session.pasajeros }} " min=1>
+            <input type="number" id="pasajeros" name="pasajeros" value="{{ pasajeros }}" min=1>
             <input type="submit" id="filtrar" name="filtrar">
             <button><a href="{%url 'venta:limpiar_preferencias'%}"> limpiar Preferencias</a></button>
             
@@ -80,7 +80,7 @@
                             <td>{{hotel.direccion}}</td>
                             <td>{{hotel.email}}</td>
                             <td>{{hotel.telefono}}</td>
-                            <td>{{hotel.encargado.persona.nombre}} {{hotel.encargado.persona.apellido}}</td>
+                            <td>{{hotel.encargadoNombre}} {{hotel.encargadoApellido}}</td>
                             <td>{{hotel.categoria.nombre}}</td>
 
                         </div>

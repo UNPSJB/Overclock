@@ -25,20 +25,18 @@ def vendedor(request):
     personaInstancia = request.user.persona
     vendedorInstancia = get_object_or_404(Vendedor, persona = personaInstancia.id)
     colHoteles= Hotel.objects.filter(vendedores__persona=vendedorInstancia.persona)
-    fecha_actual = datetime.now()
-    fecha_inicio=  datetime.strptime(request.session['fecha_inicio'], '%Y-%m-%d').date() if "fecha_inicio" in request.session else fecha_actual
-    fecha_fin=  datetime.strptime(request.session['fecha_fin'], '%Y-%m-%d').date() if "fecha_fin" in request.session else fecha_actual
-    pasajeros_default = 1
-    pasajeros =  int(request.session['pasajeros']) if "pasajeros" in request.session else pasajeros_default
-    
-    hoteles_finales = preparar_hoteles(colHoteles,fecha_inicio,fecha_fin,pasajeros)
+    fecha_inicio=  request.session['fecha_inicio'] if "fecha_inicio" in request.session else None
+    fecha_fin=  request.session['fecha_fin'] if "fecha_fin" in request.session else None
+    pasajeros =  int(request.session['pasajeros']) if "pasajeros" in request.session else None
+    hoteles_finales = []
     if fecha_inicio:
         formulario_enviado="enviado"
+        hoteles_finales = preparar_hoteles(colHoteles,fecha_inicio,fecha_fin,pasajeros)
     else:
         formulario_enviado="no_enviado"
     
     return render(request, "venta/vendedor.html", {"colHoteles": hoteles_finales,"vendedor":vendedorInstancia,
-        "pasajeros": int(request.session['pasajeros']) if "pasajeros" in request.session else None, 
+        "pasajeros": pasajeros,
         "fecha_inicio": fecha_inicio,
         "fecha_fin": fecha_fin,
         "formulario_enviado":formulario_enviado,
@@ -111,7 +109,6 @@ def iniciar_venta(request):
     request.session['fecha_inicio']=fechaInicio
     request.session['fecha_fin']=fechaFin
     request.session['pasajeros']=pasajeros
-    #request.session['venta']={'fecha_inicio': fechaInicio, '}
     return redirect('venta:vendedor')
 
 def cancelar_venta(request):
