@@ -40,9 +40,9 @@
             <label for="fecha1"> desde: </label>
             <input type="date" id="fecha1" name="fecha_inicio" value="{{ request.session.fecha_inicio }}" min="" max="" onclick="fecha_actual();">
             <label for="fecha2"> hasta: </label>
-            <input type="date" id="fecha2" name="fecha_fin" value="{{ request.session.fecha_fin }}" min="" max="" onclick="fecha_minima();">
+            <input type="date" id="fecha2" name="fecha_fin" value="{{ request.session.fecha_fin }} " min=" max=" onclick="fecha_minima();">
             <label for="pasajeros"> Pasajeros: </label>
-            <input type="number" id="pasajeros" name="pasajeros" value="{{ request.session.pasajeros }}" min=1>
+            <input type="number" id="pasajeros" name="pasajeros" value="{{ request.session.pasajeros }} " min=1>
             <input type="submit" id="filtrar" name="filtrar">
             <button><a href="{%url 'venta:limpiar_preferencias'%}"> limpiar Preferencias</a></button>
             
@@ -65,12 +65,11 @@
         </thead>
         <tbody>
             {% for hotel in colHoteles %}
-            {% hotel_disponible hotel as tengo_habitaciones %}
-            <tr class="{% if tengo_habitaciones %}
+            <tr class="{% if hotel.dispuesto %}
                     comercializable manito
                     {% else %}
                     noComercializable manito
-                    {% endif%}" {% if tengo_habitaciones %} onclick="evitar_ingreso({{hotel.pk}});" {% else %} onclick="Swal.fire({ icon: 'error',
+                    {% endif%}" {% if hotel.dispuesto %} onclick="evitar_ingreso({{hotel.id}});" {% else %} onclick="Swal.fire({ icon: 'error',
                         title: 'Preferencias no arroja resultados',
                         text: 'La busqueda no arroja resultados en este Hotel',
                         });" {% endif %}>

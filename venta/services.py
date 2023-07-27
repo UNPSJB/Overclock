@@ -61,6 +61,26 @@ def documento_valido(dni_nuevo , form):
         form.add_error('documento', 'DNI ya existe en el sistema')
         return False
     return True
+
+
+def preparar_hoteles(hoteles, fecha_inicio, fecha_fin, num_pasajeros):
+    arr = []
+    for hotel in hoteles:
+        disponible = hotel.disponible(fecha_inicio, fecha_fin, num_pasajeros)
+        data={
+            "id": hotel.pk,
+            "nombre": hotel.nombre,
+            "localidad" : hotel.localidad,
+            "direccion" : hotel.direccion,
+            "email" : hotel.email,
+            "telefono" : hotel.telefono,
+            "encargadoNombre": hotel.encargado.persona.nombre,
+            "encargadoApellido" : hotel.encargado.persona.apellido,
+            "categoria" : hotel.categoria,
+            "dispuesto" : disponible
+        }
+        arr.append(data)
+    return arr
         
 def devolver_temporadas_en_fechas(temporadas, fecha_inicio, fecha_fin):
     temporadas_en_rango=[]
@@ -73,14 +93,12 @@ def devolver_temporadas_en_fechas(temporadas, fecha_inicio, fecha_fin):
 def asignar_precio_por_temporada(fecha_inicio, fecha_fin, id_hotel, tipo_habitacion):
     temporadas = TemporadaAlta.objects.filter(hotel = id_hotel)
     precio_Hotel_temporadas = PrecioPorTipo.objects.get( hotel_id = id_hotel, tipo_id = tipo_habitacion)
-    print(precio_Hotel_temporadas)
     dias_promocion = 0
     dias_sin_promocion = 0
     total = 0
     resultado = 0
     if (temporadas):
         temporadas = devolver_temporadas_en_fechas(temporadas, fecha_inicio, fecha_fin)
-        print(temporadas)
         for temporada in temporadas:
             if (fecha_inicio <= fecha_fin <= temporada.inicio) or (temporada.fin <= fecha_inicio <= fecha_fin):
                 dias_sin_promocion = fecha_fin - fecha_inicio
@@ -112,10 +130,23 @@ def asignar_precio_por_temporada(fecha_inicio, fecha_fin, id_hotel, tipo_habitac
                 dias_promocion = temporada.fin - temporada.inicio
                 dias_promocion = dias_promocion.days * precio_Hotel_temporadas.alta
                 total =  dias_promocion + dias_sin_promocion
-            print (dias_sin_promocion)
-            print(dias_promocion)
             resultado = resultado + total
             fecha_inicio = temporada.fin
         return resultado
     else:   
-        return (fecha_fin - fecha_inicio).days * precio_Hotel_temporadas.baja 
+        return (fecha_fin - fecha_inicio).days * precio_Hotel_temporadas.baja
+
+
+def cargar_precio_habitacion_por_temporada(habitaciones, id_hotel, fecha_inicio, fecha_fin):
+    habitaciones_con_precios=[]
+    for habitacion in habitaciones:
+        precio = asignar_precio_por_temporada(fecha_inicio, fecha_fin, id_hotel, habitacion.tipo_id )
+        datos={
+            "id": habitacion.id,
+            "tipo": habitacion.tipo,
+            "numero": habitacion.numero,
+            "pasajeros": habitacion.tipo.pasajeros,
+            "precio" : precio,
+        }
+        habitaciones_con_precios.append(datos)
+    return habitaciones_con_precios

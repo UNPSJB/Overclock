@@ -112,11 +112,11 @@
                     <td>{{habitacion.tipo}}</td>
                     <td>{{habitacion.numero}}</td>
                     <td>{{habitacion.tipo.pasajeros}}</td>
-                    <td>${% precio_entre_fechas habitacion hotel.pk%}</td>
+                    <td>${{habitacion.precio}}</td>
                     <td>
                         <center>
                             <button type="button" class="btn btn-success"
-                                onclick=location.href="{% url 'venta:alquilarHabitacion' habitacion.pk hotel.pk %}"
+                                onclick=location.href="{% url 'venta:alquilarHabitacion' habitacion.id hotel.pk %}"
                                 title="Alquilar">
                                 <i class="fas fa-shopping-cart"></i> </button>
                         </center>

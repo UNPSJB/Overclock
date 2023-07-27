@@ -8,7 +8,7 @@ from hotel.models import Hotel
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from venta.carrito import Carrito
-from venta.services import cargar_liquidaciones_pendientes, documento_valido, liquidar_liquidaciones_pendientes
+from venta.services import cargar_liquidaciones_pendientes, cargar_precio_habitacion_por_temporada, documento_valido, liquidar_liquidaciones_pendientes, preparar_hoteles
 
 
 # Create your views here.
@@ -25,14 +25,19 @@ def vendedor(request):
     personaInstancia = request.user.persona
     vendedorInstancia = get_object_or_404(Vendedor, persona = personaInstancia.id)
     colHoteles= Hotel.objects.filter(vendedores__persona=vendedorInstancia.persona)
-    fecha_inicio=  datetime.strptime(request.session['fecha_inicio'], '%Y-%m-%d').date() if "fecha_inicio" in request.session else None
-    fecha_fin=  datetime.strptime(request.session['fecha_fin'], '%Y-%m-%d').date() if "fecha_fin" in request.session else None
+    fecha_actual = datetime.now()
+    fecha_inicio=  datetime.strptime(request.session['fecha_inicio'], '%Y-%m-%d').date() if "fecha_inicio" in request.session else fecha_actual
+    fecha_fin=  datetime.strptime(request.session['fecha_fin'], '%Y-%m-%d').date() if "fecha_fin" in request.session else fecha_actual
+    pasajeros_default = 1
+    pasajeros =  int(request.session['pasajeros']) if "pasajeros" in request.session else pasajeros_default
+    
+    hoteles_finales = preparar_hoteles(colHoteles,fecha_inicio,fecha_fin,pasajeros)
     if fecha_inicio:
         formulario_enviado="enviado"
     else:
         formulario_enviado="no_enviado"
     
-    return render(request, "venta/vendedor.html", {"colHoteles": colHoteles,"vendedor":vendedorInstancia,
+    return render(request, "venta/vendedor.html", {"colHoteles": hoteles_finales,"vendedor":vendedorInstancia,
         "pasajeros": int(request.session['pasajeros']) if "pasajeros" in request.session else None, 
         "fecha_inicio": fecha_inicio,
         "fecha_fin": fecha_fin,
@@ -41,6 +46,7 @@ def vendedor(request):
          })
 
 
+        
 def buscarHabitaciones(request,hotel):
     personaInstancia = request.user.persona
     vendedorInstancia = get_object_or_404(Vendedor, persona = personaInstancia.id)
@@ -63,7 +69,8 @@ def buscarHabitaciones(request,hotel):
             contenido_fechas=(fecha_inicio_venta<=fecha_inicio and fecha_fin_venta>=fecha_fin)
             if (pksiguales and (inicio_alquiler_en_fechas_ingresadas or fin_alquiler_en_fechas_ingresadas or contenido_fechas)):
                 colHabitaciones.remove(habitacion)
-    
+    print(colHabitaciones)
+    habitaciones_con_precio_final = cargar_precio_habitacion_por_temporada(colHabitaciones, hotelInstancia.pk, fecha_inicio, fecha_fin )
     ventas_paquetes_en_carrito=carrito.get_alquileres_paquetes()
     colPaquetes = hotelInstancia.get_paquetes_busqueda(fecha_inicio,fecha_fin,pasajeros)
     for venta in ventas_paquetes_en_carrito:
@@ -71,7 +78,7 @@ def buscarHabitaciones(request,hotel):
         if paquete in colPaquetes:
             colPaquetes.remove(paquete)
     return render(request, "venta/buscarHabitaciones.html", {"hotel":hotelInstancia,
-        "habitaciones_disponibles": colHabitaciones,
+        "habitaciones_disponibles": habitaciones_con_precio_final,
         "paquetes_disponibles":colPaquetes,
         "fecha_inicio": fecha_inicio,
         "fecha_fin": fecha_fin,
@@ -261,7 +268,6 @@ def limpiar_preferencias(request):
         del request.session['nombre_cliente']
     if 'apellido_cliente' in request.session:
         del request.session['apellido_cliente']
-        print("elimie apellidooo")
     return redirect("venta:vendedor")
 
 def listado_liquidaciones(request):
