@@ -118,7 +118,13 @@ class Alquiler(models.Model):
         return self.habitaciones.all()
 
     def get_cantidad_habitaciones(self):
-        return self.habitaciones.all().count()    
+        return self.habitaciones.all().count()  
+    
+    def habitacion_disponible_entre_fechas(fecha_alquiler_inicio, fecha_alquiler_fin):
+        if(fecha_alquiler_inicio <= self.inicio <= fecha_alquiler_fin) and (fecha_alquiler_inicio <= self.fin <= fecha_alquiler_fin):
+            return False
+        else:
+            return True 
 
 
 

@@ -1,3 +1,4 @@
+
 from django.db import models
 from decimal import Decimal
 from datetime import date, datetime, timedelta
@@ -78,9 +79,14 @@ class Hotel(models.Model):
         paquetesEnHotel = self.get_paquetes()
         paquetesSegunBusqueda=[]
         for paquete in paquetesEnHotel:
-            if (paquete.inicio>=fechai) and (paquete.fin<=fechaf) and (paquete.get_pasajeros()>=cantPasajeros) and (paquete.estoy_vigente()):
+            if (paquete.inicio <= fechai <=paquete.fin) and (paquete.fin<=fechaf) and (paquete.get_pasajeros()>=cantPasajeros) and (paquete.estoy_vigente()):
+                paquetesSegunBusqueda.append(paquete)
+            if ( paquete.inicio <= fechai <= fechaf) and (fechaf <= paquete.fin) and (paquete.get_pasajeros()>=cantPasajeros) and (paquete.estoy_vigente()):    
+                paquetesSegunBusqueda.append(paquete)
+            if (fechai <= paquete.inicio <= fechaf) and (fechaf <= paquete.fin) and (paquete.get_pasajeros()>=cantPasajeros) and (paquete.estoy_vigente()):    
                 paquetesSegunBusqueda.append(paquete)
         return paquetesSegunBusqueda
+    
 
     def get_temporadas(self):
         return TemporadaAlta.objects.filter(hotel=self)
@@ -167,14 +173,25 @@ class Habitacion(models.Model):
         return total
 
     def disponible(self, desde, hasta):
-        return not self.alquileres.filter(inicio__lte=desde, fin__gte=hasta).exists() and not self.paqueteturistico.filter(inicio__lte=desde,fin__gte=hasta).exists()
-    
+        if (self.alquileres.filter(inicio__lte= desde, fin__gte=hasta).exists() and (self.baja == False)):
+            return False
+        else:
+            if (self.alquileres.filter(fin__lte=desde).exists() and (self.baja == False)):
+                return True
+            else:
+                if (self.alquileres.filter(inicio__gte=desde , inicio__lte=hasta).exists() and (self.baja == False)) :
+                    return False
+                else:
+                    if (self.alquileres.filter(inicio__lte= desde, fin__lte=hasta).exists() and (self.baja == False)) :
+                        return False         
+        return True
+
     def get_pasajeros(self):
         return self.tipo.pasajeros
 
     def dar_baja(self):
         self.baja=True
-    
+ 
     def dar_alta(self):
         self.baja=False
         
