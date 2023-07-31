@@ -55,7 +55,8 @@ def buscarHabitaciones(request,hotel):
     fecha_fin=  datetime.strptime(request.session['fecha_fin'], '%Y-%m-%d').date() if "fecha_fin" in request.session else None
     pasajeros = int(request.session['pasajeros']) if "pasajeros" in request.session else None
     hotelInstancia = get_object_or_404(Hotel, pk=hotel)
-    colHabitaciones = hotelInstancia.get_habitaciones_busqueda(fecha_inicio,fecha_fin,pasajeros)
+    coleccionHabitaciones = hotelInstancia.get_habitaciones_busqueda(fecha_inicio,fecha_fin,pasajeros)
+    colHabitaciones = [habitacion for habitacion in coleccionHabitaciones if habitacion.baja == False]
     ventas_habitaciones_en_carrito=carrito.get_alquileres_habitaciones()
     for venta in ventas_habitaciones_en_carrito:
         fecha_inicio_venta=datetime.strptime(venta.fecha_inicio, '%Y-%m-%d').date()
