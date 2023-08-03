@@ -15,8 +15,19 @@
 
 {%block carrito_contador %} {%if not contador%}0{% else %}{{contador}} {% endif %}{% endblock carrito_contador%}
 {% endblock carritoz %}
+<script type="text/javascript">
+    //SCRIPT DE DATATABLE
+    const $ = jQuery.noConflict();
+    $(document).ready(function () {
+        $('#example1').DataTable();
+        $('#example2').DataTable();
+    });
+</script>
 
 {% block content %}
+
+
+
 <!--  #######################  DATOS DEL HOTEL  #######################-->
 
 <div class="titulo">
@@ -185,29 +196,11 @@
 
     </div>
 
-
-
-
-
     {% endblock datosVista %}
     {% endblock content %}
 
-
-
-
-
-
-
     {% block extrajs %}
 
-    <script type="text/javascript">
-        //SCRIPT DE DATATABLE
-        const $ = jQuery.noConflict();
-        $(document).ready(function () {
-            $('#example1').DataTable();
-            $('#example2').DataTable();
-        });
-    </script>
 
     <script>
         let state = sessionStorage.getItem("eleccion") || "habitaciones";
