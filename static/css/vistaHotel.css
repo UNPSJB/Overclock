@@ -89,7 +89,7 @@
     background-color: orange;
     }
     
-    #user:checked~div#effect {
+    #habitaciones:checked~div#effect {
     animation: goLeft 0.5s;
     visibility: visible;
     animation-fill-mode: forwards;
@@ -138,7 +138,7 @@
     
     }
     
-    #bell:checked~div#effect {
+    #paquetes:checked~div#effect {
     visibility: visible;
     animation: goRight 0.5s;
     animation-fill-mode: forwards;

@@ -1,6 +1,9 @@
 {% extends 'base/vendedor.html'%}
 {% load static %}
 {% load hotel %}
+{% block extra_css %}
+<link rel="stylesheet" href="{% static '/css/vistaHotel.css' %}">
+{% endblock extra_css %}
 
 {% block header %}
 <button onclick="location.href='/venta/vendedor'" style="text-decoration:none"
@@ -71,11 +74,11 @@
 <div class="abajo">
 
     <div id="container">
-        <input class="boton-Habitaciones-Paquetes" type="radio" id="user" name="material" value="habitaciones">
-        <label class="etiqueta-boton" for="user" id="label-1">
+        <input class="boton-Habitaciones-Paquetes" type="radio" id="habitaciones" name="material" value="habitaciones">
+        <label class="etiqueta-boton" for="habitaciones" id="label-1" onclick='seleccionarEstado("habitaciones")'>
             <span class="glyphicon glyphicon-user"><i class="fas fa-bed"></i></span></label>
-        <input class="boton-Habitaciones-Paquetes" type="radio" id="bell" name="material" value="paquetes">
-        <label class="etiqueta-boton" for="bell" id="label-2">
+        <input class="boton-Habitaciones-Paquetes" type="radio" id="paquetes" name="material" value="paquetes">
+        <label class="etiqueta-boton" for="paquetes" id="label-2" onclick='seleccionarEstado("paquetes")'>
             <span class="glyphicon glyphicon-bell"><i class=" fas fa-box"></i></span></label>
         <div id="effect"></div>
     </div>
@@ -207,24 +210,29 @@
     </script>
 
     <script>
-        $("#vistaHabitaciones").hide();
-        $("#vistaPaquetes").show();
-        $(function () {
-            $('.boton-Habitaciones-Paquetes').click(function () {
-                var state = $(this).val();
-                console.log(state)
-                switch (state) {
-                    case "habitaciones":
-                        $("#vistaHabitaciones").show();
-                        $("#vistaPaquetes").hide();
-                        break;
-                    case "paquetes":
-                        $("#vistaHabitaciones").hide();
-                        $("#vistaPaquetes").show();
-                        break;
-                }
-            });
-        });
+        let state = sessionStorage.getItem("eleccion") || "habitaciones";
+        document.getElementById(state).setAttribute("checked" , "")
+        mostrarListado(state)
+        
+        function seleccionarEstado(estado){
+            sessionStorage.setItem("eleccion" , estado)
+            document.getElementById(estado).setAttribute("checked" , "")
+            mostrarListado(estado)
+        }
+    
+    
+        function mostrarListado(state){
+            switch (state) {
+                case "habitaciones":
+                    document.getElementById("vistaPaquetes").style.display = "none";
+                    document.getElementById("vistaHabitaciones").style.display = "block";
+                    break;
+                case "paquetes":
+                    document.getElementById("vistaPaquetes").style.display = "block";
+                    document.getElementById("vistaHabitaciones").style.display = "none";
+                    break;
+            }
+        }
     </script>
     <script src="{% static 'js/dd8c49730d.js' %}"></script>#
 
