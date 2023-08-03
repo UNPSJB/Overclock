@@ -1,6 +1,5 @@
 {% extends 'base/vendedor.html'%}
 {% load static %}
-{% load hotel %}
 {% block extra_css %}
 <link rel="stylesheet" href="{% static '/css/vistaHotel.css' %}">
 {% endblock extra_css %}
@@ -91,6 +90,7 @@
         <input class="boton-Habitaciones-Paquetes" type="radio" id="paquetes" name="material" value="paquetes">
         <label class="etiqueta-boton" for="paquetes" id="label-2" onclick='seleccionarEstado("paquetes")'>
             <span class="glyphicon glyphicon-bell"><i class=" fas fa-box"></i></span></label>
+            
         <div id="effect"></div>
     </div>
 
