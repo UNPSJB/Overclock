@@ -8,3 +8,16 @@ def habitacion_duplicada(nueva_habitacion , hotel_id , form):
             return True
             break
     return False
+
+
+def hay_fechas_superpuestas(fecha_inicio, fecha_fin , fecha_inicio_paquete , fecha_fin_paquete):
+
+    if((fecha_inicio <= fecha_inicio_paquete) and (fecha_fin >= fecha_fin_paquete)):
+        return True
+    else:
+        if(fecha_inicio_paquete <= fecha_inicio <= fecha_fin_paquete):
+            return True
+        else:
+            if(fecha_inicio_paquete <= fecha_fin <= fecha_fin_paquete):
+                return True
+    return False

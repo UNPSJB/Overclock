@@ -10,7 +10,7 @@ from django.forms import forms
 from django.http import request, JsonResponse
 from django.http.response import HttpResponseRedirect
 from django.shortcuts import render, HttpResponse, redirect, get_object_or_404
-from hotel.helpers import habitacion_duplicada
+from hotel.helpers import habitacion_duplicada, hay_fechas_superpuestas
 from hotel.models import Habitacion, Hotel, PrecioPorTipo, TemporadaAlta, PaqueteTuristico
 from .forms import  HabitacionForm, HotelForm, ServicioForm, TemporadaHotelForm, AgregarTipoAHotelForm, HabitacionForm, PaqueteTuristicoForm, VendedorHotelForm
 from django.contrib.auth.forms import AuthenticationForm
@@ -222,6 +222,13 @@ def temporadaHotelCrear(request, hotel):
     hotelInstancia=get_object_or_404(Hotel, pk=hotel)
     if request.method == "POST":
             form = TemporadaHotelForm(request.POST)
+            temporadas = TemporadaAlta.objects.filter(hotel = hotel )
+            fecha_inicio = request.POST["inicio"]
+            fecha_fin = request.POST["fin"]
+            for temporada in  temporadas:
+                if (hay_fechas_superpuestas(fecha_inicio ,fecha_fin , str(temporada.inicio), str(temporada.fin))):
+                    form.add_error('inicio', 'las fechas se superponen con alguna existentes')
+                    return render(request, "hotel/modals/modal_temporadaHotel_crear.html", { "hotel": hotelInstancia, "formulario": form})
             if form.is_valid():
                 form = TemporadaHotelForm(request.POST)
                 temporadaInstancia=form.save(commit=False)
@@ -262,19 +269,6 @@ def paqueteTuristicoHotel(request,hotel):
     personaInstancia = request.user.persona
     hotelInstancia =get_object_or_404(Hotel, pk=hotel)    
     return render(request, "hotel/vistaHotelAdmin.html",{"hotel":hotelInstancia,"administrador":personaInstancia })
-    
-
-def hay_fechas_superpuestas(fecha_inicio, fecha_fin , fecha_inicio_paquete , fecha_fin_paquete):
-
-    if((fecha_inicio <= fecha_inicio_paquete) and (fecha_fin >= fecha_fin_paquete)):
-        return True
-    else:
-        if(fecha_inicio_paquete <= fecha_inicio <= fecha_fin_paquete):
-            return True
-        else:
-            if(fecha_inicio_paquete <= fecha_fin <= fecha_fin_paquete):
-                return True
-    return False
     
 
 def paqueteTuristicoHotelCrear(request, hotel):
