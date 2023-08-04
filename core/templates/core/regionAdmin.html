@@ -1,6 +1,8 @@
 {% extends 'base/base_administrador.html'%}
 {% load static %}
-
+{% block extra_css %}
+<link rel="stylesheet" href="{% static '/css/vistaHotel.css' %}">
+{% endblock extra_css %}
 {% block header %}
 <button onclick="location.href='/core/homeAdministrador'" style="text-decoration:none"
     class="rounded-1 btn  btn-outline-secondary text-white ">Administrador:{% if administrador %}{{administrador.nombre}} {{administrador.apellido}}{% endif %}</button>
@@ -16,52 +18,51 @@
 
 
 <div class="switch-toggle switch-3 switch-candy sm row justify-content-center my-4">
+    
+  
+        <input id="ciudad" name="state-d" radio type="radio"  value="ciudad" />
+        <label for="ciudad" onclick='seleccionarEstado("ciudad")'>
+            <h1>Localidades</h1>
+        </label>
+    
+        <input id="provincia" name="state-d" type="radio"  value="provincia" />
+        <label for="provincia" onclick='seleccionarEstado("provincia")'>
+            <h1>Provincias</h1>
+        </label>
+    
+        <input id="pais" name="state-d" type="radio"  value="pais" />
+        <label for="pais" onclick='seleccionarEstado("pais")'>
+            <h1>Paises</h1>
+        </label>
+        <div id="effecto"></div>
+    
+ 
+        <style>
 
+            
+            .switch-toggle {
+                margin-top: 1vh;
+                flex-direction: row;
+    
+            }
+    
+            .switch-toggle input {
+                position: absolute;
+                opacity: 0;
+                border-radius: 5px;
+            }
+    
+            .switch-toggle input+label {
+                padding: 20px;
+                float: center;
+                cursor: pointer;
+            }
+    
+        
+        </style>
 
+    </div>
 
-    <input id="ciudad" name="state-d" radio type="radio"  value="ciudad" />
-    <label for="ciudad" onclick='seleccionarEstado("ciudad")'>
-        <h1>Localidades</h1>
-    </label>
-
-    <input id="provincia" name="state-d" type="radio"  value="provincia" />
-    <label for="provincia" onclick='seleccionarEstado("provincia")'>
-        <h1>Provincias</h1>
-    </label>
-
-    <input id="pais" name="state-d" type="radio"  value="pais" />
-    <label for="pais" onclick='seleccionarEstado("pais")'>
-        <h1>Paises</h1>
-    </label>
-
-
-
-    <style>
-        .switch-toggle {
-            margin-top: 1vh;
-
-        }
-
-        .switch-toggle input {
-            position: absolute;
-            opacity: 0;
-            border-radius: 5px;
-        }
-
-        .switch-toggle input+label {
-            padding: 7px;
-            float: center;
-            cursor: pointer;
-        }
-
-        .switch-toggle input:checked+label {
-            background: #28a745;
-            border-radius: 5px;
-        }
-    </style>
-
-
-</div>
 
 
 

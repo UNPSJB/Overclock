@@ -39,12 +39,126 @@
 
 /* ######################### COSAS BOTON TOOGLE #################################*/
 
- 
+
+/* //////////////////////////////2 estados (vendedores encargados)//////////////// */
+
+#vendedor:checked~div#effecto {
+    visibility: visible;
+    animation: vendedor 1s;
+    animation-fill-mode: forwards; 
+}
+
+@keyframes vendedor {
+
+    from {
+      transform: scaleX(2);
+    }
+    to{
+        width: 27%;
+        transform: scaleX(1);
+        transform: translateX(-150px);
+    }
+      
+}
+
+#encargado:checked~div#effecto {
+    visibility: visible;
+    animation: encargado 1s;
+    animation-fill-mode: forwards; 
+}
+@keyframes encargado {
+
+    from {
+        transform: scaleX(2);
+    }
+    to{
+        width: 27%;
+        transform: scaleX(1);
+        transform: translateX(150px);
+  }
+      
+}
+
+
+
+ /* /////////////////////////  3 estados (localidad provincia pais) /////////////////////////////////////// */
+
+ #effecto{
+    position: absolute;
+    top: 5%;
+    width: 20%;
+    height: 10%;
+    box-shadow: 0px 2px 2px grey;
+    z-index: -1;
+    border-radius: 5px;
+    background-color: orange
+    
+}
+
+
+#ciudad:checked~div#effecto {
+    visibility: visible;
+    animation: izquierda 1s;
+    animation-fill-mode: forwards; 
+}
+
+@keyframes izquierda {
+
+    from {
+      transform: scaleX(2);
+    }
+    to{
+        width: 22%;
+        transform: scaleX(1);
+        transform: translateX(-189px);
+    }
+      
+}
+
+#provincia:checked~div#effecto {
+    visibility: visible;
+    animation: centro 1s;
+    animation-fill-mode: forwards;
+   
+}
+
+@keyframes centro {
+
+      from {
+        transform: scaleX(3);
+    }
+    to{
+        transform: scaleX(1);
+        transform: translateX(50px);
+    }
+        
+}
+
+#pais:checked~div#effecto {
+    visibility: visible;
+    animation: derecha 1s;
+    animation-fill-mode: forwards; 
+}
+
+@keyframes derecha {
+
+    from {
+        transform: scaleX(2);
+    }
+    to{
+        width: 14%;
+        transform: scaleX(1);
+        transform: translateX(250px);
+  }
+      
+}
+
+ /* /////////////////////////  2 estados /////////////////////////////////////// */
 .boton-Habitaciones-Paquetes {
         display: none;
 }
    
-    div#container {
+    div#container  {
     height: 5vh;
     width: 15vh;
     box-shadow: 0px 1px 5px black;
@@ -72,11 +186,11 @@
     left: 5%;
     }
     
-    .etiqueta-boton#label-2 {
+    .etiqueta-boton#label-2{
     right: 26.5%;
     }
-    
-    
+
+
     div#effect {
     position: absolute;
     top: 5%;
@@ -88,9 +202,10 @@
     border-radius: 5px;
     background-color: orange;
     }
-    
+
+
     #habitaciones:checked~div#effect {
-    animation: goLeft 0.5s;
+    animation: goLeft 1s;
     visibility: visible;
     animation-fill-mode: forwards;
     }
@@ -143,6 +258,8 @@
     animation: goRight 0.5s;
     animation-fill-mode: forwards;
     }
+
+    
     
     @keyframes goRight {
     0% {

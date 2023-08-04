@@ -1,6 +1,8 @@
 {% extends 'base/base_administrador.html'%}
 {% load static %}
-
+{% block extra_css %}
+<link rel="stylesheet" href="{% static '/css/vistaHotel.css' %}">
+{% endblock extra_css %}
 {% block header %}
 <button onclick="location.href='/core/homeAdministrador'" style="text-decoration:none"
     class="rounded-1 btn  btn-outline-secondary text-white ">Administrador:{% if administrador %}{{administrador.nombre}} {{administrador.apellido}}{% endif %}</button>
@@ -23,10 +25,14 @@
     <label for="encargado" onclick='seleccionarEstado("encargado")'>
         <h1>Encargados</h1>
     </label>
-
+    <div id="effecto"></div>
+    
+ 
     <style>
         .switch-toggle {
             margin-top: 1vh;
+            flex-direction: row;
+
         }
 
         .switch-toggle input {
@@ -36,14 +42,9 @@
         }
 
         .switch-toggle input+label {
-            padding: 7px;
+            padding: 20px;
             float: center;
             cursor: pointer;
-        }
-
-        .switch-toggle input:checked+label {
-            background: #28a745;
-            border-radius: 5px;
         }
     </style>
 </div>
