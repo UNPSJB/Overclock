@@ -12,45 +12,7 @@
 
 {% block content %}
 
-<div class="switch-toggle switch-3 switch-candy sm row justify-content-center my-4">
-
-    <input id="liquidacion" name="state-d" radio type="radio"  value="liquidacion" />
-    <label for="liquidacion" onclick='seleccionarEstado("liquidacion")'>
-        <h1>Liquidaciones</h1>
-    </label>
-
-    <input id="abonar" name="state-d" type="radio"  value="abonar" />
-    <label for="abonar" onclick='seleccionarEstado("abonar")'>
-        <h1>Abonar</h1>
-    </label>
-
-    <style>
-        .switch-toggle {
-            margin-top: 1vh;
-        }
-
-        .switch-toggle input {
-            position: absolute;
-            opacity: 0;
-            border-radius: 5px;
-        }
-
-        .switch-toggle input+label {
-            padding: 7px;
-            float: center;
-            cursor: pointer;
-        }
-
-        .switch-toggle input:checked+label {
-            background: #28a745;
-            border-radius: 5px;
-        }
-    </style>
-</div>
-
-<!-- <center><h1 class="my-4">LISTADO DE LIQUIDACIONES</h1></center> -->
-
-<!-- VISTA LIQUIDACIONES -->
+<center><h1 class="my-4">LIQUIDACIONES</h1></center>
 
 <div class="formularioRegion" id="vistaLiquidacion">
 
@@ -107,15 +69,6 @@
 </div>
 
 
-<!-- VISTA ABONADOS-->
-
-
-<div class="formularioRegion" id="vistaAbonados">
-    <h1>hola abonados</h1>
-</div>
-
-
-
 {% endblock content %}
 
 {% block extrajs %}
@@ -129,31 +82,6 @@
     });</script>
 
 <script>
-    let state = sessionStorage.getItem("opcion") || "liquidacion";
-    document.getElementById(state).setAttribute("checked" , "")
-    mostrarListado(state)
-    console.log(state)
-    
-    function seleccionarEstado(estado){
-        sessionStorage.setItem("opcion" , estado)
-        document.getElementById(estado).setAttribute("checked" , "")
-        mostrarListado(estado)
-    }
-
-
-    function mostrarListado(state){
-        switch (state) {
-            case "liquidacion":
-                document.getElementById("vistaAbonados").style.display = "none";
-                document.getElementById("vistaLiquidacion").style.display = "block";
-                break;
-            case "abonar":
-                document.getElementById("vistaAbonados").style.display = "block";
-                document.getElementById("vistaLiquidacion").style.display = "none";
-                break;
-        }
-    }
-
 
     function valoresCargados(){
         var fechaInicio = document.getElementById("fecha_inicio").value;
