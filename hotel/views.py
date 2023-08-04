@@ -283,8 +283,9 @@ def paqueteTuristicoHotelCrear(request, hotel):
             habitacion = Habitacion.objects.get(id=id_habitacion)  
             paquetes = habitacion.paqueteturistico.all() 
             for paquete in paquetes:
-                if (hay_fechas_superpuestas(fecha_inicio ,fecha_fin , str(paquete.inicio), str(paquete.fin))):
+                if (hay_fechas_superpuestas(fecha_inicio ,fecha_fin , str(paquete.inicio), str(paquete.fin))):  
                     form.fields['habitaciones'].choices=[(c.pk,c.numero) for c in Habitacion.objects.filter(hotel=hotel_actual)]
+                    form.add_error('habitaciones', 'alguna de las habitaciones seleccionadas ya tienen un paquete para ese periodo de fechas')
                     return render(request, "hotel/modals/modal_paqueteTuristicoHotel_crear.html", { "hotel": hotel_actual, "formulario": form})        
          
             # Crear un nuevo objeto PaqueteTuristico

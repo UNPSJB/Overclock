@@ -280,6 +280,7 @@
                     <th>Fecha inicio</th>
                     <th>Fecha fin</th>
                     <th>Costo</th>
+                    <th>habitaciones</th>
                     <th>Estado</th>
                     <th>Acciones</th>
                 </tr>
@@ -304,6 +305,10 @@
                     <td>{{paquete.inicio}}</td>
                     <td>{{paquete.fin}}</td>
                     <td>${{paquete.get_costo}}</td>
+                    <td> {% for habitacion in paquete.get_habitaciones %}
+                        <p>habitacion: {{habitacion.numero}}</p>
+                        {% endfor %}
+                    </td>
                     <td>{% if paquete.estoy_vendido %} VENDIDO
                         {% elif paquete.estoy_vencido %} VENCIDO
                         {% else %} VIGENTE

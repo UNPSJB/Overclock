@@ -76,7 +76,7 @@
               </a>
               </div>
               <form action="{% url 'hotel:modalCrearPaqueteTuristicoHotel' hotel.pk %}" method="POST">
-                <div class="modal-body">
+                <div class="modal-body" >
                   {% csrf_token %}
                   {{formulario.as_p}}
                 </div>
