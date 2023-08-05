@@ -160,6 +160,7 @@
                     <th>Fecha fin</th>
                     <th>Costo</th>
                     <th>Pasajeros</th>
+                    <th>Habitaciones</th>
                     <th>Acciones</th>
                 </tr>
 
@@ -179,6 +180,10 @@
                     <td>{{paquete.fin}}</td>
                     <td>${{paquete.get_costo}}</td>
                     <td>{{paquete.get_pasajeros}}</td>
+                    <td> {% for habitacion in paquete.get_habitaciones %}
+                        <p>habitacion: {{habitacion.numero}} tipo: {{habitacion.tipo}}</p>
+                        {% endfor %}
+                    </td>
                     <td>
                         <center>
                             <button type="button" class="btn btn-success"
