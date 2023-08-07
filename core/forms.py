@@ -17,7 +17,7 @@ class PaisForm(ModelForm):
 
     def clean_nombre(self):
          nombreRecibido = self.cleaned_data.get("nombre")
-         if nombreRecibido == 'Juan':
+         if nombreRecibido == '':
            raise ValidationError('Este nombre no esta permitido')
          if nombreRecibido.split(' ') == ' ':
            raise ValidationError('El nombre no puede estar vacio')
