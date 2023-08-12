@@ -309,29 +309,52 @@ def paqueteTuristicoHotelCrear(request, hotel):
 
 
 def paqueteTuristicoHotelModificar(request,hotel,paquete):
-    hotelInstancia=get_object_or_404(Hotel, pk=hotel)
+    id_hotel = hotel
+    hotelInstancia=get_object_or_404(Hotel, pk=id_hotel)
     paqueteInstancia=get_object_or_404(PaqueteTuristico, pk=paquete)
     form = PaqueteTuristicoForm(request.POST or None,instance=paqueteInstancia)
     if request.method == "POST":
+        fecha_inicio = request.POST['inicio']
+        fecha_fin = request.POST['fin']
+        lista_habitaciones_seleccion = request.POST.getlist('habitaciones')
+        lista_filtrada_habitaciones=[]
+        for elemento in lista_habitaciones_seleccion:
+            habitacion = Habitacion.objects.get(id = elemento)
+            lista_filtrada_habitaciones.append(habitacion)
+            paquetes = list(habitacion.paqueteturistico.all())
+            for x in paquetes:
+                if(x.id == paquete):
+                    paquetes.remove(x)
+            for paq in paquetes:
+                if (hay_fechas_superpuestas(fecha_inicio ,fecha_fin , str(paq.inicio), str(paq.fin))):  
+                    form.add_error('habitaciones', 'alguna de las habitaciones seleccionadas ya tienen un paquete para ese periodo de fechas')
+                    form.fields['habitaciones'].choices=[(c.pk,c.numero) for c in Habitacion.objects.filter(hotel=hotelInstancia)]
+                    return render(request, "hotel/modals/modal_paqueteTuristicoHotel_modificar.html",{'formulario':form,'hotel':hotelInstancia,'paquete':paqueteInstancia})
+
+            form.fields['habitaciones'].choices=[(c.pk,c.numero) for c in Habitacion.objects.filter(hotel=hotelInstancia)]
+            
         if form.is_valid():
-            paquete=form.save(commit=False)
-            paquete.save()
+            print(paqueteInstancia)
+            paqueteInstancia.nombre = request.POST["nombre"]
+            paqueteInstancia.coeficiente = request.POST["coeficiente"]
+            paqueteInstancia.inicio = request.POST["inicio"]
+            paqueteInstancia.fin = request.POST["fin"]
+            paqueteInstancia.habitaciones.set(lista_habitaciones_seleccion)
+            paqueteInstancia.save()
             return redirect('hotel:paqueteTuristicoHotel', hotel)
     else:
-        form.fields['habitaciones'].choices=[(c.pk,c.numero) for c in Habitacion.objects.filter(hotel=hotelInstancia)]
-        arregloHabitacionesSeleccionadas = paqueteInstancia.habitaciones.all()
-        preseleccion=[]
-        for habitacion in arregloHabitacionesSeleccionadas:
-                preseleccion.append(habitacion.pk)
-        form.initial['habitaciones'] = preseleccion
         form.initial['inicio']=str(paqueteInstancia.inicio)
         form.initial['fin']=str(paqueteInstancia.fin)
         dicc={'nombre','habitaciones','inicio','fin'}
         for campo in dicc:
-            form.fields[campo].widget.attrs['style'] = 'display:none;'
+            form.fields[campo].widget.attrs['style'] = ''
             form.fields[campo].label = ''
-        form.fields['coeficiente'].label='coeficiente de descuento'
-        return render(request, "hotel/modals/modal_paqueteTuristicoHotel_modificar.html",{'formulario':form,'hotel':hotelInstancia,'paquete':paqueteInstancia})
+        form.fields['nombre'].label='nombre'
+        form.fields['inicio'].label='inicio'
+        form.fields['fin'].label='fin'
+        form.fields['habitaciones'].label='Habitaciones'
+    form.fields['habitaciones'].choices=[(c.pk,c.numero) for c in Habitacion.objects.filter(hotel=hotelInstancia)]
+    return render(request, "hotel/modals/modal_paqueteTuristicoHotel_modificar.html",{'formulario':form,'hotel':hotelInstancia,'paquete':paqueteInstancia})
 
 def paqueteTuristicoHotelEliminar(request,hotel,paquete):
     hotelInstancia=get_object_or_404(Hotel, pk=hotel)

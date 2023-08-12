@@ -48,7 +48,7 @@ class TemporadaHotelForm(ModelForm):
 class PaqueteTuristicoForm(forms.ModelForm):
     habitaciones = forms.MultipleChoiceField(
         choices=[],
-        widget=forms.SelectMultiple(attrs={'class': 'form-control'})
+        widget=forms.SelectMultiple(attrs={'class': 'form-control'}),
     )
 
     class Meta:
@@ -67,6 +67,7 @@ class PaqueteTuristicoForm(forms.ModelForm):
         self.fields['inicio'].widget.attrs.update({'class': 'form-control'})
         self.fields['fin'].widget.attrs.update({'class': 'form-control'})
         self.fields['habitaciones'].widget.attrs.update({'class': 'form-control'})
+        
 
 
 class AgregarTipoAHotelForm(ModelForm):

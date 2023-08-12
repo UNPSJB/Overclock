@@ -316,19 +316,25 @@
                     <td>
                         <center>
                             {% if paquete.estoy_vigente %}
-                            <button type="button" class="btn btn-warning" data-toggle="modal"
-                                data-target="#modificarPaqueteTuristicoHotel"
-                                onclick="abrir_modal('{% url 'hotel:modalModificarPaqueteTuristicoHotel' hotel.pk paquete.pk%}', '#modificarPaqueteTuristicoHotel');"
-                                title="Editar">
-                                <i class="fas fa-edit"></i>
-                            </button>
+                                <button type="button" class="btn btn-warning" data-toggle="modal"
+                                    data-target="#modificarPaqueteTuristicoHotel"
+                                    onclick="abrir_modal('{% url 'hotel:modalModificarPaqueteTuristicoHotel' hotel.pk paquete.pk%}', '#modificarPaqueteTuristicoHotel');"
+                                    title="Editar">
+                                    <i class="fas fa-edit"></i>
+                                </button>
+                                <button type="button" class="btn btn-danger" data-toggle="modal"
+                                    data-target="#eliminarPaqueteTuristicoHotel"
+                                    onclick="abrir_modal('{% url 'hotel:modalEliminarPaqueteTuristicoHotel' hotel.pk paquete.pk%}', '#eliminarPaqueteTuristicoHotel');"
+                                    title="Eliminar">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             {% elif paquete.estoy_vencido %}
-                            <button type="button" class="btn btn-danger" data-toggle="modal"
-                                data-target="#eliminarPaqueteTuristicoHotel"
-                                onclick="abrir_modal('{% url 'hotel:modalEliminarPaqueteTuristicoHotel' hotel.pk paquete.pk%}', '#eliminarPaqueteTuristicoHotel');"
-                                title="Eliminar">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                                <button type="button" class="btn btn-danger" data-toggle="modal"
+                                    data-target="#eliminarPaqueteTuristicoHotel"
+                                    onclick="abrir_modal('{% url 'hotel:modalEliminarPaqueteTuristicoHotel' hotel.pk paquete.pk%}', '#eliminarPaqueteTuristicoHotel');"
+                                    title="Eliminar">
+                                    <i class="fas fa-trash"></i>
+                                </button>
                             {% elif paquete.estoy_vendido %}
 
                             {% endif %}

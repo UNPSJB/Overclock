@@ -194,8 +194,7 @@ class Habitacion(models.Model):
  
     def dar_alta(self):
         self.baja=False
-        
-
+    
 
 # Temporada Alta
 class TemporadaAlta(models.Model):
@@ -277,5 +276,9 @@ class PaqueteTuristico(models.Model):
 
     def get_habitaciones(self):
         return self.habitaciones.all()
+    
+    def set_habitaciones(self , habitaciones):
+        self.habitaciones = habitaciones
+        self.save()
         
         
