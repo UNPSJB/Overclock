@@ -1,4 +1,7 @@
-{% extends 'base/vendedor.html'%} {% load static %} 
+{% extends 'base/vendedor.html'%} 
+{% load static %} 
+{% block tarjeta1 %}
+{% endblock tarjeta1 %}
 {% block header %}
 <button
   onclick="Swal.fire({
@@ -12,9 +15,28 @@
   VENDEDOR: {{factura.vendedor.persona.nombre.upper}}
   {{factura.vendedor.persona.apellido.upper}}
 </button>
+
+
+
 {% endblock header %} {% block carrito %}
 <!--VACIO PARA QUE NO APAREZCA EL CARRITO, DADO QUE ESTAMOS EN LA VISTA CARRITO-->
-{% endblock carrito %} {% block content %}
+{% endblock carrito %}
+
+{% block cerrarSecion %}
+  <button 
+  onclick="Swal.fire({
+    icon: 'error',
+    title: 'Unicas opciones en Facturacion son Pagar y Cancelar',
+    text: 'Seleccione una opcion valida',
+  });"
+  style="text-decoration:none; align-items:right;"
+  class="rounded-1 btn btn-lg btn-outline-secondary text-white float-center mt-1  "> Cerrar Sesion
+  </button>
+{% endblock cerrarSecion %}
+
+
+
+{% block content %}
 
 <div class="formularioCarrito" id="vistaCarrito">
   <center>
