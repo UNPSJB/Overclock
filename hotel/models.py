@@ -246,6 +246,8 @@ class PaqueteTuristico(models.Model):
 
     def get_costo(self):
         self.actualizar_precio()
+        if(self.cantidad_dias() == 0):
+            return "{0:.2f}".format(self.precio / 5)
         return "{0:.2f}".format((1-self.coeficiente) * (self.precio * self.cantidad_dias()))
 
     def tengo_habitacion(self,habitacion): 
