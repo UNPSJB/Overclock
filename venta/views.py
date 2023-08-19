@@ -57,6 +57,7 @@ def buscarHabitaciones(request,hotel):
     hotelInstancia = get_object_or_404(Hotel, pk=hotel)
     coleccionHabitaciones = hotelInstancia.get_habitaciones_busqueda(fecha_inicio,fecha_fin,pasajeros)
     colHabitaciones = [habitacion for habitacion in coleccionHabitaciones if habitacion.baja == False]
+    print("habitaciones hoteeeeel" , colHabitaciones)
     ventas_habitaciones_en_carrito=carrito.get_alquileres_habitaciones()
     for venta in ventas_habitaciones_en_carrito:
         fecha_inicio_venta=datetime.strptime(venta.fecha_inicio, '%Y-%m-%d').date()
@@ -72,6 +73,7 @@ def buscarHabitaciones(request,hotel):
     habitaciones_con_precio_final = cargar_precio_habitacion_por_temporada(colHabitaciones, hotelInstancia.pk, fecha_inicio, fecha_fin )
     ventas_paquetes_en_carrito=carrito.get_alquileres_paquetes()
     colPaquetes = hotelInstancia.get_paquetes_busqueda(fecha_inicio,fecha_fin,pasajeros)
+    print("col paquetes" , colPaquetes)
     for venta in ventas_paquetes_en_carrito:
         paquete=get_object_or_404(PaqueteTuristico,pk=venta.paquete)
         if paquete in colPaquetes:
@@ -164,7 +166,11 @@ def cliente_modificar(request,cliente):
     
 def vista_carrito(request):
     carrito=Carrito(request)
-    coleccion_ventas = carrito.mostrar_carrito()
+    coleccion_ventas = []
+    total = 0
+    if carrito.get_cantidad() > 0:
+        coleccion_ventas = carrito.mostrar_carrito()
+        total=float(str(coleccion_ventas['total']).strip("['|{|}]"))
     personaInstancia = request.user.persona
     vendedorInstancia = get_object_or_404(Vendedor, persona = personaInstancia.id)
     contador=carrito.get_cantidad()
@@ -173,7 +179,6 @@ def vista_carrito(request):
         print(cliente.persona.nombre)
     except Exception:
         print("no hay persona seleccionada")
-    total=float(str(coleccion_ventas['total']).strip("['|{|}]"))
     print(carrito.get_vendedor().persona.nombre)
     return render(request,"venta/carrito.html",{"cliente":cliente,"vendedor":vendedorInstancia, "contador":contador, "coleccion_ventas":coleccion_ventas,"total":total})
 
@@ -224,38 +229,34 @@ def facturar_carrito(request):
 def pagar_factura(request, factura):
     seleccionTipoPago=request.POST.get('opcionTipoPago')
     facturita= get_object_or_404(Factura, pk=factura)
-
-    if seleccionTipoPago=="Puntos":
-        
-        facturita.cliente.quitar_puntos(facturita)
-        
+    if seleccionTipoPago=="Puntos":   
+        facturita.cliente.quitar_puntos(facturita)  
     else:
         if seleccionTipoPago=="Efectivo":
-            print("puntos antes: ", facturita.cliente.puntos)
             facturita.cliente.agregar_puntos(facturita)
-            print("puntos despues: ", facturita.cliente.puntos)
-        
     tipoPago= get_object_or_404(Tipo_pago, nombre=seleccionTipoPago)
     facturita.tipo_pago=tipoPago
     facturita.save()
+    carrito = Carrito(request)
+    carrito.vaciar_carrito()
     return redirect("venta:vendedor")
 
 
 def cancelar_venta(request,factura):
     print("CANCELANDO VENTAAAAAAAAAA!!!!!")
     facturita= get_object_or_404(Factura, pk=factura)
-    print(facturita.tipo_pago)
     for alquiler in facturita.get_alquileres():
         if alquiler.paquete is not None:
-            print(alquiler.paquete.nombre)
             alquiler.paquete.cancelar_venta()
     facturita.delete()
-    print(facturita.pk)
+    carrito = Carrito(request)
+    carrito.vaciar_carrito()
     return redirect("venta:vendedor")
 
 
 def limpiar_preferencias(request):
-
+    carrito = Carrito(request)
+    carrito.set_cliente(None)
     if 'fecha_inicio' in request.session:
         del request.session['fecha_inicio']
     if 'fecha_fin' in request.session:

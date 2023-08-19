@@ -102,52 +102,47 @@
 
 <form id="form_pago_factura" onsubmit="return evitar_envio(event)"
             action="{%url 'venta:pagarFactura' factura.pk %} " method="POST">
-{% csrf_token %}
-<div class="ml-5 mb-5 mt-5">
+  {% csrf_token %}
+  <div class="ml-5 mb-5 mt-5">
 
 
-  <div class="row mt-2 h3"> SELECCIONE METODO DE PAGO </div>
+    <div class="row mt-2 h3"> SELECCIONE METODO DE PAGO </div>
 
-  <div class="form-check mt-3">
-    <input class="form-check-input " type="radio" name="opcionTipoPago" id="exampleRadios1" value="Efectivo" checked>
-    <label class="form-check-label h5" for="exampleRadios1">
-      Efectivo
-    </label>
-  </div>
-  <div class="form-check ">
-    <input class="form-check-input " type="radio" name="opcionTipoPago" id="exampleRadios2" value="Tarjeta">
-    <label class="form-check-label h5" for="exampleRadios2">
-      Tarjeta
-    </label>
-  </div>
-  <div class="form-check {% if not alcanzanPuntos %} disabled {% endif %}  ">
-    <input class="form-check-input " type="radio" name="opcionTipoPago" id="exampleRadios3" value="Puntos" {% if not alcanzanPuntos %} disabled {% endif %}>
-    <label class="form-check-label h5" for="exampleRadios3">
-      Puntos
-    </label>
-  </div>
-</div>
-<div class="row mt-2">
-    <div class="col-10 ml-4" style="background-color: rgb(185, 182, 182)">
-      <h3>TOTAL: ${{factura.total}}</h3>
+    <div class="form-check mt-3">
+      <input class="form-check-input " type="radio" name="opcionTipoPago" id="exampleRadios1" value="Efectivo" checked>
+      <label class="form-check-label h5" for="exampleRadios1">
+        Efectivo
+      </label>
     </div>
-<div class="col-1">
+    <div class="form-check ">
+      <input class="form-check-input " type="radio" name="opcionTipoPago" id="exampleRadios2" value="Tarjeta">
+      <label class="form-check-label h5" for="exampleRadios2">
+        Tarjeta
+      </label>
+    </div>
+    <div class="form-check {% if not alcanzanPuntos %} disabled {% endif %}  ">
+      <input class="form-check-input " type="radio" name="opcionTipoPago" id="exampleRadios3" value="Puntos" {% if not alcanzanPuntos %} disabled {% endif %}>
+      <label class="form-check-label h5" for="exampleRadios3">
+        Puntos
+      </label>
+    </div>
+  </div>
+  <div class="row mt-2">
+      <div class="col-10 ml-4" style="background-color: rgb(185, 182, 182)">
+        <h3>TOTAL: ${{factura.total}}</h3>
+      </div>
+  <div class="col-1">
 
 
-<input class="btn btn-success" type="submit" id="filtrar" name="filtrar" value="   PAGAR   " > 
+  <input class="btn btn-success" type="submit" id="filtrar" name="filtrar" value="   PAGAR  " > 
 </form>
 
 
   
-      <button
-        class="btn btn-danger"
-        
-        onClick="location.href='{%url 'venta:cancelarFactura' factura.pk %} '"
-        
-      >
-        CANCELAR 
-      </button>
-    </div>
+  <button class="btn btn-danger" style="margin-top: 15px;"  onClick="location.href='{%url 'venta:cancelarFactura' factura.pk %} '">
+    CANCELAR 
+  </button>
+</div>
   </div>
 </div>
 

@@ -37,6 +37,20 @@ class Carrito:
             else:
                 count+=len(value["alquiler"])
         return count
+    
+    
+    def limpiar_contador_items(self):
+        self.carrito.clear()
+                
+    
+    def vaciar_carrito(self):
+        habitaciones = self.get_alquileres_habitaciones()
+        paquetes = self.get_paquetes_para_alquilar()
+        self.quitar_paquete(paquetes)
+        for habitacion in habitaciones:
+            self.quitar_habitacion(habitacion , habitacion.fecha_inicio , habitacion.fecha_fin)
+        self.limpiar_contador_items()
+        self.save()
            
 #*************************GESTION HABITACION DE CARRITO **************************************
     def agregar_habitacion(self,habitacion,desde,hasta,pasajeros):

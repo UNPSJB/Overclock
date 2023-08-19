@@ -99,40 +99,43 @@ def asignar_precio_por_temporada(fecha_inicio, fecha_fin, id_hotel, tipo_habitac
     resultado = 0
     if (temporadas):
         temporadas = devolver_temporadas_en_fechas(temporadas, fecha_inicio, fecha_fin)
-        for temporada in temporadas:
-            if (fecha_inicio <= fecha_fin <= temporada.inicio) or (temporada.fin <= fecha_inicio <= fecha_fin):
-                dias_sin_promocion = fecha_fin - fecha_inicio
-                dias_sin_promocion = dias_sin_promocion.days * precio_Hotel_temporadas.baja
-                total =  dias_sin_promocion
-            
-            if((fecha_inicio < temporada.inicio) and (temporada.inicio <= fecha_fin <= temporada.fin)):
-                dias_promocion = fecha_fin - temporada.inicio
-                dias_promocion = dias_promocion.days * precio_Hotel_temporadas.alta
-                dias_sin_promocion = temporada.inicio - fecha_inicio
-                dias_sin_promocion = dias_sin_promocion.days * precio_Hotel_temporadas.baja
-                total = dias_promocion + dias_sin_promocion
-            
-            if((temporada.inicio <= fecha_inicio <= temporada.fin) and (temporada.fin <= fecha_fin)):
-                dias_promocion = temporada.fin - fecha_inicio
-                dias_promocion = dias_promocion.days * precio_Hotel_temporadas.alta
-                dias_sin_promocion = fecha_fin - temporada.fin
-                dias_sin_promocion = dias_sin_promocion.days * precio_Hotel_temporadas.baja
-                total = dias_promocion + dias_sin_promocion
-            
-            if (temporada.inicio <= fecha_inicio) and (temporada.fin >= fecha_fin):
-                dias_promocion = fecha_fin - fecha_inicio
-                dias_promocion = dias_promocion.days * precio_Hotel_temporadas.alta
-                total = dias_promocion
-            
-            if ((fecha_inicio <= temporada.inicio <= temporada.fin) and (temporada.fin <= fecha_fin)):
-                dias_sin_promocion = (fecha_fin - temporada.fin ) + ( temporada.inicio - fecha_inicio)
-                dias_sin_promocion = dias_sin_promocion.days * precio_Hotel_temporadas.baja
-                dias_promocion = temporada.fin - temporada.inicio
-                dias_promocion = dias_promocion.days * precio_Hotel_temporadas.alta
-                total =  dias_promocion + dias_sin_promocion
-            resultado = resultado + total
-            fecha_inicio = temporada.fin
-        return resultado
+        if (temporadas):
+            for temporada in temporadas:
+                if (fecha_inicio <= fecha_fin <= temporada.inicio) or (temporada.fin <= fecha_inicio <= fecha_fin):
+                    dias_sin_promocion = fecha_fin - fecha_inicio
+                    dias_sin_promocion = dias_sin_promocion.days * precio_Hotel_temporadas.baja
+                    total =  dias_sin_promocion
+                
+                if((fecha_inicio < temporada.inicio) and (temporada.inicio <= fecha_fin <= temporada.fin)):
+                    dias_promocion = fecha_fin - temporada.inicio
+                    dias_promocion = dias_promocion.days * precio_Hotel_temporadas.alta
+                    dias_sin_promocion = temporada.inicio - fecha_inicio
+                    dias_sin_promocion = dias_sin_promocion.days * precio_Hotel_temporadas.baja
+                    total = dias_promocion + dias_sin_promocion
+                
+                if((temporada.inicio <= fecha_inicio <= temporada.fin) and (temporada.fin <= fecha_fin)):
+                    dias_promocion = temporada.fin - fecha_inicio
+                    dias_promocion = dias_promocion.days * precio_Hotel_temporadas.alta
+                    dias_sin_promocion = fecha_fin - temporada.fin
+                    dias_sin_promocion = dias_sin_promocion.days * precio_Hotel_temporadas.baja
+                    total = dias_promocion + dias_sin_promocion
+                
+                if (temporada.inicio <= fecha_inicio) and (temporada.fin >= fecha_fin):
+                    dias_promocion = fecha_fin - fecha_inicio
+                    dias_promocion = dias_promocion.days * precio_Hotel_temporadas.alta
+                    total = dias_promocion
+                
+                if ((fecha_inicio <= temporada.inicio <= temporada.fin) and (temporada.fin <= fecha_fin)):
+                    dias_sin_promocion = (fecha_fin - temporada.fin ) + ( temporada.inicio - fecha_inicio)
+                    dias_sin_promocion = dias_sin_promocion.days * precio_Hotel_temporadas.baja
+                    dias_promocion = temporada.fin - temporada.inicio
+                    dias_promocion = dias_promocion.days * precio_Hotel_temporadas.alta
+                    total =  dias_promocion + dias_sin_promocion
+                resultado = resultado + total
+                fecha_inicio = temporada.fin
+            return resultado
+        else:
+            return (fecha_fin - fecha_inicio).days * precio_Hotel_temporadas.baja
     else:   
         return (fecha_fin - fecha_inicio).days * precio_Hotel_temporadas.baja
 

@@ -77,14 +77,18 @@ class Hotel(models.Model):
     
     def get_paquetes_busqueda(self,fechai,fechaf,cantPasajeros):
         paquetesEnHotel = self.get_paquetes()
+        print("paquetes en hoteldasdasdasd", paquetesEnHotel)
         paquetesSegunBusqueda=[]
         for paquete in paquetesEnHotel:
+            print("dasdasdasdasda" , paquete.nombre)
             if (paquete.inicio <= fechai <=paquete.fin) and (paquete.fin<=fechaf) and (paquete.get_pasajeros()>=cantPasajeros) and (paquete.estoy_vigente()):
                 paquetesSegunBusqueda.append(paquete)
             if ( paquete.inicio <= fechai <= fechaf) and (fechaf <= paquete.fin) and (paquete.get_pasajeros()>=cantPasajeros) and (paquete.estoy_vigente()):    
                 paquetesSegunBusqueda.append(paquete)
             if (fechai <= paquete.inicio <= fechaf) and (fechaf <= paquete.fin) and (paquete.get_pasajeros()>=cantPasajeros) and (paquete.estoy_vigente()):    
                 paquetesSegunBusqueda.append(paquete)
+            if (fechai <= paquete.inicio <= fechaf) and (fechaf >= paquete.fin) and (paquete.get_pasajeros()>=cantPasajeros) and (paquete.estoy_vigente()):    
+                paquetesSegunBusqueda.append(paquete)         
         return paquetesSegunBusqueda
     
 
