@@ -8,7 +8,7 @@ from hotel.models import Hotel
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
 from venta.carrito import Carrito
-from venta.services import cargar_liquidaciones_pendientes, cargar_precio_habitacion_por_temporada, documento_valido, liquidar_liquidaciones_pendientes, preparar_hoteles
+from venta.services import cargar_liquidaciones_pendientes, cargar_precio_habitacion_por_temporada, documento_valido, filtrar_habitaciones, liquidar_liquidaciones_pendientes, preparar_hoteles
 
 
 # Create your views here.
@@ -70,7 +70,6 @@ def buscarHabitaciones(request,hotel):
             if (pksiguales and (inicio_alquiler_en_fechas_ingresadas or fin_alquiler_en_fechas_ingresadas or contenido_fechas)):
                 colHabitaciones.remove(habitacion)
     print(colHabitaciones)
-    habitaciones_con_precio_final = cargar_precio_habitacion_por_temporada(colHabitaciones, hotelInstancia.pk, fecha_inicio, fecha_fin )
     ventas_paquetes_en_carrito=carrito.get_alquileres_paquetes()
     colPaquetes = hotelInstancia.get_paquetes_busqueda(fecha_inicio,fecha_fin,pasajeros)
     print("col paquetes" , colPaquetes)
@@ -78,6 +77,9 @@ def buscarHabitaciones(request,hotel):
         paquete=get_object_or_404(PaqueteTuristico,pk=venta.paquete)
         if paquete in colPaquetes:
             colPaquetes.remove(paquete)
+    habitaciones_filtradas = filtrar_habitaciones(colHabitaciones , colPaquetes)
+    print("habitaciones : " , habitaciones_filtradas)
+    habitaciones_con_precio_final = cargar_precio_habitacion_por_temporada(colHabitaciones, hotelInstancia.pk, fecha_inicio, fecha_fin )
     return render(request, "venta/buscarHabitaciones.html", {"hotel":hotelInstancia,
         "habitaciones_disponibles": habitaciones_con_precio_final,
         "paquetes_disponibles":colPaquetes,
@@ -86,6 +88,7 @@ def buscarHabitaciones(request,hotel):
         "vendedor":vendedorInstancia,
         "contador":contador
         })
+
 
 
 

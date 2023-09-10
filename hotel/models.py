@@ -169,26 +169,47 @@ class Habitacion(models.Model):
     def precio_alquiler(self, desde, hasta):
         if desde >= hasta:
             #TODO: Custom exception
-            raise Exception("No puedo calcular el precio")
+            raise Exception("No puedo calcular el precio ... precio_alquiler")
         total = Decimal(0)
         while desde < hasta:
             total += self.precio_por_noche(desde)
             desde += timedelta(days=1)
         return total
 
-    def disponible(self, desde, hasta):
-        if (self.alquileres.filter(inicio__lte= desde, fin__gte=hasta).exists() and (self.baja == False)):
-            return False
-        else:
-            if (self.alquileres.filter(fin__lte=desde).exists() and (self.baja == False)):
-                return True
+
+    def disponible(self ,desde, hasta):
+        print(self.numero)
+        alquileres = self.alquileres.all()
+        desicion = False
+        print(alquileres)
+        for alquiler in alquileres:
+            print("entre")
+            if ((str(alquiler.inicio) > str(hasta) ) and (self.baja == False)):
+                print("1")
+                desicion = True
             else:
-                if (self.alquileres.filter(inicio__gte=desde , inicio__lte=hasta).exists() and (self.baja == False)) :
-                    return False
+                if ((str(alquiler.fin) < str(desde)) and (self.baja == False)):
+                    print("2")
+                    desicion = True
                 else:
-                    if (self.alquileres.filter(inicio__lte= desde, fin__lte=hasta).exists() and (self.baja == False)) :
-                        return False         
-        return True
+                    print("3")
+                    desicion = False
+        return desicion
+
+    # def disponible(self, desde, hasta):
+    #     print(self.numero)
+    #     if (self.alquileres.filter(inicio__lte= desde, fin__gte=hasta).exists() and (self.baja == False)):
+    #         return False
+    #     else:
+    #         if (self.alquileres.filter(fin__lte=desde).exists() and (self.baja == False)):
+    #             return True
+    #         else:
+    #             if (self.alquileres.filter(inicio__gte=desde , inicio__lte=hasta).exists() and (self.baja == False)) :
+    #                 return False
+    #             else:
+    #                 if (self.alquileres.filter(inicio__lte= desde, fin__lte=hasta).exists() and (self.baja == False)) :
+    #                     return False         
+    #     return True
 
     def get_pasajeros(self):
         return self.tipo.pasajeros

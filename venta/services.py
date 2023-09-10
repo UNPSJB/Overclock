@@ -1,7 +1,7 @@
 from datetime import datetime
 from core.models import Persona, Vendedor
-from hotel.models import PrecioPorTipo, TemporadaAlta
-from venta.models import Factura, Liquidacion
+from hotel.models import Habitacion, PaqueteTuristico, PrecioPorTipo, TemporadaAlta
+from venta.models import Alquiler, Factura, Liquidacion
 from venta.helpers import cliente_existe
 
 def buscar_monto_total_liquidaciones_pendientes(fecha_inicio, fecha_fin, vendedor):
@@ -153,3 +153,17 @@ def cargar_precio_habitacion_por_temporada(habitaciones, id_hotel, fecha_inicio,
         }
         habitaciones_con_precios.append(datos)
     return habitaciones_con_precios
+
+
+# elimino las habitaciones que se encuentran en paquetes promocionales de un hotel
+def filtrar_habitaciones(habitaciones , paquetes) :  
+    for paquete in paquetes:
+        paq = PaqueteTuristico.objects.get(id = paquete.pk)
+        lista=paq.habitaciones.all()
+        for elemento in lista:
+            for habitacion in habitaciones:
+                if elemento.numero == habitacion.numero:
+                    habitaciones.remove(habitacion)
+    return habitaciones
+
+
