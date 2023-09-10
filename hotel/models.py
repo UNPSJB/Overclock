@@ -183,33 +183,14 @@ class Habitacion(models.Model):
         desicion = False
         print(alquileres)
         for alquiler in alquileres:
-            print("entre")
             if ((str(alquiler.inicio) > str(hasta) ) and (self.baja == False)):
-                print("1")
                 desicion = True
             else:
                 if ((str(alquiler.fin) < str(desde)) and (self.baja == False)):
-                    print("2")
                     desicion = True
                 else:
-                    print("3")
                     desicion = False
         return desicion
-
-    # def disponible(self, desde, hasta):
-    #     print(self.numero)
-    #     if (self.alquileres.filter(inicio__lte= desde, fin__gte=hasta).exists() and (self.baja == False)):
-    #         return False
-    #     else:
-    #         if (self.alquileres.filter(fin__lte=desde).exists() and (self.baja == False)):
-    #             return True
-    #         else:
-    #             if (self.alquileres.filter(inicio__gte=desde , inicio__lte=hasta).exists() and (self.baja == False)) :
-    #                 return False
-    #             else:
-    #                 if (self.alquileres.filter(inicio__lte= desde, fin__lte=hasta).exists() and (self.baja == False)) :
-    #                     return False         
-    #     return True
 
     def get_pasajeros(self):
         return self.tipo.pasajeros
