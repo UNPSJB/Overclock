@@ -193,7 +193,7 @@ def quitar_paquete_carrito(request, paquete):
 
 def quitar_habitacion_carrito(request, habitacion, desde, hasta):
     carrito=Carrito(request)
-    print("holaaaaaaaaaa ", habitacion)
+    print("holaaaaaaaa ", habitacion)
     habitacion=habitacion.split("-")
     print("holaaaaaaaaaa ", habitacion)
     fecha_desde=datetime.strptime(desde, '%Y-%m-%d').date()
