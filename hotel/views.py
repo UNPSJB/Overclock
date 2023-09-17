@@ -278,6 +278,10 @@ def paqueteTuristicoHotelCrear(request, hotel):
     if request.method == "POST":
         fecha_inicio = request.POST['inicio']
         fecha_fin = request.POST['fin']
+        if (fecha_inicio == fecha_fin):
+            form.add_error('inicio', 'la fecha inicio no puede ser igual a la fecha de finalizacion')
+            form.add_error('fin', 'la fecha finalizacion no puede ser igual a la fecha de inicio')
+            return render(request, "hotel/modals/modal_paqueteTuristicoHotel_crear.html", { "hotel": hotel_actual, "formulario": form})       
         id_habitaciones = request.POST.getlist('habitaciones')
         for id_habitacion in id_habitaciones:
             habitacion = Habitacion.objects.get(id=id_habitacion)  
