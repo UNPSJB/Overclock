@@ -1,9 +1,9 @@
 
-from venta.models import Factura, Tipo_pago
+from venta.models import Alquiler, Factura, Tipo_pago
 from venta.forms import ClienteForm
 from django.shortcuts import render, redirect, get_object_or_404
-from hotel.models import Hotel, PaqueteTuristico
-from core.models import Persona, Vendedor, Cliente
+from hotel.models import Habitacion, Hotel, PaqueteTuristico
+from core.models import Persona, TipoHabitacion, Vendedor, Cliente
 from hotel.models import Hotel
 from django.contrib.auth.decorators import login_required
 from datetime import datetime
@@ -304,5 +304,90 @@ def liquidar(request, documento, fecha_inicio, fecha_fin):
         "administrador":personaInstancia,
     }
     return render(request, 'venta/listado_liquidaciones.html', context)
+
+def lista_compras_cliente(request, id_cliente):
+    
+    cliente = Persona.objects.get(id = id_cliente)
+    print(id_cliente)
+    facturas = Factura.objects.filter(cliente_id = id_cliente)
+    
+    print(facturas)
+    lista_compras=[]
+    for factura in facturas :
+        id_factura = factura.pk
+        pago = Tipo_pago.objects.get(id = factura.tipo_pago.pk)
+        tipoPago = pago.nombre
+        alquileres = Alquiler.objects.filter(factura_id = id_factura)
+        print(alquileres)
+        for alquiler in alquileres:
+            fechainicio = alquiler.inicio
+            fechafin = alquiler.fin
+            total_gastado = alquiler.total
+            habitaciones=[]
+            
+            if alquiler.paquete :
+                paqueteTuristico = PaqueteTuristico.objects.get( id = alquiler.paquete.pk)
+                print("paquete turistico" , paqueteTuristico.get_habitaciones())
+                paqueteHabitacion = paqueteTuristico.get_habitaciones()
+                nombrePaquete = paqueteTuristico.nombre
+                habitacionesPaquetes = list(paqueteHabitacion)
+                hotel = Hotel.objects.get(id = alquiler.paquete.hotel_id)
+                nombre_hotel = hotel.nombre
+                i=0 #contador
+                nombreHabitacion=[]
+                for habitacionPaquete in habitacionesPaquetes:
+                    habitacionPaquete = str(habitacionesPaquetes[i])
+                    habitacionPaquete = habitacionPaquete.split(',')
+                    hab = habitacionPaquete[1]
+                    print(hab)
+                    habitaciones.append(hab)
+                    habitacion = hab.split(":")
+                    numeroHabitacion = habitacion[1]
+                    i+=1
+                    print("se sumo 1")
+                    habitacionHotel = Habitacion.objects.get(hotel_id = hotel.pk , numero = numeroHabitacion)
+                    # tipoHabitacion = TipoHabitacion.objects.get(id = habitacionHotel.tipo)
+                    # tipo = tipoHabitacion.nombre
+                    print("tipo habitacion" , habitacionHotel.tipo)
+                    nombreHabitacion.append(habitacionHotel.tipo)
+            else:
+                
+                nombreHabitacion=[]
+                i=0 #contador
+                alquilersHabitaciones = alquiler.habitaciones.all()
+                print("lllllllllllllllllllllllllllllllllllllllll" , list(alquilersHabitaciones))
+                for alquilerHabitacion in alquilersHabitaciones:
+                    print(alquilerHabitacion)
+                    alquilerHabitacion  = str(alquilersHabitaciones[i])
+                    alquilerHabitacion  = alquilerHabitacion.split(',')
+                    hab = alquilerHabitacion [1]
+                    print(hab)
+                    habitaciones.append(hab)
+                    habitacion = hab.split(":")
+                    numeroHabitacion = habitacion[1]
+                    print("el numeroooo" , numeroHabitacion)
+                    i+=1
+                    print("numerooo hoteeel", hotel.pk)
+                    # habitacionHotel = Habitacion.objects.get(hotel_id = hotel.pk , numero = numeroHabitacion)
+                    # tipoHabitacion = TipoHabitacion.objects.get(id = habitacionHotel.tipo)
+                    # tipo = tipoHabitacion.nombre
+                    print("tipo habitacion" , habitacionHotel.tipo)
+                    nombreHabitacion.append(habitacionHotel.tipo)
+                
+            nueva_compra ={ 'nombre_hotel': nombre_hotel,
+                            'fecha_inicio': fechainicio,
+                            'fecha_fin':fechafin,
+                            'nombre_paquete': nombrePaquete,
+                            'total_gastado': total_gastado,
+                            'tipo_pago':tipoPago,
+                            'paquete_habitacion': habitaciones,
+                            'paquete_tipo_habitacion': nombreHabitacion}
+        
+            lista_compras.append(nueva_compra)
+            
+        context = {'cliente': cliente,
+                    'lista_compras':lista_compras}
+    
+    return render(request, 'venta/lista_compras_cliente.html', context)
 
 

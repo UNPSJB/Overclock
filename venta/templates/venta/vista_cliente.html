@@ -31,6 +31,9 @@
                 <th>
                     <Center>Seleccionar</Center>
                 </th>
+                <th>
+                    <Center>lista compras realizadas</Center>
+                </th>
             </tr>
         </thead>
         <tbody>
@@ -60,6 +63,17 @@
                     <center>
 
                         <button type="button" class="btn btn-success" onclick="location.href='{% url 'venta:seleccionarCliente' cliente.persona.id %}' " title="Seleccionar">
+                            <i class="fas fa-check-square"></i>
+                        </button>
+
+
+                    </center>
+
+                </td>
+                <td>
+                    <center>
+
+                        <button type="button" class="btn btn-success" onclick="location.href='{% url 'venta:listaComprasCliente' cliente.pk %}' ">
                             <i class="fas fa-check-square"></i>
                         </button>
 
